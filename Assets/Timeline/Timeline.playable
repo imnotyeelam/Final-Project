@@ -48,119 +48,6 @@ MonoBehaviour:
   VirtualCamera:
     exposedName: f8afe444ef7686340918c9e34df7330d
     defaultValue: {fileID: 0}
---- !u!114 &-7459586386181415563
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b22792c3b570444eb18cb78c2af3a74, type: 3}
-  m_Name: Audio Track
-  m_EditorClassIdentifier: 
-  m_Version: 3
-  m_AnimClip: {fileID: 0}
-  m_Locked: 0
-  m_Muted: 0
-  m_CustomPlayableFullTypename: 
-  m_Curves: {fileID: 0}
-  m_Parent: {fileID: 11400000}
-  m_Children: []
-  m_Clips:
-  - m_Version: 1
-    m_Start: 76.38333333333334
-    m_ClipIn: 0
-    m_Asset: {fileID: -7360655993528210495}
-    m_Duration: 8.666666666666657
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -7459586386181415563}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: -1
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: SFX_FireSmall_L
-  m_Markers:
-    m_Objects: []
-  m_TrackProperties:
-    volume: 1
-    stereoPan: 0
-    spatialBlend: 0
---- !u!114 &-7360655993528210495
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
-  m_Name: AudioPlayableAsset
-  m_EditorClassIdentifier: 
-  m_Clip: {fileID: 8300000, guid: 94bc8546fe222904c9fd6e0438c1b6fc, type: 3}
-  m_Loop: 0
-  m_bufferingTime: 0.1
-  m_ClipProperties:
-    volume: 1
 --- !u!114 &-6619243842405991302
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -209,6 +96,22 @@ MonoBehaviour:
   VirtualCamera:
     exposedName: c4ec159d71007ed41bae69706cd5c8ef
     defaultValue: {fileID: 0}
+--- !u!114 &-5521451026283076963
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
+  m_Name: CinemachineShot
+  m_EditorClassIdentifier: 
+  DisplayName: 
+  VirtualCamera:
+    exposedName: 0399de36c6961244e8f328f89e32353d
+    defaultValue: {fileID: 0}
 --- !u!114 &-4947082035288172625
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -256,6 +159,22 @@ MonoBehaviour:
   DisplayName: 
   VirtualCamera:
     exposedName: b65306155d858f243a849e816e3f064d
+    defaultValue: {fileID: 0}
+--- !u!114 &-2494591594793694384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
+  m_Name: CinemachineShot
+  m_EditorClassIdentifier: 
+  DisplayName: 
+  VirtualCamera:
+    exposedName: 2025ef4e3d664304b837212b1a7d4b9a
     defaultValue: {fileID: 0}
 --- !u!114 &-2374559782970652628
 MonoBehaviour:
@@ -334,7 +253,7 @@ MonoBehaviour:
   m_Name: RecorderClip
   m_EditorClassIdentifier: 
   enabled: 1
-  take: 5
+  take: 10
   captureEveryNthFrame: 1
   fileNameGenerator:
     m_Path:
@@ -512,7 +431,6 @@ MonoBehaviour:
   m_Tracks:
   - {fileID: 5101535098609379719}
   - {fileID: 6007094308015701359}
-  - {fileID: -7459586386181415563}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
@@ -621,13 +539,13 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: 6303319515047475962}
-    m_Duration: 3.8333333333333335
+    m_Duration: 2
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 1.2333333333333334
+    m_BlendOutDuration: 0.8166666666666667
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -687,16 +605,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera
   - m_Version: 1
-    m_Start: 2.6
+    m_Start: 1.1833333333333333
     m_ClipIn: 0
     m_Asset: {fileID: -4947082035288172625}
-    m_Duration: 5.683333333333334
+    m_Duration: 3.1333333333333337
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 1.2333333333333334
-    m_BlendOutDuration: 1.2833333333333332
+    m_BlendInDuration: 0.8166666666666667
+    m_BlendOutDuration: 1.533333333333334
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -756,16 +674,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (1)
   - m_Version: 1
-    m_Start: 7
+    m_Start: 2.783333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 7590803009805929221}
-    m_Duration: 5.85
+    m_Duration: 2.4833333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 1.2833333333333332
-    m_BlendOutDuration: 3.1500000000000004
+    m_BlendInDuration: 1.533333333333334
+    m_BlendOutDuration: 0.9500000000000002
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -825,16 +743,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (2)
   - m_Version: 1
-    m_Start: 9.7
+    m_Start: 4.316666666666666
     m_ClipIn: 0
     m_Asset: {fileID: -403611494453056845}
-    m_Duration: 6.416666666666668
+    m_Duration: 5
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 3.1500000000000004
-    m_BlendOutDuration: 2.0500000000000007
+    m_BlendInDuration: 0.9500000000000002
+    m_BlendOutDuration: 1.5
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -894,16 +812,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (3)
   - m_Version: 1
-    m_Start: 14.066666666666666
+    m_Start: 7.816666666666666
     m_ClipIn: 0
     m_Asset: {fileID: -4698777387220108212}
-    m_Duration: 6.916666666666666
+    m_Duration: 5.550000000000001
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 2.0500000000000007
-    m_BlendOutDuration: 0.9499999999999993
+    m_BlendInDuration: 1.5
+    m_BlendOutDuration: 1.3833333333333346
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -963,16 +881,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (4)
   - m_Version: 1
-    m_Start: 20.033333333333335
+    m_Start: 11.983333333333333
     m_ClipIn: 0
     m_Asset: {fileID: -6281058309327055765}
-    m_Duration: 5
+    m_Duration: 5.733333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.9499999999999993
-    m_BlendOutDuration: 0.8333333333333357
+    m_BlendInDuration: 1.3833333333333346
+    m_BlendOutDuration: 1.31666666666667
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1032,16 +950,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (5)
   - m_Version: 1
-    m_Start: 24.2
+    m_Start: 16.4
     m_ClipIn: 0
     m_Asset: {fileID: -7761725122624418194}
-    m_Duration: 5
+    m_Duration: 5.400000000000002
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.8333333333333357
-    m_BlendOutDuration: 0.8000000000000007
+    m_BlendInDuration: 1.31666666666667
+    m_BlendOutDuration: 1.4833333333333343
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1101,16 +1019,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (7)
   - m_Version: 1
-    m_Start: 28.4
+    m_Start: 20.316666666666666
     m_ClipIn: 0
     m_Asset: {fileID: -970787085350803229}
-    m_Duration: 5
+    m_Duration: 5.583333333333332
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.8000000000000007
-    m_BlendOutDuration: 0.8166666666666629
+    m_BlendInDuration: 1.4833333333333343
+    m_BlendOutDuration: 1.2333333333333307
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1170,16 +1088,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (8)
   - m_Version: 1
-    m_Start: 32.583333333333336
+    m_Start: 24.666666666666668
     m_ClipIn: 0
     m_Asset: {fileID: 8030656279173903037}
-    m_Duration: 5
+    m_Duration: 5.416666666666664
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.8166666666666629
-    m_BlendOutDuration: 0.81666666666667
+    m_BlendInDuration: 1.2333333333333307
+    m_BlendOutDuration: 1.4499999999999993
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1239,16 +1157,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (9)
   - m_Version: 1
-    m_Start: 36.766666666666666
+    m_Start: 28.633333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 32076125292283161}
-    m_Duration: 5
+    m_Duration: 3.5833333333333357
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.81666666666667
-    m_BlendOutDuration: 0.6499999999999986
+    m_BlendInDuration: 1.4499999999999993
+    m_BlendOutDuration: 1.2000000000000028
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1308,16 +1226,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (10)
   - m_Version: 1
-    m_Start: 41.11666666666667
+    m_Start: 31.016666666666666
     m_ClipIn: 0
     m_Asset: {fileID: 8162769369140718455}
-    m_Duration: 5
+    m_Duration: 3.633333333333333
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.6499999999999986
-    m_BlendOutDuration: 0.7166666666666686
+    m_BlendInDuration: 1.2000000000000028
+    m_BlendOutDuration: 1.0333333333333314
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1377,16 +1295,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (11)
   - m_Version: 1
-    m_Start: 45.4
+    m_Start: 33.61666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -2374559782970652628}
-    m_Duration: 5
+    m_Duration: 5.266666666666666
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.7166666666666686
-    m_BlendOutDuration: 0.7166666666666686
+    m_BlendInDuration: 1.0333333333333314
+    m_BlendOutDuration: 1.9500000000000028
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1446,16 +1364,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (12)
   - m_Version: 1
-    m_Start: 49.68333333333333
+    m_Start: 36.93333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 8948943042875869877}
-    m_Duration: 5
+    m_Duration: 4.88333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.7166666666666686
-    m_BlendOutDuration: 0.6499999999999986
+    m_BlendInDuration: 1.9500000000000028
+    m_BlendOutDuration: 1.5
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1515,16 +1433,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (13)
   - m_Version: 1
-    m_Start: 54.03333333333333
+    m_Start: 40.31666666666667
     m_ClipIn: 0
     m_Asset: {fileID: 8778207649367479428}
-    m_Duration: 5
+    m_Duration: 5.666666666666664
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.6499999999999986
-    m_BlendOutDuration: 0.6999999999999957
+    m_BlendInDuration: 1.5
+    m_BlendOutDuration: 1.9166666666666643
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1584,16 +1502,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (14)
   - m_Version: 1
-    m_Start: 58.333333333333336
+    m_Start: 44.06666666666667
     m_ClipIn: 0
     m_Asset: {fileID: 6971293039535486329}
-    m_Duration: 4.199999999999996
+    m_Duration: 5.983333333333327
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.6999999999999957
-    m_BlendOutDuration: 0.5
+    m_BlendInDuration: 1.9166666666666643
+    m_BlendOutDuration: 2
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1653,16 +1571,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (15)
   - m_Version: 1
-    m_Start: 62.03333333333333
+    m_Start: 48.05
     m_ClipIn: 0
     m_Asset: {fileID: 9182534533949976718}
-    m_Duration: 5.5
+    m_Duration: 11.083333333333336
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.5
-    m_BlendOutDuration: 0.46666666666665435
+    m_BlendInDuration: 2
+    m_BlendOutDuration: 4.133333333333333
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1722,16 +1640,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (16)
   - m_Version: 1
-    m_Start: 67.06666666666668
+    m_Start: 55
     m_ClipIn: 0
     m_Asset: {fileID: 4211019137121206238}
-    m_Duration: 4.316666666666663
+    m_Duration: 7.86666666666666
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.46666666666665435
-    m_BlendOutDuration: -1
+    m_BlendInDuration: 4.133333333333333
+    m_BlendOutDuration: 1.4666666666666615
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1758,7 +1676,25 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1773,67 +1709,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (17)
   - m_Version: 1
-    m_Start: 71.38333333333334
-    m_ClipIn: 0
-    m_Asset: {fileID: 2682959011205630355}
-    m_Duration: 5
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 5101535098609379719}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: 0.5500000000000114
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: CinemachineCamera (18)
-  - m_Version: 1
-    m_Start: 75.83333333333333
+    m_Start: 64.9
     m_ClipIn: 0
     m_Asset: {fileID: -8858401032376928109}
-    m_Duration: 5
+    m_Duration: 6.383333333333326
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.5500000000000114
-    m_BlendOutDuration: 1.0333333333333314
+    m_BlendInDuration: 2.25
+    m_BlendOutDuration: 1.5833333333333286
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1893,16 +1778,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (19)
   - m_Version: 1
-    m_Start: 79.8
+    m_Start: 69.7
     m_ClipIn: 0
     m_Asset: {fileID: -6470079013911759399}
-    m_Duration: 5
+    m_Duration: 8.75
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 1.0333333333333314
-    m_BlendOutDuration: 0.5
+    m_BlendInDuration: 1.5833333333333286
+    m_BlendOutDuration: 4.900000000000006
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1962,16 +1847,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (20)
   - m_Version: 1
-    m_Start: 84.3
+    m_Start: 73.55
     m_ClipIn: 0
     m_Asset: {fileID: -773893656480261230}
-    m_Duration: 5
+    m_Duration: 8.816666666666663
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.5
-    m_BlendOutDuration: 0.4333333333333371
+    m_BlendInDuration: 4.900000000000006
+    m_BlendOutDuration: 1.0999999999999943
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -2031,16 +1916,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (21)
   - m_Version: 1
-    m_Start: 88.86666666666666
+    m_Start: 81.26666666666667
     m_ClipIn: 0
     m_Asset: {fileID: 260709369063093931}
-    m_Duration: 5
+    m_Duration: 5.349999999999994
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.4333333333333371
-    m_BlendOutDuration: 0.61666666666666
+    m_BlendInDuration: 1.0999999999999943
+    m_BlendOutDuration: 2.1999999999999886
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -2100,16 +1985,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (22)
   - m_Version: 1
-    m_Start: 93.25
+    m_Start: 84.41666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -2878812683845805363}
-    m_Duration: 5
+    m_Duration: 5.983333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.61666666666666
-    m_BlendOutDuration: 0.88333333333334
+    m_BlendInDuration: 2.1999999999999886
+    m_BlendOutDuration: 1.8000000000000114
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -2169,16 +2054,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (23)
   - m_Version: 1
-    m_Start: 97.36666666666666
+    m_Start: 88.6
     m_ClipIn: 0
     m_Asset: {fileID: -7727983172333219770}
-    m_Duration: 5
+    m_Duration: 5.6000000000000085
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.88333333333334
-    m_BlendOutDuration: 0.8999999999999915
+    m_BlendInDuration: 1.8000000000000114
+    m_BlendOutDuration: 2.066666666666663
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -2238,16 +2123,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (24)
   - m_Version: 1
-    m_Start: 101.46666666666667
+    m_Start: 92.13333333333334
     m_ClipIn: 0
     m_Asset: {fileID: -534638946410267227}
-    m_Duration: 5
+    m_Duration: 5.816666666666663
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.8999999999999915
-    m_BlendOutDuration: 0.7833333333333314
+    m_BlendInDuration: 2.066666666666663
+    m_BlendOutDuration: 1.9666666666666686
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -2307,16 +2192,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (25)
   - m_Version: 1
-    m_Start: 105.68333333333334
+    m_Start: 95.98333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 5512165421033237474}
-    m_Duration: 5
+    m_Duration: 6.066666666666663
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.7833333333333314
-    m_BlendOutDuration: 0.75
+    m_BlendInDuration: 1.9666666666666686
+    m_BlendOutDuration: 2.6333333333333258
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -2376,16 +2261,16 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (26)
   - m_Version: 1
-    m_Start: 109.93333333333334
+    m_Start: 99.41666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -1054310583936496990}
-    m_Duration: 5.066666666666663
+    m_Duration: 6.683333333333323
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.75
-    m_BlendOutDuration: 0.5666666666666629
+    m_BlendInDuration: 2.6333333333333258
+    m_BlendOutDuration: 2.7333333333333343
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -2445,15 +2330,15 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (27)
   - m_Version: 1
-    m_Start: 114.43333333333334
+    m_Start: 113.38333333333334
     m_ClipIn: 0
     m_Asset: {fileID: -6619243842405991302}
-    m_Duration: 5.566666666666663
+    m_Duration: 6.61666666666666
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5101535098609379719}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.5666666666666629
+    m_BlendInDuration: 2.3333333333333286
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -2513,6 +2398,213 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: CinemachineCamera (28)
+  - m_Version: 1
+    m_Start: 61.4
+    m_ClipIn: 0
+    m_Asset: {fileID: 2682959011205630355}
+    m_Duration: 5.75
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 5101535098609379719}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 1.4666666666666615
+    m_BlendOutDuration: 2.25
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: CinemachineCamera (18)
+  - m_Version: 1
+    m_Start: 103.36666666666666
+    m_ClipIn: 0
+    m_Asset: {fileID: -2494591594793694384}
+    m_Duration: 7.450000000000003
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 5101535098609379719}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 2.7333333333333343
+    m_BlendOutDuration: 2.7333333333333343
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: CinemachineCamera (29)
+  - m_Version: 1
+    m_Start: 108.08333333333333
+    m_ClipIn: 0
+    m_Asset: {fileID: -5521451026283076963}
+    m_Duration: 7.63333333333334
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 5101535098609379719}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 2.7333333333333343
+    m_BlendOutDuration: 2.3333333333333286
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: CinemachineCamera (30)
   m_Markers:
     m_Objects: []
   TrackPriority: 0
