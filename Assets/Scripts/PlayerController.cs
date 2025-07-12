@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -9,8 +10,8 @@ public class PlayerController : MonoBehaviour
     public float jumpHeight = 2f;
 
     [Header("Climbing Settings")]
-    public bool isClimbing = false;
     public float climbSpeed = 3f;
+    private bool isClimbing = false;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        Cursor.lockState = CursorLockMode.Locked; // Optional: lock the mouse
     }
 
     void Update()
@@ -42,13 +44,15 @@ public class PlayerController : MonoBehaviour
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f;
-            jumpCount = 0;
+            velocity.y = -2f; // Prevent gravity stacking
+            jumpCount = 0;    // Reset jump count on landing
         }
     }
 
     void Move()
     {
+        if (isClimbing) return; // Disable normal move when climbing
+
         float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
 
         float x = Input.GetAxis("Horizontal");
@@ -60,6 +64,8 @@ public class PlayerController : MonoBehaviour
 
     void HandleJump()
     {
+        if (isClimbing) return; // Don't jump when climbing
+
         if (Input.GetButtonDown("Jump"))
         {
             if (isGrounded || jumpCount < 1) // Allow double jump
@@ -72,7 +78,7 @@ public class PlayerController : MonoBehaviour
 
     void ApplyGravity()
     {
-        if (!isClimbing) // disable gravity when climbing
+        if (!isClimbing)
         {
             velocity.y += gravity * Time.deltaTime;
             controller.Move(velocity * Time.deltaTime);
@@ -84,8 +90,8 @@ public class PlayerController : MonoBehaviour
         if (isClimbing)
         {
             float v = Input.GetAxis("Vertical");
-            Vector3 climbDirection = new Vector3(0, v, 0);
-            controller.Move(climbDirection * climbSpeed * Time.deltaTime);
+            Vector3 climbDir = new Vector3(0, v, 0);
+            controller.Move(climbDir * climbSpeed * Time.deltaTime);
         }
     }
 
@@ -94,7 +100,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Ladder"))
         {
             isClimbing = true;
-            velocity.y = 0; // reset vertical speed
+            velocity.y = 0f;
         }
     }
 
