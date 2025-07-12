@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -13,11 +12,6 @@ public class PlayerController : MonoBehaviour
     public float climbSpeed = 3f;
     private bool isClimbing = false;
 
-    [Header("Ground Check")]
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
-
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
@@ -26,72 +20,57 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked; // Optional: lock the mouse
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
-        GroundCheck();
-        Move();
-        HandleJump();
-        ApplyGravity();
-        Climb();
-    }
+        isGrounded = controller.isGrounded;
 
-    void GroundCheck()
-    {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        if (isGrounded && velocity.y < 0)
+        if (isGrounded && !isClimbing)
         {
-            velocity.y = -2f; // Prevent gravity stacking
-            jumpCount = 0;    // Reset jump count on landing
+            if (jumpCount > 0)
+                jumpCount = 0;
+
+            if (velocity.y < 0)
+                velocity.y = -2f;
         }
-    }
 
-    void Move()
-    {
-        if (isClimbing) return; // Disable normal move when climbing
+        Vector3 move = Vector3.zero;
 
-        float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+        if (isClimbing)
+        {
+            float v = Input.GetAxis("Vertical");
+            move = new Vector3(0f, v * climbSpeed, 0f);
+            velocity = Vector3.zero;
+        }
+        else
+        {
+            float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+            float x = Input.GetAxis("Horizontal");
+            float z = Input.GetAxis("Vertical");
+            Vector3 horizontal = transform.right * x + transform.forward * z;
+            move = horizontal * speed;
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+            velocity.y += gravity * Time.deltaTime;
+            move.y = velocity.y;
+        }
 
-        Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
+        HandleJump();
+        controller.Move(move * Time.deltaTime);
     }
 
     void HandleJump()
     {
-        if (isClimbing) return; // Don't jump when climbing
+        if (isClimbing) return;
 
         if (Input.GetButtonDown("Jump"))
         {
-            if (isGrounded || jumpCount < 1) // Allow double jump
+            if (isGrounded || jumpCount < 1)
             {
                 velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 jumpCount++;
             }
-        }
-    }
-
-    void ApplyGravity()
-    {
-        if (!isClimbing)
-        {
-            velocity.y += gravity * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime);
-        }
-    }
-
-    void Climb()
-    {
-        if (isClimbing)
-        {
-            float v = Input.GetAxis("Vertical");
-            Vector3 climbDir = new Vector3(0, v, 0);
-            controller.Move(climbDir * climbSpeed * Time.deltaTime);
         }
     }
 
@@ -100,7 +79,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Ladder"))
         {
             isClimbing = true;
-            velocity.y = 0f;
+            velocity = Vector3.zero;
         }
     }
 
