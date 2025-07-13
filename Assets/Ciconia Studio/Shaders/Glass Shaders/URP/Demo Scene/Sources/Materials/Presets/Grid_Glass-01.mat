@@ -2,21 +2,29 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Grid_Glass-01
   m_Shader: {fileID: 4800000, guid: 4ae935bab0143fe4ab16d7e7f9a13579, type: 3}
-  m_ShaderKeywords: _FALLOFFFADE1_ON _FRESNELONOFF_ON _USEALBEDOA1_ON _USEALBEDOA_ON
-    _USECUBEMAP_OFF
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _USECUBEMAP_OFF
+  m_InvalidKeywords:
+  - _FALLOFFFADE1_ON
+  - _FRESNELONOFF_ON
+  - _USEALBEDOA1_ON
+  - _USEALBEDOA_ON
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -56,6 +64,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _A: 0
     - _AlphaCutoff: 0.5
@@ -136,8 +145,10 @@ Material:
     - _Color: {r: 0, g: 0, b: 0, a: 0}
     - _Color0: {r: 0.990566, g: 0.91486794, b: 0.098122105, a: 0}
     - _ColorCubemap: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorDecal: {r: 1, g: 0, b: 0, a: 1}
+    - _ColorDecal: {r: 0.98427665, g: 1, b: 0.9992346, a: 1}
     - _ColorFresnel: {r: 0, g: 0, b: 0, a: 1}
     - _ColorFresnel1: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 0}
     - _SecondaryColor: {r: 1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
