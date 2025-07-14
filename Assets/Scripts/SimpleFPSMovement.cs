@@ -24,7 +24,6 @@ public class SimpleFPSMovement : MonoBehaviour
 
     void Update()
     {
-        // Check if grounded
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
@@ -32,7 +31,6 @@ public class SimpleFPSMovement : MonoBehaviour
             velocity.y = -2f;
         }
 
-        // Movement
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -40,13 +38,11 @@ public class SimpleFPSMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * (isRunning ? runSpeed : walkSpeed) * Time.deltaTime);
 
-        // Jump
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        // Gravity
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }

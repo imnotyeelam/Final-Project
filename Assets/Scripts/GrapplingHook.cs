@@ -1,74 +1,69 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class GrapplingHook : MonoBehaviour
 {
-    public Camera playerCamera;
-    public Transform grappleOrigin; // 空 GameObject，挂在摄像头前
-    public float maxDistance = 30f;
-    public LayerMask grappleLayer;
+    [Header("Grappling Settings")]
+    public Transform cameraTransform;
+    public Transform hookStartPoint;
+    public float maxGrappleDistance = 30f;
+    public float grappleSpeed = 10f;
+    public LayerMask grappleMask;
+    public GameObject ropeCylinderPrefab;
 
-    public LineRenderer lineRenderer;
-    public float pullSpeed = 10f;
-
+    private CharacterController controller;
     private Vector3 grapplePoint;
     private bool isGrappling = false;
-    private CharacterController controller;
+    private GameObject currentRopeCylinder;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        lineRenderer.positionCount = 0;
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            StartGrapple();
+            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+            if (Physics.Raycast(ray, out RaycastHit hit, maxGrappleDistance, grappleMask))
+            {
+                grapplePoint = hit.point;
+                isGrappling = true;
+
+                if (currentRopeCylinder == null && ropeCylinderPrefab != null)
+                {
+                    currentRopeCylinder = Instantiate(ropeCylinderPrefab);
+                }
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            isGrappling = false;
+            if (currentRopeCylinder)
+                Destroy(currentRopeCylinder);
         }
 
         if (isGrappling)
         {
-            GrappleMovement();
-            DrawRope();
-        }
-        else
-        {
-            lineRenderer.positionCount = 0;
+            Vector3 direction = (grapplePoint - transform.position).normalized;
+            controller.Move(direction * grappleSpeed * Time.deltaTime);
+            UpdateRopeVisual();
         }
     }
 
-    void StartGrapple()
+    void UpdateRopeVisual()
     {
-        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        RaycastHit hit;
+        if (currentRopeCylinder == null) return;
 
-        if (Physics.Raycast(ray, out hit, maxDistance, grappleLayer))
-        {
-            grapplePoint = hit.point;
-            isGrappling = true;
-            lineRenderer.positionCount = 2;
-        }
-    }
+        Vector3 start = hookStartPoint.position;
+        Vector3 end = grapplePoint;
+        Vector3 dir = end - start;
+        float length = dir.magnitude;
 
-    void GrappleMovement()
-    {
-        Vector3 direction = (grapplePoint - transform.position).normalized;
-        float distance = Vector3.Distance(transform.position, grapplePoint);
-
-        if (distance > 2f)
-        {
-            controller.Move(direction * pullSpeed * Time.deltaTime);
-        }
-        else
-        {
-            isGrappling = false;
-        }
-    }
-
-    void DrawRope()
-    {
-        lineRenderer.SetPosition(0, grappleOrigin.position);
-        lineRenderer.SetPosition(1, grapplePoint);
+        currentRopeCylinder.transform.position = start + dir / 2f;
+        currentRopeCylinder.transform.up = dir.normalized;
+        currentRopeCylinder.transform.localScale = new Vector3(0.05f, length / 2f, 0.05f);
     }
 }
