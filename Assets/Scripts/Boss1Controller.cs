@@ -11,7 +11,7 @@ public class Boss1Controller : MonoBehaviour
 
     public float distanceToChase = 10f;
     public float distanceToLose = 15f;
-    public float agentDistanceToStop = 2f; // Renamed here
+    public float agentDistanceToStop = 8f; // Renamed here
 
     [Header("Bullet Section")]
     public GameObject bullet;
