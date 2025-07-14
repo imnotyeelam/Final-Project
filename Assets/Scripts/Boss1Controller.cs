@@ -3,146 +3,134 @@ using UnityEngine.AI;
 
 public class Boss1Controller : MonoBehaviour
 {
-    private Vector3 targetPoint, startPoint;
-    // public float moveSpeed;
-    //public Rigidbody rb;
-    private bool chasing;
-    public float distanceToCHase = 10f, distanceToLose = 15f, distanceToStop = 2f;
+    public enum BossState { Idle, Chasing, Attacking }
+    private BossState currentState = BossState.Idle;
 
+    private Vector3 targetPoint, startPoint;
     private NavMeshAgent agent;
+
+    public float distanceToChase = 10f;
+    public float distanceToLose = 15f;
+    public float distanceToStop = 2f;
 
     public float keepChasingTime = 5f;
     private float chaseCounter;
 
     [Header("Bullet Section")]
-
     public GameObject bullet;
     public Transform firePoint;
-    public float fireRate, waitBetweenShots = 1f, timeToShoot = 2f;
+    public float fireRate = 0.5f;
+    public float waitBetweenShots = 1f;
+    public float timeToShoot = 2f;
     private float fireCount, shootWaitCounter, shootTimeCounter;
 
     public Animator anim;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        startPoint = transform.position;//store his first starting position
+        startPoint = transform.position;
 
         shootTimeCounter = timeToShoot;
         shootWaitCounter = waitBetweenShots;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        targetPoint = Player.instance.transform.position;//store Vector3: x,y,z
-        targetPoint.y = transform.position.y;//this will no longer depend on player y axis, instead it is now depending on enemy y axis itself
+        if (Player.instance == null) return;
 
-        if (!chasing)//chasing is false
+        targetPoint = Player.instance.transform.position;
+        targetPoint.y = transform.position.y;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, targetPoint);
+
+        switch (currentState)
         {
-            if (Vector3.Distance(transform.position, targetPoint) < distanceToCHase)
-            {
-                chasing = true;//we are within the range
-            }
-            //make Enemy chase us for certain time before deciding to go back to the startPoint
-            if (chaseCounter > 0)
-            {
-                chaseCounter -= Time.deltaTime;
+            case BossState.Idle:
+                anim.Play("Idle");
 
-                if (chaseCounter <= 0)
+                if (distanceToPlayer < distanceToChase)
                 {
-                    agent.destination = startPoint;
+                    currentState = BossState.Chasing;
                 }
-            }
+                break;
 
-            if (agent.remainingDistance < 0.25f)
-            {
-                anim.SetBool("isMoving", false);
-            }
-            else
-            {
-                anim.SetBool("isMoving", true);
-            }
-        }
-        else//chasing is true
-        {
-            if (Vector3.Distance(transform.position, targetPoint) > distanceToStop)
-            {
-                agent.destination = targetPoint;
-            }
-            else
-            {
-                //stop him here
-                agent.destination = transform.position;
-            }
+            case BossState.Chasing:
+                agent.SetDestination(targetPoint);
+                anim.Play("Run");
 
-            // transform.LookAt(targetPoint);
-            // rb.linearVelocity = transform.forward * moveSpeed;
-
-
-            if (Vector3.Distance(transform.position, targetPoint) > distanceToLose)
-            {
-                chasing = false;//we are out of the range
-                //agent.destination = startPoint;
-                chaseCounter = keepChasingTime;//to reset the chaseCounter
-            }
-
-            if (shootWaitCounter > 0)
-            {
-                shootWaitCounter -= Time.deltaTime;
-
-                if (shootWaitCounter <= 0)
+                if (distanceToPlayer > distanceToLose)
                 {
-                    shootTimeCounter = timeToShoot;
+                    currentState = BossState.Idle;
+                    agent.SetDestination(startPoint);
+                }
+                else if (distanceToPlayer <= distanceToStop)
+                {
+                    currentState = BossState.Attacking;
+                    shootWaitCounter = waitBetweenShots;
+                    agent.ResetPath();
+                }
+                break;
+
+            case BossState.Attacking:
+                transform.LookAt(Player.instance.transform.position);
+
+                if (distanceToPlayer > distanceToStop)
+                {
+                    currentState = BossState.Chasing;
+                    break;
                 }
 
-                anim.SetBool("isMoving", true);
-
-            }
-            else if (Player.instance.gameObject.activeInHierarchy)
-            {
-                shootTimeCounter -= Time.deltaTime;
-
-                if (shootTimeCounter > 0)
+                // Attack logic
+                if (shootWaitCounter > 0)
                 {
-                    fireCount -= Time.deltaTime;
+                    shootWaitCounter -= Time.deltaTime;
 
-                    if (fireCount <= 0)
+                    if (shootWaitCounter <= 0)
                     {
-                        fireCount = fireRate;
-
-                        firePoint.LookAt(targetPoint + new Vector3(0f, 0.4f, 0f));
-
-                        //check the angle towards the player
-                        Vector3 targetDir = Player.instance.transform.position - transform.position;//the direction
-                        float angle = Vector3.SignedAngle(targetDir, transform.forward, Vector3.up);
-
-                        if (Mathf.Abs(angle) < 30f)
-                        {
-                            Instantiate(bullet, firePoint.position, firePoint.rotation);
-
-                            anim.SetTrigger("fireShot");
-                        }
-                        else
-                        {
-                            shootWaitCounter = waitBetweenShots;//reset the waiting again
-                        }
+                        shootTimeCounter = timeToShoot;
                     }
 
-                    agent.destination = transform.position;//stop while shooting
+                    anim.Play("Idle");
                 }
-                else
+                else if (Player.instance.gameObject.activeInHierarchy)
                 {
-                    shootWaitCounter = waitBetweenShots;
+                    shootTimeCounter -= Time.deltaTime;
+
+                    if (shootTimeCounter > 0)
+                    {
+                        fireCount -= Time.deltaTime;
+
+                        if (fireCount <= 0)
+                        {
+                            fireCount = fireRate;
+
+                            firePoint.LookAt(targetPoint + new Vector3(0f, 0.4f, 0f));
+
+                            // Check angle
+                            Vector3 targetDir = Player.instance.transform.position - transform.position;
+                            float angle = Vector3.SignedAngle(targetDir, transform.forward, Vector3.up);
+
+                            if (Mathf.Abs(angle) < 30f)
+                            {
+                                Instantiate(bullet, firePoint.position, firePoint.rotation);
+                                anim.SetTrigger("fireShot");
+                            }
+                            else
+                            {
+                                shootWaitCounter = waitBetweenShots;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        shootWaitCounter = waitBetweenShots;
+                    }
+
+                    anim.SetBool("isMoving", false);
                 }
 
-                anim.SetBool("isMoving", false);
-            }
-
-
+                break;
         }
     }
-
-
 }
