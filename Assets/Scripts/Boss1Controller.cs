@@ -6,12 +6,12 @@ public class Boss1Controller : MonoBehaviour
     public enum BossState { Idle, Chasing, Attacking }
     private BossState currentState = BossState.Idle;
 
-    private Vector3 targetPoint;
     private NavMeshAgent agent;
+    private Vector3 targetPoint;
 
-    public float distanceToChase = 20f;
-    public float distanceToLose = 20f;
-    public float distanceToStop = 6f;
+    public float distanceToChase = 10f;
+    public float distanceToLose = 15f;
+    public float agentDistanceToStop = 2f; // Renamed here
 
     [Header("Bullet Section")]
     public GameObject bullet;
@@ -54,28 +54,29 @@ public class Boss1Controller : MonoBehaviour
                 agent.SetDestination(targetPoint);
                 anim.SetBool("isMoving", true);
 
-                if (distanceToPlayer > distanceToLose)
-                {
-                    currentState = BossState.Idle;
-                    agent.ResetPath(); // 不回家，只停下
-                    anim.SetBool("isMoving", false);
-                }
-                else if (distanceToPlayer <= distanceToStop)
+                // Changed to agentDistanceToStop
+                if (distanceToPlayer <= agentDistanceToStop)
                 {
                     currentState = BossState.Attacking;
-                    agent.ResetPath(); // ✅ 停止移动
-                    agent.isStopped = true; // ✅ 更明确地停住
+                    agent.isStopped = true;
+                    agent.ResetPath();
                     anim.SetBool("isMoving", false);
                     shootWaitCounter = waitBetweenShots;
                 }
-                
+                else if (distanceToPlayer > distanceToLose)
+                {
+                    currentState = BossState.Idle;
+                    agent.ResetPath();
+                    anim.SetBool("isMoving", false);
+                }
                 break;
 
             case BossState.Attacking:
-                agent.isStopped = true;
                 transform.LookAt(new Vector3(Player.instance.transform.position.x, transform.position.y, Player.instance.transform.position.z));
+                agent.isStopped = true;
 
-                if (distanceToPlayer > distanceToStop && distanceToPlayer <= distanceToLose)
+                // Changed to agentDistanceToStop
+                if (distanceToPlayer > agentDistanceToStop && distanceToPlayer <= distanceToLose)
                 {
                     currentState = BossState.Chasing;
                     break;
@@ -91,7 +92,6 @@ public class Boss1Controller : MonoBehaviour
                 if (shootWaitCounter > 0)
                 {
                     shootWaitCounter -= Time.deltaTime;
-
                     if (shootWaitCounter <= 0)
                     {
                         shootTimeCounter = timeToShoot;
@@ -110,7 +110,6 @@ public class Boss1Controller : MonoBehaviour
                             fireCount = fireRate;
 
                             firePoint.LookAt(targetPoint + new Vector3(0f, 0.4f, 0f));
-
                             Vector3 targetDir = Player.instance.transform.position - transform.position;
                             float angle = Vector3.SignedAngle(targetDir, transform.forward, Vector3.up);
 
