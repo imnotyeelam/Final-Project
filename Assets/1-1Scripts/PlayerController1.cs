@@ -22,7 +22,7 @@ public class PlayerController1 : MonoBehaviour
     private Animator anim;
 
 
-    //public GameObject bullet;
+    public GameObject bullet;
     public Transform firePoint;//spawn point of the bullet
 
     //public Gun activeGun;
@@ -96,9 +96,10 @@ public class PlayerController1 : MonoBehaviour
         //Debug.Log("Speed = " + moveInput.magnitude);
 
         //Handle the shooting
-        /*
-        if(Input.GetMouseButtonDown(0) && activeGun.fireCounter<=0)//left click mouse button
+        
+        if(Input.GetMouseButtonDown(0) )//left click mouse button
         {
+            
             RaycastHit hit;//invisible stick
             if (Physics.Raycast(camTrans.position, camTrans.forward, out hit, 500f))
             {
@@ -108,14 +109,15 @@ public class PlayerController1 : MonoBehaviour
             {
                 firePoint.LookAt(camTrans.position + (camTrans.forward * 30f));
             }
-            //Instantiate(bullet, firePoint.position, firePoint.rotation);
+            
+            Instantiate(bullet, firePoint.position, firePoint.rotation);
             //spawn the bullet on the fire pointposition and rotation
-            FireShot();
+            //FireShot();
         }
 
 
         //repeating shots
-        
+        /*
         if(Input.GetMouseButton(0) && activeGun.canAutoFire)//left click mouse buttom and canAutoFire is true
         {
             if(activeGun.fireCounter<=0)
