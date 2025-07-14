@@ -802,6 +802,22 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 359035273}
+    - target: {fileID: 912949306207061607, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 912949306207061607, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 912949306207061607, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 912949306207061607, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 918855332337054249, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -882,6 +898,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2088330045686844436, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088330045686844436, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520660046261698788, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520660046261698788, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520660046261698788, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520660046261698788, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3542009826308815747, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -893,6 +933,38 @@ PrefabInstance:
     - target: {fileID: 3578626086299824489, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993485453346539074, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216643483516717549, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216643483516717549, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216643483516717549, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5632784243037806867, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5632784243037806867, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5632784243037806867, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5632784243037806867, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
