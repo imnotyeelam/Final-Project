@@ -12,7 +12,7 @@ public class GrapplingHook : MonoBehaviour
     public GameObject ropeCylinderPrefab;
 
     [Header("Hand Animation")]
-    public Animator handAnimator; // 👈 Drag your hand Animator here
+    public Animator handAnimator; 
 
     private CharacterController controller;
     private Vector3 grapplePoint;
@@ -26,6 +26,7 @@ public class GrapplingHook : MonoBehaviour
 
     void Update()
     {
+        // Start Grapple
         if (Input.GetKeyDown(KeyCode.E))
         {
             Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
@@ -34,29 +35,40 @@ public class GrapplingHook : MonoBehaviour
                 grapplePoint = hit.point;
                 isGrappling = true;
 
-                // Trigger fist animation
+                // Trigger hand "fist" animation
                 if (handAnimator != null)
+                {
                     handAnimator.SetBool("IsFisting", true);
+                }
 
+                // Spawn rope cylinder if needed
                 if (currentRopeCylinder == null && ropeCylinderPrefab != null)
                 {
                     currentRopeCylinder = Instantiate(ropeCylinderPrefab);
                 }
             }
+            Debug.Log("Triggered Fist Animation");
+            handAnimator.SetBool("IsFisting", true);
         }
 
+        // End Grapple
         if (Input.GetKeyUp(KeyCode.E))
         {
             isGrappling = false;
 
             // Return to idle animation
             if (handAnimator != null)
+            {
                 handAnimator.SetBool("IsFisting", false);
+            }
 
             if (currentRopeCylinder)
+            {
                 Destroy(currentRopeCylinder);
+            }
         }
 
+        // Move toward grapple point
         if (isGrappling)
         {
             Vector3 direction = (grapplePoint - transform.position).normalized;
