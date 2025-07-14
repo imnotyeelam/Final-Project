@@ -1,20 +1,56 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MinionAI : MonoBehaviour
 {
-    public Transform player;
+    public Transform target;
+    private NavMeshAgent agent;
+    private Animator animator;
 
-    public void SetTarget(Transform target)
+    public float attackRange = 1.5f;
+    public float attackCooldown = 1.5f;
+    private float lastAttackTime;
+
+    void Start()
     {
-        player = target;
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+
+        agent.stoppingDistance = 6f; // 正确设置！
     }
 
-    // 示例追踪逻辑（可选）
+    public void SetTarget(Transform t)
+    {
+        target = t;
+    }
+
     void Update()
     {
-        if (player != null)
+        if (target == null) return;
+
+        agent.SetDestination(target.position);
+
+        // 播放跑步动画
+        if (agent.remainingDistance > agent.stoppingDistance)
         {
-            transform.position = Vector3.MoveTowards(transform.position, player.position, 2f * Time.deltaTime);
+            animator.SetBool("isRunning", true);
+            agent.isStopped = false;
+        }
+        else
+        {
+            // 到达停止点，播放攻击动画
+            animator.SetBool("isRunning", false);
+            agent.isStopped = true;
+
+            if (agent.remainingDistance <= attackRange)
+            {
+                if (Time.time - lastAttackTime >= attackCooldown)
+                {
+                    animator.SetTrigger("isAttacking");
+                    Debug.Log("攻击玩家！");
+                    lastAttackTime = Time.time;
+                }
+            }
         }
     }
 }
