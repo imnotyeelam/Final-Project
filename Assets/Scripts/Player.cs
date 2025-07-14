@@ -1,8 +1,10 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    public static Player instance; // ← 加上这一行！
+
     public float moveSpeed = 6f;
     public float runSpeed = 12f;
     public float gravityModifier = 2.5f;
@@ -15,6 +17,11 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController charCon;
     public Transform camTrans;
+
+    void Awake()
+    {
+        instance = this; // ← 再加上这一行！
+    }
 
     void Start()
     {
