@@ -34,11 +34,12 @@ public class BulletController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         
-        if (other.gameObject.tag == "Enemy"&& damageEnemy)
+        if (other.gameObject.tag == "Enemy")
         {
             //Destroy(other.gameObject);
             other.gameObject.GetComponent<EnemyHealthController>().DamageEnemy(damage);
         }
+        /*
         if (other.gameObject.tag == "HeadShot" && damageEnemy)
         {
             //Destroy(other.gameObject);
@@ -58,7 +59,7 @@ public class BulletController : MonoBehaviour
         {
             damageable.TakeDamage(damage, attackPlayer);
         }
-        
+        */
         Destroy(gameObject);
 
         float offset = 0.7f;

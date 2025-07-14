@@ -17,9 +17,9 @@ public class EnemyHealthController : MonoBehaviour
         
     }
 
-    public void DamageEnemy()
+    public void DamageEnemy(int damageAmount)
     {
-        currentHealth--;
+        currentHealth-=damageAmount;
         if(currentHealth <=0 )
         {
             //destroy the target
