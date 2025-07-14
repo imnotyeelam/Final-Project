@@ -31,25 +31,7 @@ public class Boss1antitank : MonoBehaviour, Boss1IDamageable
     }
     private void OnTriggerEnter(Collider other)
     {
-        /*
-        if(other.CompareTag("Enemy") && damageEnemy)
-        {
-            other.gameObject.GetComponent<EnemyHealthConctroller>().DamageEnemy(damage);
-            //Destroy(other.transform.parent.gameObject);
-        }
-
-        if (other.CompareTag("headShot") && damageEnemy)
-        {
-            other.transform.parent.GetComponent<EnemyHealthConctroller>().DamageEnemy(damage*2);
-        }
-
-        if (other.CompareTag("Player") && damagePlayer)
-        {
-            //Debug.Log("Hit the Player!!");
-            PlayerHealthController.instance.DamagePlayer(damage);
-        }
-        */
-
+        
         Boss1IDamageable damageable = other.GetComponent<Boss1IDamageable>();
         if (damageable != null)
         {
