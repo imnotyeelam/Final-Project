@@ -7,10 +7,12 @@ public class GrapplingHook : MonoBehaviour
     public Transform cameraTransform;
     public Transform hookStartPoint;
     public float maxGrappleDistance = 30f;
-    public float grappleSpeed = 20f;
-    public float stopDistance = 2f; // Distance to stop near grapple point
+    public float grappleSpeed = 10f;
     public LayerMask grappleMask;
     public GameObject ropeCylinderPrefab;
+
+    [Header("Hand Animation")]
+    public Animator handAnimator; // 👈 Drag your hand Animator here
 
     private CharacterController controller;
     private Vector3 grapplePoint;
@@ -24,7 +26,6 @@ public class GrapplingHook : MonoBehaviour
 
     void Update()
     {
-        // Shoot grapple
         if (Input.GetKeyDown(KeyCode.E))
         {
             Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
@@ -33,6 +34,10 @@ public class GrapplingHook : MonoBehaviour
                 grapplePoint = hit.point;
                 isGrappling = true;
 
+                // Trigger fist animation
+                if (handAnimator != null)
+                    handAnimator.SetBool("IsFisting", true);
+
                 if (currentRopeCylinder == null && ropeCylinderPrefab != null)
                 {
                     currentRopeCylinder = Instantiate(ropeCylinderPrefab);
@@ -40,39 +45,23 @@ public class GrapplingHook : MonoBehaviour
             }
         }
 
-        // Cancel grapple
         if (Input.GetKeyUp(KeyCode.E))
         {
-            StopGrapple();
+            isGrappling = false;
+
+            // Return to idle animation
+            if (handAnimator != null)
+                handAnimator.SetBool("IsFisting", false);
+
+            if (currentRopeCylinder)
+                Destroy(currentRopeCylinder);
         }
 
         if (isGrappling)
         {
-            Vector3 toTarget = grapplePoint - transform.position;
-            float distance = toTarget.magnitude;
-
-            if (distance > stopDistance)
-            {
-                // Pull the player smoothly
-                Vector3 move = toTarget.normalized * grappleSpeed * Time.deltaTime;
-                controller.Move(move);
-            }
-            else
-            {
-                // Stop when close enough
-                StopGrapple();
-            }
-
+            Vector3 direction = (grapplePoint - transform.position).normalized;
+            controller.Move(direction * grappleSpeed * Time.deltaTime);
             UpdateRopeVisual();
-        }
-    }
-
-    void StopGrapple()
-    {
-        isGrappling = false;
-        if (currentRopeCylinder)
-        {
-            Destroy(currentRopeCylinder);
         }
     }
 
