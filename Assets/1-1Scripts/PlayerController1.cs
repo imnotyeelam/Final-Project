@@ -4,9 +4,9 @@ using UnityEngine;
 
 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController1 : MonoBehaviour
 {
-    public static PlayerController instance;
+    public static PlayerController1 instance;
     public float moveSpeed, gravityModifier, jumpPower, runSpeed = 12f;
     public CharacterController charCon;
 
@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
     {
         //moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
         //moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
-        //float yStore = moveInput.y;//Store the first position moveInput y of the player
+        float yStore = moveInput.y;//Store the first position moveInput y of the player
 
         //to prevent falling error movement when the player satrt from higher ground
 
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         {
             moveInput = moveInput * moveSpeed;
         }
-        //moveInput.y = yStore;//continue the moveInput y;
+        moveInput.y = yStore;//continue the moveInput y;
 
 
         moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
