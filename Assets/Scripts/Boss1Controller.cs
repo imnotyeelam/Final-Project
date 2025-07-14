@@ -47,7 +47,7 @@ public class Boss1Controller : MonoBehaviour
         switch (currentState)
         {
             case BossState.Idle:
-                anim.Play("Idle");
+                anim.SetBool("isMoving", false);
 
                 if (distanceToPlayer < distanceToChase)
                 {
@@ -57,7 +57,7 @@ public class Boss1Controller : MonoBehaviour
 
             case BossState.Chasing:
                 agent.SetDestination(targetPoint);
-                anim.Play("Run");
+                anim.SetBool("isMoving", true);
 
                 if (distanceToPlayer > distanceToLose)
                 {
@@ -68,7 +68,8 @@ public class Boss1Controller : MonoBehaviour
                 {
                     currentState = BossState.Attacking;
                     shootWaitCounter = waitBetweenShots;
-                    agent.ResetPath();
+                    agent.ResetPath(); // Stop moving to shoot
+                    anim.SetBool("isMoving", false);
                 }
                 break;
 
@@ -85,13 +86,10 @@ public class Boss1Controller : MonoBehaviour
                 if (shootWaitCounter > 0)
                 {
                     shootWaitCounter -= Time.deltaTime;
-
                     if (shootWaitCounter <= 0)
                     {
                         shootTimeCounter = timeToShoot;
                     }
-
-                    anim.Play("Idle");
                 }
                 else if (Player.instance.gameObject.activeInHierarchy)
                 {
@@ -107,7 +105,6 @@ public class Boss1Controller : MonoBehaviour
 
                             firePoint.LookAt(targetPoint + new Vector3(0f, 0.4f, 0f));
 
-                            // Check angle
                             Vector3 targetDir = Player.instance.transform.position - transform.position;
                             float angle = Vector3.SignedAngle(targetDir, transform.forward, Vector3.up);
 
@@ -126,10 +123,7 @@ public class Boss1Controller : MonoBehaviour
                     {
                         shootWaitCounter = waitBetweenShots;
                     }
-
-                    anim.SetBool("isMoving", false);
                 }
-
                 break;
         }
     }
