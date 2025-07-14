@@ -7,7 +7,7 @@ public class MinionAI : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
 
-    public float attackRange = 1.5f;
+    public float attackRange = 14.5f;
     public float attackCooldown = 1.5f;
     private float lastAttackTime;
 
@@ -16,7 +16,7 @@ public class MinionAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        agent.stoppingDistance = 6f; // 正确设置！
+        agent.stoppingDistance = 10f; // 正确设置！
     }
 
     public void SetTarget(Transform t)
