@@ -8,7 +8,7 @@ public class BulletController : MonoBehaviour
     public GameObject impactEffect;
     public int damage = 1;
 
-    // public bool damageEnemy, damagePlayer;
+    public bool damageEnemy, damagePlayer;
 
     public bool attackPlayer;
 
@@ -34,12 +34,12 @@ public class BulletController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" && damageEnemy)
         {
             //Destroy(other.gameObject);
             other.gameObject.GetComponent<EnemyHealthController>().DamageEnemy(damage);
         }
-        /*
+        
         if (other.gameObject.tag == "HeadShot" && damageEnemy)
         {
             //Destroy(other.gameObject);
@@ -47,14 +47,14 @@ public class BulletController : MonoBehaviour
         }
         if (other.CompareTag("Player")&&damagePlayer)
         {
-            //Debug.Log("Hit the player");
-            PlayerHealthController.instance.DamagePlayer(damage);
+            Debug.Log("Hit the player");
+            //PlayerHealthController.instance.DamagePlayer(damage);
         }
         
 
-        IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
+        //IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
         //try to interact with the other object that implements IDamageable
-
+        /*
         if (damageable != null)
         {
             damageable.TakeDamage(damage, attackPlayer);
