@@ -4,8 +4,8 @@ using UnityEngine.AI;
 
 public class EnemyController1 : MonoBehaviour
 {
-    //public float moveSpeed;
-    //public Rigidbody rb;
+    public float moveSpeed;
+    public Rigidbody rb;
 
     private bool chasing;
     public float distanceToChase = 10f, distanceToLose = 15f, distanceToStop = 2f;
