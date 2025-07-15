@@ -8,7 +8,7 @@ public class BulletController : MonoBehaviour
     public GameObject impactEffect;
     public int damage = 1;
 
-    public bool damageEnemy, damagePlayer;
+    public bool damageEnemy, damagePlayer;//can tick in the inspector
 
     public bool attackPlayer;
 
@@ -34,7 +34,7 @@ public class BulletController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         
-        if (other.gameObject.tag == "Enemy" && damageEnemy)
+        if (other.CompareTag("Enemy") && damageEnemy)
         {
             //Destroy(other.gameObject);
             other.gameObject.GetComponent<EnemyHealthController>().DamageEnemy(damage);
