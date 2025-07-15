@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -12,7 +13,7 @@ public class GrapplingHook : MonoBehaviour
     public GameObject ropeCylinderPrefab;
 
     [Header("Hand Animation")]
-    public Animator handAnimator; 
+    public Animator handAnimator;
 
     private CharacterController controller;
     private Vector3 grapplePoint;
@@ -26,7 +27,9 @@ public class GrapplingHook : MonoBehaviour
 
     void Update()
     {
-        // Start Grapple
+        // Only allow grappling in hooker mode
+        if (HandSwitcher.CurrentMode != 1) return;
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
@@ -35,28 +38,22 @@ public class GrapplingHook : MonoBehaviour
                 grapplePoint = hit.point;
                 isGrappling = true;
 
-                // Trigger hand "fist" animation
                 if (handAnimator != null)
                 {
                     handAnimator.SetBool("IsFisting", true);
                 }
 
-                // Spawn rope cylinder if needed
                 if (currentRopeCylinder == null && ropeCylinderPrefab != null)
                 {
                     currentRopeCylinder = Instantiate(ropeCylinderPrefab);
                 }
             }
-            Debug.Log("Triggered Fist Animation");
-            handAnimator.SetBool("IsFisting", true);
         }
 
-        // End Grapple
         if (Input.GetKeyUp(KeyCode.E))
         {
             isGrappling = false;
 
-            // Return to idle animation
             if (handAnimator != null)
             {
                 handAnimator.SetBool("IsFisting", false);
@@ -68,7 +65,6 @@ public class GrapplingHook : MonoBehaviour
             }
         }
 
-        // Move toward grapple point
         if (isGrappling)
         {
             Vector3 direction = (grapplePoint - transform.position).normalized;
@@ -76,7 +72,7 @@ public class GrapplingHook : MonoBehaviour
             UpdateRopeVisual();
         }
     }
-
+    
     void UpdateRopeVisual()
     {
         if (currentRopeCylinder == null) return;
@@ -86,8 +82,13 @@ public class GrapplingHook : MonoBehaviour
         Vector3 dir = end - start;
         float length = dir.magnitude;
 
+        // Position rope in the middle of the start and end points
         currentRopeCylinder.transform.position = start + dir / 2f;
+
+        // Rotate rope to align with the direction
         currentRopeCylinder.transform.up = dir.normalized;
-        currentRopeCylinder.transform.localScale = new Vector3(0.05f, length / 2f, 0.05f);
+
+        // Scale rope based on distance (assuming Y-axis is up in cylinder)
+        currentRopeCylinder.transform.localScale = new Vector3(0.1f, length / 2f, 0.1f);
     }
 }
