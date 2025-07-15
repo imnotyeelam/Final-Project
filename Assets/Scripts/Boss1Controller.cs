@@ -23,6 +23,11 @@ public class Boss1Controller : MonoBehaviour
 
     public Animator anim;
 
+    public void ThrowGrenade()
+    {
+        firePoint.LookAt(Player.instance.transform.position + new Vector3(0f, 0.4f, 0f));
+        Instantiate(bullet, firePoint.position, firePoint.rotation);
+    }
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
