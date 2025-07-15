@@ -5,7 +5,6 @@ public class FistAttack : MonoBehaviour
     public float punchRange = 2f;
     public int punchDamage = 1;
     public float punchCooldown = 0.5f;
-    public LayerMask enemyMask;
     public Transform leftFistPoint;
     public Transform rightFistPoint;
     public GameObject punchEffect;
@@ -38,20 +37,23 @@ public class FistAttack : MonoBehaviour
             Instantiate(punchEffect, fistPoint.position, fistPoint.rotation);
         }
 
-        // Detect enemy hit
-        Collider[] hits = Physics.OverlapSphere(fistPoint.position, punchRange, enemyMask);
+        // Detect all nearby colliders within punch range
+        Collider[] hits = Physics.OverlapSphere(fistPoint.position, punchRange);
 
         foreach (Collider hit in hits)
         {
-            SimpleEnemy enemy = hit.GetComponent<SimpleEnemy>();
-            if (enemy != null)
+            if (hit.CompareTag("Enemy"))
             {
-                enemy.TakeDamage(punchDamage);
-                Debug.Log("Enemy hit by punch!");
-
-                if (enemy.health <= 0)
+                SimpleEnemy enemy = hit.GetComponent<SimpleEnemy>();
+                if (enemy != null)
                 {
-                    Destroy(hit.gameObject);
+                    enemy.TakeDamage(punchDamage);
+                    Debug.Log("Enemy hit by punch!");
+
+                    if (enemy.health <= 0)
+                    {
+                        Destroy(hit.gameObject);
+                    }
                 }
             }
         }
@@ -59,7 +61,6 @@ public class FistAttack : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Just to visualize punch range
         if (leftFistPoint != null)
             Gizmos.DrawWireSphere(leftFistPoint.position, punchRange);
         if (rightFistPoint != null)
