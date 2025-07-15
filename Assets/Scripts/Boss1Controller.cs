@@ -9,20 +9,17 @@ public class Boss1Controller : MonoBehaviour
     private NavMeshAgent agent;
     private Vector3 targetPoint;
 
-    public float distanceToChase = 10f;
-    public float distanceToLose = 15f;
-    public float agentDistanceToStop = 8f; // Renamed here
-
-    public float attackStartDistance = 10f;
-    public float attackStopDistance = 15f; // 跑太远就不攻击
+    public float distanceToChase;
+    public float distanceToLose;
+    public float agentDistanceToStop; // Renamed here
 
 
     [Header("Bullet Section")]
     public GameObject bullet;
     public Transform firePoint;
     public float fireRate = 0.5f;
-    public float waitBetweenShots = 0.2f;
-    public float timeToShoot = 0.8f;
+    public float waitBetweenShots = 0.1f;
+    public float timeToShoot = 0.5f;
     private float fireCount, shootWaitCounter, shootTimeCounter;
 
     public Animator anim;
