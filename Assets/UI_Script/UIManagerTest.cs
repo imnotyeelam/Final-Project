@@ -5,11 +5,11 @@ public class UIManagerTest : MonoBehaviour
     private float currentHP = 100f;
     private float maxHP = 100f;
 
-    private float currentEnergy = 50f;
+    private float currentEnergy = 100f;
     private float maxEnergy = 100f;
 
     private int collectedPieces = 0;
-    private int totalPieces = 5;
+    private int totalPieces = 3;
 
     void Start()
     {

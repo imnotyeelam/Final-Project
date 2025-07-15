@@ -23,14 +23,61 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHealth(float current, float max)
     {
-        if (healthBar) healthBar.value = current / max;
+        float percent = current / max;
+
+        if (healthBar)
+        {
+            healthBar.value = percent;
+
+            Color highColor = Color.green;
+            Color midColor = Color.yellow;
+            Color lowColor = Color.red;
+
+            Image fillImage = healthBar.fillRect.GetComponent<Image>();
+
+            if (percent > 0.5f)
+            {
+                float t = (percent - 0.5f) / 0.5f;
+                fillImage.color = Color.Lerp(midColor, highColor, t);
+            }
+            else
+            {
+                float t = percent / 0.5f;
+                fillImage.color = Color.Lerp(lowColor, midColor, t);
+            }
+        }
+
         if (healthText) healthText.text = $"{current}/{max}";
     }
 
+
     public void UpdateEnergy(float current, float max)
     {
-        if (energyBar) energyBar.value = current / max;
+        float percent = current / max;
+
+        if (energyBar)
+        {
+            energyBar.value = percent;
+
+            Color highColor = Color.cyan;
+            Color midColor = Color.yellow;
+            Color lowColor = Color.red;
+
+            Image fillImage = energyBar.fillRect.GetComponent<Image>();
+
+            if (percent > 0.5f)
+            {
+                float t = (percent - 0.5f) / 0.5f;
+                fillImage.color = Color.Lerp(midColor, highColor, t);
+            }
+            else
+            {
+                float t = percent / 0.5f;
+                fillImage.color = Color.Lerp(lowColor, midColor, t);
+            }
+        }
     }
+
 
     public void UpdatePieces(int collected, int total)
     {
