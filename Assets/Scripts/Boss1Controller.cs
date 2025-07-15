@@ -25,9 +25,14 @@ public class Boss1Controller : MonoBehaviour
 
     public void ThrowGrenade()
     {
-        firePoint.LookAt(Player.instance.transform.position + new Vector3(0f, 0.4f, 0f));
-        Instantiate(bullet, firePoint.position, firePoint.rotation);
+        Vector3 targetPos = Player.instance.transform.position + new Vector3(0f, 0.4f, 0f);
+        Vector3 direction = (targetPos - firePoint.position).normalized;
+
+        Quaternion rotation = Quaternion.LookRotation(direction);
+
+        Instantiate(bullet, firePoint.position, rotation);
     }
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -77,7 +82,15 @@ public class Boss1Controller : MonoBehaviour
                 break;
 
             case BossState.Attacking:
-                transform.LookAt(new Vector3(Player.instance.transform.position.x, transform.position.y, Player.instance.transform.position.z));
+                // 平滑朝向玩家（只旋转 Y 轴）
+                Vector3 direction = Player.instance.transform.position - transform.position;
+                direction.y = 0f; // 避免抬头/低头
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+                }
+
                 agent.isStopped = true;
 
                 // Changed to agentDistanceToStop
@@ -120,7 +133,6 @@ public class Boss1Controller : MonoBehaviour
 
                             if (Mathf.Abs(angle) < 30f)
                             {
-                                Instantiate(bullet, firePoint.position, firePoint.rotation);
                                 anim.SetTrigger("fireShot");
                             }
                             else
