@@ -1,19 +1,23 @@
 using UnityEngine;
+using System.Collections; // 别忘了加这一行才能用 IEnumerator
 
 public class Boss1HealthController : MonoBehaviour
 {
+    public enum BossType { MainBoss, Clone }
+    public BossType bossType = BossType.MainBoss;
+
     public int currentHealth = 2;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Vector3 spawnPosition;
+
     void Start()
     {
+        spawnPosition = transform.position;
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        if (bossType == BossType.Clone)
+        {
+            BossManager.instance.RegisterClone(this);
+        }
     }
 
     public void DamageEnemy(int BulletDamage)
@@ -22,20 +26,31 @@ public class Boss1HealthController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Destroy(transform.parent.gameObject);
+            if (bossType == BossType.MainBoss)
+            {
+                BossManager.instance.MainBossDied();
+                Destroy(gameObject);
+            }
+            else
+            {
+                if (!BossManager.instance.IsMainBossDead())
+                    StartCoroutine(ReviveAfterSeconds(5f)); // 5秒后复活
+
+                gameObject.SetActive(false);
+            }
         }
     }
 
-    public void TakeDamage(int damage, bool attackPLayer)
+    public void ForceKill()
     {
-        if (!attackPLayer)
-        {
-            currentHealth -= damage;
+        Destroy(gameObject);
+    }
 
-            if (currentHealth <= 0)
-            {
-                Destroy(transform.parent.gameObject);
-            }
-        }
+    private IEnumerator ReviveAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        currentHealth = 2;
+        transform.position = spawnPosition;
+        gameObject.SetActive(true);
     }
 }
