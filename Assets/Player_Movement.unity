@@ -5665,7 +5665,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 107176264}
   bulletPrefab: {fileID: 4754782290425702832, guid: 10a08a899d715304fa2a7581d8752d0c, type: 3}
-  lightningPrefab: {fileID: 620125848978976675, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+  lightningPrefab: {fileID: 4666016928129409062, guid: da22f0a50b8d94b4782f84f5f3c21647, type: 3}
 --- !u!95 &2129596786 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 95000013609880944, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
@@ -5676,7 +5676,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000011195282122, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
   m_PrefabInstance: {fileID: 1435797944}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &8326331169395006085
+--- !u!1001 &9130665627627965391
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -5684,55 +5684,55 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 620125848978976675, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
-      propertyPath: m_Name
-      value: LightningBolt
-      objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.974646
+      value: 18.796024
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25.26904
+      value: 25.5198
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 124.00904
+      value: 106.35225
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 858879114607259787, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+    - target: {fileID: 2457798926944964773, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511350515436809357, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
+      propertyPath: m_Name
+      value: 'LightningBoltRendererPrefabLineRenderer '
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1d67a471068f5994d925c9e2a4385ffa, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 9bed7c32b1fa490478aff575fffeda3c, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -5745,4 +5745,4 @@ SceneRoots:
   - {fileID: 1642750306}
   - {fileID: 748513552}
   - {fileID: 1717605856}
-  - {fileID: 8326331169395006085}
+  - {fileID: 9130665627627965391}
