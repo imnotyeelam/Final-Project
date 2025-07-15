@@ -126,10 +126,10 @@ MonoBehaviour:
   moveSpeed: 20
   lifeTime: 5
   impactEffect: {fileID: 7112781024126390488, guid: 0df82f2368f3875428a33e02f4a0b9f5, type: 3}
-  damage: 1
+  damage: 5
   damageEnemy: 0
   damagePlayer: 1
-  attackPlayer: 0
+  attackPlayer: 1
 --- !u!54 &2076386169665856164
 Rigidbody:
   m_ObjectHideFlags: 0

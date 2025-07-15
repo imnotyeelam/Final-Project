@@ -24,7 +24,7 @@ public class EnemyController1 : MonoBehaviour
         public float fireRate, waitBetweenShots = 1f, timeToShoot = 2f;
         private float fireCount, shotWaitCounter, shootTimeCounter;
 
-        //public Animator anim;
+        public Animator anim;
         
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -67,7 +67,7 @@ public class EnemyController1 : MonoBehaviour
                     agent.destination = startPoint;
                 }
             }
-            /*
+            
             if (agent.remainingDistance < .25f)
             {
                 anim.SetBool("isMoving", false);
@@ -76,7 +76,7 @@ public class EnemyController1 : MonoBehaviour
             {
                 anim.SetBool("isMoving", true);
             }
-            */
+            
         }
             else//chasing = true, where the enemy will chase us
             {
@@ -112,7 +112,7 @@ public class EnemyController1 : MonoBehaviour
                         shootTimeCounter = timeToShoot;
                     }
 
-                    //anim.SetBool("isMoving", true);
+                    anim.SetBool("isMoving", true);
                 }
                 else if (PlayerController1.instance.gameObject.activeInHierarchy)//only run the code whem he is active when he is alive
                 {
@@ -135,7 +135,7 @@ public class EnemyController1 : MonoBehaviour
                             if (Mathf.Abs(angle) <= 30f)//abs:绝对值（因为有时候角度会为负数）
                             {
                                 Instantiate(bullet, firePoint.position, firePoint.rotation);
-                                //anim.SetTrigger("fireshot");
+                                anim.SetTrigger("fireShot");
 
                             }
                             else
@@ -152,7 +152,7 @@ public class EnemyController1 : MonoBehaviour
                         shotWaitCounter = waitBetweenShots;
                     }
 
-                    //anim.SetBool("isMoving", false);
+                    anim.SetBool("isMoving", false);
 
                 }
                 
