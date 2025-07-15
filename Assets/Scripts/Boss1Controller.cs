@@ -82,15 +82,7 @@ public class Boss1Controller : MonoBehaviour
                 break;
 
             case BossState.Attacking:
-                // 平滑朝向玩家（只旋转 Y 轴）
-                Vector3 direction = Player.instance.transform.position - transform.position;
-                direction.y = 0f; // 避免抬头/低头
-                if (direction != Vector3.zero)
-                {
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-                }
-
+                transform.LookAt(new Vector3(Player.instance.transform.position.x, transform.position.y, Player.instance.transform.position.z));
                 agent.isStopped = true;
 
                 // Changed to agentDistanceToStop
