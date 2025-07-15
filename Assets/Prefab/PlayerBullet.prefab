@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4552651084735550966}
   m_Layer: 0
   m_Name: PlayerBullet
-  m_TagString: Untagged
+  m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,7 +105,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -152,6 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 50
   lifetime: 2
+  hitEffectPrefab: {fileID: 339158821923109191, guid: 108ca465382c11742bd2c91fe4fdb13f, type: 3}
 --- !u!1001 &3674622179339377906
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -162,15 +163,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1877136941094780746, guid: 951bd10daf7e25e41863d488ccdfc5ce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 48.032055
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1877136941094780746, guid: 951bd10daf7e25e41863d488ccdfc5ce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 24.23
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1877136941094780746, guid: 951bd10daf7e25e41863d488ccdfc5ce, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 84.46
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1877136941094780746, guid: 951bd10daf7e25e41863d488ccdfc5ce, type: 3}
       propertyPath: m_LocalRotation.w
