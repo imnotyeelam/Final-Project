@@ -5,13 +5,14 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [Header("PlayerStatus UI")]
+    [Header("Player Status UI")]
     public Slider healthBar;
     public Text healthText;
+    public Slider energyBar;
     public Text piecesText;
 
     [Header("TaskPanel UI")]
-    public Transform taskContent;    // ScrollView Content
+    public Transform taskContent;
     public GameObject taskPrefab;
 
     private void Awake()
@@ -24,6 +25,11 @@ public class UIManager : MonoBehaviour
     {
         if (healthBar) healthBar.value = current / max;
         if (healthText) healthText.text = $"{current}/{max}";
+    }
+
+    public void UpdateEnergy(float current, float max)
+    {
+        if (energyBar) energyBar.value = current / max;
     }
 
     public void UpdatePieces(int collected, int total)
@@ -46,8 +52,6 @@ public class UIManager : MonoBehaviour
         return newTask;
     }
 
-
-
     public void RemoveTask(GameObject taskItem)
     {
         Destroy(taskItem);
@@ -60,5 +64,4 @@ public class UIManager : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-
 }
