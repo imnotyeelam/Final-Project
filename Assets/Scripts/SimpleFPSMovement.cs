@@ -3,25 +3,32 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class SimpleFPSMovement : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public float walkSpeed = 6f;
     public float runSpeed = 10f;
     public float gravity = -9.81f;
     public float jumpHeight = 2f;
+
+    [Header("Camera Reference")]
     public Transform cameraTransform;
 
-    private CharacterController controller;
-    private Vector3 velocity;
-    private bool isGrounded;
-    private int jumpCount = 0;
-
-    public float groundCheckDistance = 0.4f;
+    [Header("Ground Check Settings")]
     public Transform groundCheck;
+    public float groundCheckDistance = 0.4f;
     public LayerMask groundMask;
 
     [Header("Double Jump Settings")]
     public int maxJumps = 2;
-    public float doubleJumpSpeedBoost = 1.2f; // Optional speed boost on double jump
+    public float doubleJumpSpeedBoost = 1.2f;
 
+    [HideInInspector]
+    public Vector3 currentMoveVelocity; // ← used by HeadBob or camera scripts
+    [HideInInspector]
+    public bool isGrounded;
+
+    private CharacterController controller;
+    private Vector3 velocity;
+    private int jumpCount = 0;
     private bool usedDoubleJump = false;
 
     void Start()
@@ -45,15 +52,18 @@ public class SimpleFPSMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
-
         float currentSpeed = isRunning ? runSpeed : walkSpeed;
 
-        // If double jump is active, increase movement speed slightly
         if (usedDoubleJump)
             currentSpeed *= doubleJumpSpeedBoost;
 
         Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * currentSpeed * Time.deltaTime);
+        Vector3 horizontalMove = move * currentSpeed;
+
+        // Save for HeadBob use
+        currentMoveVelocity = horizontalMove;
+
+        controller.Move(horizontalMove * Time.deltaTime);
 
         // Jump input
         if (Input.GetButtonDown("Jump") && jumpCount < maxJumps)
@@ -65,7 +75,7 @@ public class SimpleFPSMovement : MonoBehaviour
                 usedDoubleJump = true;
         }
 
-        // Gravity
+        // Apply gravity
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
