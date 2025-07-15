@@ -7,7 +7,7 @@ public class MinionAI : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
 
-    public float attackRange = 14.5f;
+    public float attackRange = 18f;
     public float attackCooldown = 1.5f;
     private float lastAttackTime;
 
@@ -16,7 +16,7 @@ public class MinionAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        agent.stoppingDistance = 10f; // 正确设置！
+        agent.stoppingDistance = 15f; // 正确设置！
     }
 
     public void SetTarget(Transform t)
@@ -29,6 +29,8 @@ public class MinionAI : MonoBehaviour
         if (target == null) return;
 
         agent.SetDestination(target.position);
+
+        Debug.Log("距离为：" + agent.remainingDistance);
 
         // 播放跑步动画
         if (agent.remainingDistance > agent.stoppingDistance)
