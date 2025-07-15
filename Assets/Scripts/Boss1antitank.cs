@@ -2,51 +2,71 @@ using UnityEngine;
 
 public class Boss1antitank : MonoBehaviour, Boss1IDamageable
 {
-    public float moveSpeed, lifeTime;
-    private Rigidbody rb;
-    public GameObject LaserImpact;
+    public float moveSpeed = 10f;
+    public float lifeTime = 5f;
+    public float explosionRadius = 5f;
     public int damage = 2;
 
+    public GameObject LaserImpact;
+
+    private Rigidbody rb;
     public bool attackPlayer;
 
-    public bool damageEnemy, damagePlayer;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        rb.linearVelocity = transform.forward * moveSpeed;
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
 
         lifeTime -= Time.deltaTime;
-
         if (lifeTime <= 0)
         {
-            Destroy(gameObject);
+            Explode();
         }
     }
+
+
     private void OnTriggerEnter(Collider other)
     {
-        
-        Boss1IDamageable damageable = other.GetComponent<Boss1IDamageable>();
-        if (damageable != null)
+        // 只要触碰到任何物体就爆炸
+        Explode();
+    }
+
+    private void Explode()
+    {
+        // 1. 爆炸特效
+        if (LaserImpact != null)
         {
-            damageable.TakeDamage(damage, attackPlayer);
+            Instantiate(LaserImpact, transform.position, Quaternion.identity);
         }
 
-        float offset = 0.7f;
-        Vector3 newPosition = transform.position - transform.forward * offset;
+        // 2. 范围伤害
+        Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
+        foreach (var hit in hits)
+        {
+            Boss1IDamageable damageable = hit.GetComponent<Boss1IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(damage, attackPlayer);
+            }
+        }
 
-        Instantiate(LaserImpact, newPosition, transform.rotation);
+        // 3. 自毁
         Destroy(gameObject);
     }
 
-    public void TakeDamage(int damage, bool attackPLayer)
+    public void TakeDamage(int damage, bool attackPlayer)
     {
-        throw new System.NotImplementedException();
+        // 手雷不响应伤害
+    }
+
+    // 可视化爆炸半径（仅编辑器中看到）
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
     }
 }
