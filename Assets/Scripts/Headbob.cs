@@ -8,9 +8,9 @@ public class HeadBob : MonoBehaviour
     public float bobVerticalAmplitude = 0.05f;
 
     [Header("Running Settings")]
-    public float runBobFrequency = 2.5f;
-    public float runBobHorizontalAmplitude = 0.08f;
-    public float runBobVerticalAmplitude = 0.1f;
+    public float runBobFrequency = 4f;
+    public float runBobHorizontalAmplitude = 0.2f;
+    public float runBobVerticalAmplitude = 0.2f;
 
     public SimpleFPSMovement playerMovement;
 
