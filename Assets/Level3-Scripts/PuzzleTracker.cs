@@ -3,7 +3,7 @@ using UnityEngine;
 public class PuzzleTracker : MonoBehaviour
 {
     public static PuzzleTracker Instance;
-    public int collectedPieces = 8;
+    public int collectedPieces = 7;
 
     void Awake() => Instance = this;
 

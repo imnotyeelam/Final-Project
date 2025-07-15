@@ -30,7 +30,7 @@ public class MinionAI : MonoBehaviour
 
         agent.SetDestination(target.position);
 
-        Debug.Log("距离为：" + agent.remainingDistance);
+        //Debug.Log("距离为：" + agent.remainingDistance);
 
         // 播放跑步动画
         if (agent.remainingDistance > agent.stoppingDistance)

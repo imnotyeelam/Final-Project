@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class Boss2Controller : MonoBehaviour
@@ -11,68 +11,41 @@ public class Boss2Controller : MonoBehaviour
     private int currentWave = 0;
     private int totalWaves = 3;
     private List<GameObject> currentMinions = new List<GameObject>();
-
     private bool isSummoning = false;
-    private bool isAwake = false; // Boss ÊÇ·ñÒÑ¾­ÆðÉí
-    private bool playerInRange = false;
-
-    void Start()
-    {
-        // ³õÊ¼×´Ì¬£ºlying down
-        animator.Play("LyingDown"); // È·±£ Animator ÓÐÕâ¸ö×´Ì¬
-    }
 
     void Update()
     {
-        // ¼ì²âÌõ¼þ£ºÍæ¼ÒÊÕ¼¯ >= 2 ¿éËéÆ¬ && Íæ¼ÒÔÚ·¶Î§ÄÚ && Boss »¹Ã»ÆðÉí
-        if (!isAwake && playerInRange && PuzzleTracker.Instance.collectedPieces >= 2)
-        {
-            isAwake = true;
-            animator.SetTrigger("GetUp");
-        }
-
-        // ¼ì²éÊÇ·ñËùÓÐÐ¡±øËÀÍö£¬×¼±¸ÏÂÒ»²¨
         if (!isSummoning && currentMinions.Count > 0)
         {
             currentMinions.RemoveAll(m => m == null);
             if (currentMinions.Count == 0 && currentWave < totalWaves)
             {
-                Invoke(nameof(StartSummon), 2f); // 2ÃëºóÕÙ»½ÏÂÒ»²¨
+                Invoke(nameof(StartSummon), 2f); // 2ç§’åŽå¬å”¤ä¸‹ä¸€æ³¢
             }
         }
     }
 
-    // ´¥·¢Æ÷¼ì²âÍæ¼ÒÊÇ·ñ½øÈë Boss ·¶Î§
-    private void OnTriggerEnter(Collider other)
+    // ç”¨äºŽ Trigger è°ƒç”¨
+    public void StartGetUpAnimation()
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = true;
-        }
+        Debug.Log("Boss å¼€å§‹èµ·èº«ï¼");
+        animator.SetTrigger("GetUp");
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = false;
-        }
-    }
-
-    // **Animation Event£ºGetUp ²¥·Å½áÊøºóµ÷ÓÃ**
+    // å½“ GetUp åŠ¨ç”»ç»“æŸåŽï¼ŒåŠ¨ç”»äº‹ä»¶è°ƒç”¨è¿™ä¸ª
     public void OnGetUpFinished()
     {
-        animator.SetTrigger("BattleIdle");
-        Invoke(nameof(StartSummon), 2f); // ÑÓ³Ù 2s ºó¿ªÊ¼µÚÒ»²¨ÕÙ»½
+        //animator.SetTrigger("BattleIdle");
+        Invoke(nameof(StartSummon), 1.5f);
     }
 
     void StartSummon()
     {
         isSummoning = true;
-        animator.SetTrigger("Summon"); // ²¥·Å Victory_RF02_Anim
+        animator.SetTrigger("Summon");
     }
 
-    // ÔÚ Summon ¶¯»­µÄ Animation Event ÖÐµ÷ÓÃ
+    // Animation Event æ”¾åœ¨ Summon åŠ¨ç”»ä¸Š
     public void SpawnMinions()
     {
         currentWave++;
