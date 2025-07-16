@@ -70,10 +70,17 @@ public class Boss2Controller : MonoBehaviour
         Debug.Log("SummonPoints count: " + summonPoints.Length);
         Debug.Log($"开始第 {currentWave} 波召唤，共 {minionsPerWave} 个小兵");
 
+        List<Transform> availablePoints = new List<Transform>(summonPoints);
+
         for (int i = 0; i < minionsPerWave; i++)
         {
-            // 随机选择出生点
-            Transform spawnPoint = summonPoints[Random.Range(0, summonPoints.Length)];
+            if (availablePoints.Count == 0) break; // 避免越界
+
+            int randomIndex = Random.Range(0, availablePoints.Count);
+            Transform spawnPoint = availablePoints[randomIndex];
+
+            // 移除该点，防止重复
+            availablePoints.RemoveAt(randomIndex);
 
             // 生成小兵
             GameObject minion = Instantiate(minionPrefab, spawnPoint.position, Quaternion.identity);
