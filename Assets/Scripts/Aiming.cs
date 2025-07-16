@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class Aiming : MonoBehaviour
 {
-    public Transform hipPosition;      // Default position
-    public Transform aimPosition;      // Aiming position
+    public Transform hipPosition;
+    public Transform aimPosition;
     public float aimSpeed = 10f;
 
     public Camera playerCamera;
     public float normalFOV = 60f;
     public float aimFOV = 40f;
-    public float fovTransitionSpeed = 5f;
+    public float fovSpeed = 5f;
 
-    private bool isAiming = false;
+    private bool isAiming;
 
     void Update()
     {
-        isAiming = Input.GetMouseButton(1); // Right mouse button
+        isAiming = Input.GetMouseButton(1); // Right click
 
-        // Move gun to aiming position
+        // Move gun between hip and aim positions
         if (isAiming)
         {
             transform.position = Vector3.Lerp(transform.position, aimPosition.position, Time.deltaTime * aimSpeed);
@@ -29,11 +29,11 @@ public class Aiming : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, hipPosition.rotation, Time.deltaTime * aimSpeed);
         }
 
-        // Camera FOV change
-        if (playerCamera != null)
+        // FOV change
+        if (playerCamera)
         {
             float targetFOV = isAiming ? aimFOV : normalFOV;
-            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * fovTransitionSpeed);
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * fovSpeed);
         }
     }
 

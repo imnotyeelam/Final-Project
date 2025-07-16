@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class CrosshairController : MonoBehaviour
+public class CrosshairManager : MonoBehaviour
 {
-    public GameObject crosshairUI;
-    public Aiming gunAiming;
+    public GameObject crosshairUI;       // assign your crosshair image in Inspector
+    public Aiming aimingScript;          // drag the gun (which has the Aiming.cs) here
 
     void Update()
     {
-        if (crosshairUI != null && gunAiming != null)
+        if (crosshairUI != null && aimingScript != null)
         {
-            crosshairUI.SetActive(!gunAiming.IsAiming());
+            crosshairUI.SetActive(!aimingScript.IsAiming());
         }
     }
 }
