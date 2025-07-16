@@ -7288,21 +7288,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 1917973643}
-  hookStartPoint: {fileID: 1269941914}
+  hookStartPoint: {fileID: 1416468891}
+  maxGrappleDistance: 30
+  grappleSpeed: 10
   grappleMask:
     serializedVersion: 2
     m_Bits: 64
-  ropePrefab: {fileID: 5860907266064649023, guid: b40ea337eeb12c04683612505998724e, type: 3}
+  ropeCylinderPrefab: {fileID: 5860907266064649023, guid: b40ea337eeb12c04683612505998724e, type: 3}
   normalMaxDistance: 30
   aimMaxDistance: 50
   normalSpeed: 10
   aimSpeed: 15
-  cooldown: 0.5
-  aimIndicator: {fileID: 620412944}
-  readyColor: {r: 1, g: 0.5, b: 0, a: 0.8}
-  validColor: {r: 0, g: 1, b: 0, a: 1}
-  invalidColor: {r: 1, g: 0, b: 0, a: 1}
   handAnimator: {fileID: 1084691089}
+  aimIndicator: {fileID: 620412944}
+  cooldown: 0.5
 --- !u!143 &748513548
 CharacterController:
   m_ObjectHideFlags: 0

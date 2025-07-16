@@ -4,199 +4,154 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class GrapplingHook : MonoBehaviour
 {
-    [Header("Core Settings")]
+    [Header("Grappling Settings")]
     public Transform cameraTransform;
     public Transform hookStartPoint;
+    public float maxGrappleDistance = 30f;
+    public float grappleSpeed = 10f;
     public LayerMask grappleMask;
-    public GameObject ropePrefab;
+    public GameObject ropeCylinderPrefab;
 
-    [Header("Distance Settings")]
+    [Header("Aiming Settings")]
     public float normalMaxDistance = 30f;
     public float aimMaxDistance = 50f;
-
-    [Header("Speed Settings")]
     public float normalSpeed = 10f;
     public float aimSpeed = 15f;
+
+    [Header("Visuals")]
+    public Animator handAnimator;
+    public GameObject aimIndicator;
     public float cooldown = 0.5f;
 
-    [Header("Visual Settings")]
-    public GameObject aimIndicator;
-    public Color readyColor = new Color(1, 0.5f, 0, 0.8f); // Orange
-    public Color validColor = Color.green;
-    public Color invalidColor = Color.red;
-    public Animator handAnimator;
-
-    // Private variables
     private CharacterController controller;
     private Vector3 grapplePoint;
     private bool isGrappling = false;
-    private GameObject currentRope;
+    private GameObject currentRopeCylinder;
     private float lastGrappleTime;
-    private float currentMaxDistance;
-    private float currentGrappleSpeed;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        currentMaxDistance = normalMaxDistance;
-        currentGrappleSpeed = normalSpeed;
-        
-        if (aimIndicator)
-        {
-            aimIndicator.SetActive(false);
-            UpdateIndicatorColor(readyColor);
-        }
+        if (aimIndicator) aimIndicator.SetActive(false);
     }
 
-    void Update()
+void Update()
     {
-        // Only work in hook mode
-        if (HandSwitcher.CurrentMode != 1)
+        // Only allow grappling in hook mode
+        if (HandSwitcher.CurrentMode != 1) 
         {
             if (isGrappling) ReleaseGrapple();
             return;
         }
 
-        UpdateAimState();
-        HandleGrappleInput();
-        UpdateGrappleMovement();
-    }
-
-    void UpdateAimState()
-    {
-        // Update current values based on aiming state
-        currentMaxDistance = HandSwitcher.IsAiming ? aimMaxDistance : normalMaxDistance;
-        currentGrappleSpeed = HandSwitcher.IsAiming ? aimSpeed : normalSpeed;
-
-        // Update indicator visibility
+        // Update aiming visual
         if (aimIndicator)
         {
-            bool shouldShow = HandSwitcher.IsAiming;
-            aimIndicator.SetActive(shouldShow);
+            bool showIndicator = HandSwitcher.IsAiming;
+            aimIndicator.SetActive(showIndicator);
+            
+            if (showIndicator)
+            {
+                UpdateAimIndicatorColor();
+            }
+        }
 
-            if (shouldShow)
-            {
-                UpdateIndicatorColor(CheckValidTarget() ? validColor : invalidColor);
-            }
-            else
-            {
-                UpdateIndicatorColor(readyColor);
-            }
+        // Adjust values based on aiming state
+        maxGrappleDistance = HandSwitcher.IsAiming ? aimMaxDistance : normalMaxDistance;
+        grappleSpeed = HandSwitcher.IsAiming ? aimSpeed : normalSpeed;
+
+        // Start grappling on left-click down
+        if (Input.GetMouseButtonDown(0) && !isGrappling && Time.time > lastGrappleTime + cooldown)
+        {
+            TryStartGrapple();
+        }
+
+        // Release grappling on left-click up
+        if (Input.GetMouseButtonUp(0) && isGrappling)
+        {
+            ReleaseGrapple();
+        }
+
+        if (isGrappling)
+        {
+            PerformGrappleMovement();
+            UpdateRopeVisual();
         }
     }
 
-    bool CheckValidTarget()
+    void UpdateAimIndicatorColor()
     {
-        Ray ray = HandSwitcher.IsAiming
-            ? new Ray(cameraTransform.position, cameraTransform.forward)
-            : new Ray(hookStartPoint.position, hookStartPoint.forward);
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        bool canGrapple = Physics.Raycast(ray, maxGrappleDistance, grappleMask);
         
-        return Physics.Raycast(ray, currentMaxDistance, grappleMask);
-    }
-
-    void HandleGrappleInput()
-    {
-        if (Input.GetMouseButtonDown(0) )// Left click
+        if (aimIndicator.TryGetComponent<Image>(out var image))
         {
-            if (!isGrappling && Time.time > lastGrappleTime + cooldown)
-            {
-                TryStartGrapple();
-            }
-            else if (isGrappling)
-            {
-                ReleaseGrapple();
-            }
+            image.color = canGrapple ? Color.green : Color.red;
         }
     }
 
     void TryStartGrapple()
     {
-        Ray ray = HandSwitcher.IsAiming
+        Ray ray = HandSwitcher.IsAiming 
             ? new Ray(cameraTransform.position, cameraTransform.forward)
             : new Ray(hookStartPoint.position, hookStartPoint.forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, currentMaxDistance, grappleMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxGrappleDistance, grappleMask))
         {
-            StartGrapple(hit.point);
+            grapplePoint = hit.point;
+            isGrappling = true;
+            lastGrappleTime = Time.time;
+
+            if (handAnimator != null)
+            {
+                handAnimator.SetBool("IsGrappling", true);
+            }
+
+            if (ropeCylinderPrefab != null && currentRopeCylinder == null)
+            {
+                currentRopeCylinder = Instantiate(ropeCylinderPrefab);
+            }
         }
-    }
-
-    void StartGrapple(Vector3 targetPoint)
-    {
-        grapplePoint = targetPoint;
-        isGrappling = true;
-        lastGrappleTime = Time.time;
-
-        // Visual feedback
-        if (handAnimator) handAnimator.SetBool("IsGrappling", true);
-        if (ropePrefab) currentRope = Instantiate(ropePrefab);
-    }
-
-    void UpdateGrappleMovement()
-    {
-        if (!isGrappling) return;
-
-        Vector3 direction = (grapplePoint - transform.position).normalized;
-        controller.Move(direction * currentGrappleSpeed * Time.deltaTime);
-        
-        // Small upward force for better feel
-        controller.Move(Vector3.up * currentGrappleSpeed * 0.1f * Time.deltaTime);
-
-        UpdateRopeVisual();
-    }
-
-    void UpdateRopeVisual()
-    {
-        if (!currentRope) return;
-
-        Vector3 start = hookStartPoint.position;
-        Vector3 end = grapplePoint;
-        Vector3 midpoint = (start + end) * 0.5f;
-
-        currentRope.transform.position = midpoint;
-        currentRope.transform.up = (end - start).normalized;
-        currentRope.transform.localScale = new Vector3(
-            0.1f, 
-            Vector3.Distance(start, end) * 0.5f, 
-            0.1f
-        );
     }
 
     void ReleaseGrapple()
     {
-        if (!isGrappling) return;
-
         isGrappling = false;
         lastGrappleTime = Time.time;
 
-        // Visual feedback
-        if (handAnimator) handAnimator.SetBool("IsGrappling", false);
-        if (currentRope) Destroy(currentRope);
+        if (handAnimator != null)
+        {
+            handAnimator.SetBool("IsGrappling", false);
+        }
+
+        if (currentRopeCylinder)
+        {
+            Destroy(currentRopeCylinder);
+        }
     }
 
-    void UpdateIndicatorColor(Color color)
+    void PerformGrappleMovement()
     {
-        if (!aimIndicator) return;
+        Vector3 direction = (grapplePoint - transform.position).normalized;
+        controller.Move(direction * grappleSpeed * Time.deltaTime);
+        controller.Move(Vector3.up * grappleSpeed * 0.2f * Time.deltaTime);
+    }
 
-        // Try UI Image first
-        var image = aimIndicator.GetComponent<Image>();
-        if (image != null)
-        {
-            image.color = color;
-            return;
-        }
+    void UpdateRopeVisual()
+    {
+        if (currentRopeCylinder == null) return;
 
-        // Fallback to SpriteRenderer
-        var sprite = aimIndicator.GetComponent<SpriteRenderer>();
-        if (sprite != null)
-        {
-            sprite.color = color;
-        }
+        Vector3 start = hookStartPoint.position;
+        Vector3 end = grapplePoint;
+        Vector3 dir = end - start;
+
+        currentRopeCylinder.transform.position = start + dir * 0.5f;
+        currentRopeCylinder.transform.up = dir.normalized;
+        currentRopeCylinder.transform.localScale = new Vector3(0.1f, dir.magnitude * 0.5f, 0.1f);
     }
 
     void OnDisable()
     {
         ReleaseGrapple();
-        if (aimIndicator) aimIndicator.SetActive(false);
     }
 }
