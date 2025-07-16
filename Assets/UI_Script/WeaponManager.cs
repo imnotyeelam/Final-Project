@@ -118,6 +118,7 @@ public class WeaponManager : MonoBehaviour
     public void AddAmmo(int amount)
     {
         currentAmmo = Mathf.Min(currentAmmo + amount, maxAmmo);
+        UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
         Debug.Log("Ammo reloaded: " + currentAmmo);
 
         //if ammo > 0, hide warning

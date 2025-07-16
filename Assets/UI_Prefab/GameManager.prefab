@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2893126513535482617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7589792434759553627}
+  - component: {fileID: 6047885618782667611}
+  - component: {fileID: 1640410570760988848}
+  - component: {fileID: 3238360615842713548}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7589792434759553627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2893126513535482617}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 778.4381, y: 570.6251, z: 3.9130785}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6047885618782667611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2893126513535482617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2857dd607ecb68c4fa1db67abc913593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenuUI: {fileID: 0}
+--- !u!114 &1640410570760988848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2893126513535482617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3062ab765b679414eaac64dd66b6e3b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dadKey: 53
+  dadDuration: 30
+  dadCooldown: 120
+  momKey: 52
+  momDuration: 5
+  momCooldown: 180
+  dadCooldownOverlay: {fileID: 0}
+  dadCooldownText: {fileID: 0}
+  dadActiveOverlay: {fileID: 0}
+  dadActiveText: {fileID: 0}
+  momCooldownOverlay: {fileID: 0}
+  momCooldownText: {fileID: 0}
+  momActiveOverlay: {fileID: 0}
+  momActiveText: {fileID: 0}
+--- !u!114 &3238360615842713548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2893126513535482617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b514b40c2eca246b04d71060317f8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentWeapon: 0
+  weaponIcon: {fileID: 0}
+  unarmedSprite: {fileID: 21300000, guid: 926c4d119bdab3c46b008630317abb84, type: 3}
+  hookSprite: {fileID: 21300000, guid: b4d5cb1a19bf0274caf042682f8b03cf, type: 3}
+  gunSprite: {fileID: 21300000, guid: 59e11584b43097d4d90ec6a00ad050e5, type: 3}
+  currentAmmo: 30
+  maxAmmo: 30
+  ammoPerShot: 1

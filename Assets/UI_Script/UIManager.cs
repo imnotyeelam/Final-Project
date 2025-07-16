@@ -147,18 +147,35 @@ public class UIManager : MonoBehaviour
         switch (type)
         {
             case "Ammo":
-                if (ammoProps > 0) { ammoProps--; success = true; }
+                if (ammoProps > 0)
+                {
+                    ammoProps--;
+                    success = true;
+                    WeaponManager.Instance.AddAmmo(0);
+                }
                 break;
+
             case "HP":
-                if (hpProps > 0) { hpProps--; success = true; }
+                if (hpProps > 0)
+                {
+                    hpProps--;
+                    success = true;
+                }
                 break;
+
             case "Energy":
-                if (energyProps > 0) { energyProps--; success = true; }
+                if (energyProps > 0)
+                {
+                    energyProps--;
+                    success = true;
+                }
                 break;
         }
+
         if (success) UpdatePropsUI();
         return success;
     }
+
 
     private void UpdatePropsUI()
     {
