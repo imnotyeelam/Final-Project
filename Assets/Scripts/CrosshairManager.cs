@@ -8,10 +8,16 @@ public class CrosshairManager : MonoBehaviour
 
     void Update()
     {
-        if (crosshairUI == null) return;
+        if (crosshairUI == null)
+        {
+            Debug.LogWarning("Crosshair UI not assigned!");
+            return;
+        }
 
+        // Gun Aim Mode only
         bool shouldShow = HandSwitcher.CurrentMode == 3 && HandSwitcher.IsAiming;
         crosshairUI.SetActive(shouldShow);
+
         Debug.Log("Crosshair visible? " + shouldShow);
     }
 }
