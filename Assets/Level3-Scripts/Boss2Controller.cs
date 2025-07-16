@@ -18,6 +18,9 @@ public class Boss2Controller : MonoBehaviour
     private List<GameObject> currentMinions = new List<GameObject>();
     private bool isSummoning = false;
 
+    [Header("Colliders")]
+    public GameObject lyingColliderObject; // 拖入躺下状态的碰撞体空物体
+
     void Update()
     {
         // 检查是否所有小兵死亡，准备下一波
@@ -65,9 +68,9 @@ public class Boss2Controller : MonoBehaviour
         currentWave++;
         currentMinions.Clear();
 
-        Debug.Log("MinionPrefab: " + (minionPrefab != null));
-        Debug.Log("Player: " + (player != null));
-        Debug.Log("SummonPoints count: " + summonPoints.Length);
+        //Debug.Log("MinionPrefab: " + (minionPrefab != null));
+        //Debug.Log("Player: " + (player != null));
+        //Debug.Log("SummonPoints count: " + summonPoints.Length);
         Debug.Log($"开始第 {currentWave} 波召唤，共 {minionsPerWave} 个小兵");
 
         List<Transform> availablePoints = new List<Transform>(summonPoints);
@@ -97,5 +100,14 @@ public class Boss2Controller : MonoBehaviour
         rootPosition.y = transform.position.y;
         transform.position = rootPosition;
         transform.rotation = animator.rootRotation;
+    }
+
+    public void DisableLyingCollider()
+    {
+        if (lyingColliderObject != null)
+        {
+            lyingColliderObject.SetActive(false);
+            // 或者使用：lyingColliderObject.GetComponent<Collider>().enabled = false;
+        }
     }
 }

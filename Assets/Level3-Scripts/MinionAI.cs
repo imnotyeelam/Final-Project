@@ -7,12 +7,19 @@ public class MinionAI : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
 
+    [Header("Bullet Settings")]
     public GameObject bullet;
     public Transform firePoint;
 
+    [Header("Attack Settings")]
     public float attackRange = 18f;
+    public float minAttackDistance = 3f;     // 最小攻击距离，避免出生直接攻击
     public float attackCooldown = 0.5f;
     private float lastAttackTime;
+
+    [Header("Spawn Settings")]
+    public float spawnAttackDelay = 1.5f;    // 刚生成后等待多久才允许攻击
+    private float spawnTime;
 
     private bool hasShotInThisAttack = false; // 防止一段动画射多次子弹
 
@@ -44,14 +51,15 @@ public class MinionAI : MonoBehaviour
             animator.SetBool("isRunning", false);
             agent.isStopped = true;
 
-            if (agent.remainingDistance <= attackRange)
+            //攻击条件：1. 冷却结束  2. 出生后延迟结束  3. 在攻击距离内  4. 大于最小攻击距离
+            if (Time.time - spawnTime >= spawnAttackDelay &&
+                Time.time - lastAttackTime >= attackCooldown &&
+                agent.remainingDistance <= attackRange &&
+                agent.remainingDistance > minAttackDistance)
             {
-                if (Time.time - lastAttackTime >= attackCooldown)
-                {
-                    animator.SetTrigger("isAttacking");
-                    lastAttackTime = Time.time;
-                    hasShotInThisAttack = false; // 重置射击标记
-                }
+                animator.SetTrigger("isAttacking");
+                lastAttackTime = Time.time;
+                hasShotInThisAttack = false; // 重置射击标记
             }
         }
 
@@ -70,7 +78,7 @@ public class MinionAI : MonoBehaviour
             lookPos.y = transform.position.y; // 保持水平旋转
             transform.LookAt(lookPos);
 
-            float normalizedTime = stateInfo.normalizedTime % 1;
+            float normalizedTime = stateInfo.normalizedTime % 1; //normalise the time of the animation
 
             if (normalizedTime > 0.3f && !hasShotInThisAttack)
             {

@@ -3781,6 +3781,7 @@ GameObject:
   - component: {fileID: 150749703679120772}
   - component: {fileID: 2111514643860344115}
   - component: {fileID: 2588931474045729977}
+  - component: {fileID: -2828672746598961854}
   m_Layer: 0
   m_Name: SniperDefault
   m_TagString: Enemy
@@ -3845,7 +3846,9 @@ MonoBehaviour:
   bullet: {fileID: 1462549143368988947, guid: 120cbd0055f70724b9d8fc3275adf31b, type: 3}
   firePoint: {fileID: 1604432494563345346}
   attackRange: 18
+  minAttackDistance: 3
   attackCooldown: 0.5
+  spawnAttackDelay: 1.5
 --- !u!195 &150749703679120772
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3904,6 +3907,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 5
+--- !u!54 &-2828672746598961854
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6728229736012338021}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6963816040550127003
 GameObject:
   m_ObjectHideFlags: 0

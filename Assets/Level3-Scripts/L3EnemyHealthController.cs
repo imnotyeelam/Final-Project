@@ -22,7 +22,7 @@ public class L3EnemyHealthController : MonoBehaviour
 
         if(currentHealth <= 0)
         {
-            Destroy(transform.parent.gameObject);
+            Destroy(gameObject);
         }
     }
 }
