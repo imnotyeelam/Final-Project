@@ -3,23 +3,30 @@ using UnityEngine;
 public class HeadBob : MonoBehaviour
 {
     [Header("Walking Settings")]
-    public float bobFrequency = 1.5f;
-    public float bobHorizontalAmplitude = 0.05f;
-    public float bobVerticalAmplitude = 0.05f;
+    public float walkFrequency = 1.6f;
+    public float walkHorizontalAmplitude = 0.05f;
+    public float walkVerticalAmplitude = 0.03f;
 
-    [Header("Running Settings")]
-    public float runBobFrequency = 4f;
-    public float runBobHorizontalAmplitude = 0.2f;
-    public float runBobVerticalAmplitude = 0.2f;
+    [Header("Sprinting Settings")]
+    public float sprintFrequency = 2.5f;
+    public float sprintHorizontalAmplitude = 0.1f;
+    public float sprintVerticalAmplitude = 0.08f;
+    public float sprintForwardTilt = 0.05f;
+
+    [Header("Strafe Tilt Settings")]
+    public float strafeTiltAngle = 5f;          // degrees of tilt
+    public float tiltSpeed = 5f;                // how fast it rotates
 
     public SimpleFPSMovement playerMovement;
 
     private float timer = 0f;
     private Vector3 startLocalPosition;
+    private Quaternion startLocalRotation;
 
     void Start()
     {
         startLocalPosition = transform.localPosition;
+        startLocalRotation = transform.localRotation;
 
         if (playerMovement == null)
         {
@@ -35,25 +42,38 @@ public class HeadBob : MonoBehaviour
         float speed = horizontalVelocity.magnitude;
 
         bool isMoving = speed > 0.1f && playerMovement.isGrounded;
-        bool isRunning = Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W);
+        bool isSprinting = Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W);
+        bool isStrafingLeft = Input.GetKey(KeyCode.A);
+        bool isStrafingRight = Input.GetKey(KeyCode.D);
 
+        // Determine movement bobbing
         if (isMoving)
         {
-            float frequency = isRunning ? runBobFrequency : bobFrequency;
-            float amplitudeX = isRunning ? runBobHorizontalAmplitude : bobHorizontalAmplitude;
-            float amplitudeY = isRunning ? runBobVerticalAmplitude : bobVerticalAmplitude;
+            float frequency = isSprinting ? sprintFrequency : walkFrequency;
+            float ampX = isSprinting ? sprintHorizontalAmplitude : walkHorizontalAmplitude;
+            float ampY = isSprinting ? sprintVerticalAmplitude : walkVerticalAmplitude;
+            float forwardOffset = isSprinting ? -sprintForwardTilt : 0f;
 
             timer += Time.deltaTime * frequency;
 
-            float bobX = Mathf.Sin(timer) * amplitudeX;
-            float bobY = Mathf.Cos(timer * 2f) * amplitudeY;
+            float bobX = Mathf.Sin(timer) * ampX;
+            float bobY = Mathf.Abs(Mathf.Cos(timer * 2f)) * ampY;
 
-            transform.localPosition = startLocalPosition + new Vector3(bobX, bobY, 0f);
+            Vector3 bobOffset = new Vector3(bobX, bobY, forwardOffset);
+            transform.localPosition = startLocalPosition + bobOffset;
         }
         else
         {
             timer = 0f;
-            transform.localPosition = Vector3.Lerp(transform.localPosition, startLocalPosition, Time.deltaTime * 5f);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, startLocalPosition, Time.deltaTime * 6f);
         }
+
+        // Handle strafing camera tilt (roll)
+        float targetTilt = 0f;
+        if (isStrafingLeft) targetTilt = strafeTiltAngle;
+        else if (isStrafingRight) targetTilt = -strafeTiltAngle;
+
+        Quaternion targetRotation = Quaternion.Euler(startLocalRotation.eulerAngles.x, startLocalRotation.eulerAngles.y, targetTilt);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime * tiltSpeed);
     }
 }

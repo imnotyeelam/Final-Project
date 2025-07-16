@@ -17,22 +17,39 @@ public class GunShooter : MonoBehaviour
 
     void Shoot()
     {
-        // Fire bullet
-        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        // 1. Perform a raycast to get the correct target point
+        Camera cam = Camera.main;
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Vector3 targetPoint;
+        RaycastHit hit;
 
-        // Lightning zap effect (LineRenderer)
+        if (Physics.Raycast(ray, out hit, 100f))
+        {
+            targetPoint = hit.point;
+        }
+        else
+        {
+            targetPoint = ray.GetPoint(100f); // If no hit, shoot far
+        }
+
+        // 2. Calculate the direction
+        Vector3 direction = (targetPoint - firePoint.position).normalized;
+
+        // 3. Instantiate bullet and rotate it to face the direction
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
+
+        // 4. Lightning Effect along the same path
         if (lightningPrefab != null)
         {
             LightningEffect lightning = Instantiate(lightningPrefab);
-            Vector3 endPoint = firePoint.position + firePoint.forward * 5f;
-            lightning.ShowLightning(firePoint.position, endPoint);
+            lightning.ShowLightning(firePoint.position, targetPoint);
         }
 
-        // Particle burst (Muzzle Flash)
+        // 5. Muzzle flash
         if (muzzleFlashPrefab != null)
         {
             GameObject flash = Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation);
-            Destroy(flash, 1f); // Clean up after a second
+            Destroy(flash, 1f);
         }
     }
 }
