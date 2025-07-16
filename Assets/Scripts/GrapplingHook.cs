@@ -23,8 +23,10 @@ public class GrapplingHook : MonoBehaviour
     public GameObject aimIndicator;
     public float cooldown = 0.5f;
 
-    [Header("Grapple Gravity")]
-    public float grappleGravity = -5f; // Lighter gravity while grappling
+    [Header("Audio")]
+    public AudioClip hookShootClip;
+    public AudioClip hookLatchClip;
+    private AudioSource audioSource;
 
     private CharacterController controller;
     private Vector3 grapplePoint;
@@ -32,34 +34,25 @@ public class GrapplingHook : MonoBehaviour
     private GameObject currentRopeCylinder;
     private float lastGrappleTime;
 
-    private SimpleFPSMovement movementScript;
-    private float originalGravity;
-
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        movementScript = GetComponent<SimpleFPSMovement>();
-        if (movementScript != null)
-            originalGravity = movementScript.gravity;
-
+        audioSource = GetComponent<AudioSource>();
         if (aimIndicator) aimIndicator.SetActive(false);
     }
 
     void Update()
     {
-        // If not in hook mode
+        // Exit if not in hook mode
         if (HandSwitcher.CurrentMode != 1)
         {
-            if (isGrappling)
-                ReleaseGrapple();
-
+            if (isGrappling) ReleaseGrapple();
             if (aimIndicator && aimIndicator.activeSelf)
                 aimIndicator.SetActive(false);
-
             return;
         }
 
-        // Aim indicator visibility
+        // Aim visual
         if (aimIndicator)
         {
             bool showIndicator = HandSwitcher.IsAiming;
@@ -67,7 +60,7 @@ public class GrapplingHook : MonoBehaviour
             if (showIndicator) UpdateAimIndicatorColor();
         }
 
-        // Adjust values based on aim
+        // Adjust distance & speed
         maxGrappleDistance = HandSwitcher.IsAiming ? aimMaxDistance : normalMaxDistance;
         grappleSpeed = HandSwitcher.IsAiming ? aimSpeed : normalSpeed;
 
@@ -113,15 +106,17 @@ public class GrapplingHook : MonoBehaviour
             isGrappling = true;
             lastGrappleTime = Time.time;
 
-            if (handAnimator != null)
-                handAnimator.SetBool("IsGrappling", true);
+            handAnimator?.SetBool("IsGrappling", true);
 
             if (ropeCylinderPrefab != null && currentRopeCylinder == null)
                 currentRopeCylinder = Instantiate(ropeCylinderPrefab);
 
-            // Reduce gravity
-            if (movementScript != null)
-                movementScript.gravity = grappleGravity;
+            // 🔊 Play shoot + latch sounds
+            if (audioSource)
+            {
+                if (hookShootClip) audioSource.PlayOneShot(hookShootClip);
+                if (hookLatchClip) audioSource.PlayOneShot(hookLatchClip, 0.7f);
+            }
         }
     }
 
@@ -130,22 +125,19 @@ public class GrapplingHook : MonoBehaviour
         isGrappling = false;
         lastGrappleTime = Time.time;
 
-        if (handAnimator != null)
-            handAnimator.SetBool("IsGrappling", false);
+        handAnimator?.SetBool("IsGrappling", false);
 
         if (currentRopeCylinder)
             Destroy(currentRopeCylinder);
-
-        // Restore gravity
-        if (movementScript != null)
-            movementScript.gravity = originalGravity;
     }
 
     void PerformGrappleMovement()
     {
         Vector3 direction = (grapplePoint - transform.position).normalized;
+
+        // Stronger drag + upward pull
         controller.Move(direction * grappleSpeed * Time.deltaTime);
-        controller.Move(Vector3.up * grappleSpeed * 0.2f * Time.deltaTime);
+        controller.Move(Vector3.up * grappleSpeed * 0.4f * Time.deltaTime);
     }
 
     void UpdateRopeVisual()

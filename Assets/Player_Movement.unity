@@ -155,7 +155,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 11.200012, y: 0}
-  m_SizeDelta: {x: 90, y: 90}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &16257288
 MonoBehaviour:
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 268f24daad1fa184ca5843e726e7dd34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crosshairUI: {fileID: 16257286}
+  crosshairImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   aimColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &19460271 stripped
@@ -6922,6 +6922,8 @@ MonoBehaviour:
   handAnimator: {fileID: 1084691089}
   aimIndicator: {fileID: 620412944}
   cooldown: 0.5
+  hookShootClip: {fileID: 8300000, guid: 48e874deec28e6147bf81f1c3ed42eac, type: 3}
+  hookLatchClip: {fileID: 8300000, guid: 1cf784f3c7bb4f9468870afa40dc3c9a, type: 3}
 --- !u!143 &748513548
 CharacterController:
   m_ObjectHideFlags: 0
@@ -7092,7 +7094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 268f24daad1fa184ca5843e726e7dd34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crosshairUI: {fileID: 16257286}
+  crosshairImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   aimColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!4 &837422028 stripped
@@ -10930,9 +10932,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 906203857}
   bulletPrefab: {fileID: 4754782290425702832, guid: 10a08a899d715304fa2a7581d8752d0c, type: 3}
+  bulletSpeed: 50
+  fireRate: 0.1
   lightningPrefab: {fileID: 4666016928129409062, guid: da22f0a50b8d94b4782f84f5f3c21647, type: 3}
   muzzleFlashPrefab: {fileID: 453128823}
+  muzzleFlashDuration: 0.1
   shootClip: {fileID: 8300000, guid: ba3e6abfd82f8d845aa6e9aa752408d5, type: 3}
+  volume: 0.7
+  crosshairImage: {fileID: 0}
+  normalCrosshairColor: {r: 1, g: 1, b: 1, a: 1}
+  aimingCrosshairColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1858933704
 GameObject:
   m_ObjectHideFlags: 0
@@ -16252,9 +16261,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 107176264}
   bulletPrefab: {fileID: 4754782290425702832, guid: 10a08a899d715304fa2a7581d8752d0c, type: 3}
+  bulletSpeed: 50
+  fireRate: 0.1
   lightningPrefab: {fileID: 4666016928129409062, guid: da22f0a50b8d94b4782f84f5f3c21647, type: 3}
   muzzleFlashPrefab: {fileID: 1896416882}
+  muzzleFlashDuration: 0.1
   shootClip: {fileID: 8300000, guid: ba3e6abfd82f8d845aa6e9aa752408d5, type: 3}
+  volume: 0.7
+  crosshairImage: {fileID: 0}
+  normalCrosshairColor: {r: 1, g: 1, b: 1, a: 1}
+  aimingCrosshairColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!95 &2129596786 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 95000013609880944, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
