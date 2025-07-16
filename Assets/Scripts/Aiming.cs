@@ -2,43 +2,58 @@ using UnityEngine;
 
 public class Aiming : MonoBehaviour
 {
-    public Transform hipPosition;
-    public Transform aimPosition;
-    public float aimSpeed = 10f;
-
+    [Header("Camera Settings")]
     public Camera playerCamera;
     public float normalFOV = 60f;
-    public float aimFOV = 40f;
-    public float fovSpeed = 5f;
+    public float gunAimFOV = 40f;
+    public float hookAimFOV = 50f; // Different FOV for hook aiming
+    public float fovTransitionSpeed = 5f;
 
-    private bool isAiming;
+    [Header("Camera Positions")]
+    public Transform normalCameraPos;
+    public Transform gunAimCameraPos;
+    public Transform hookAimCameraPos; // New hook aim position
+    public float cameraMoveSpeed = 5f;
 
     void Update()
     {
-        isAiming = Input.GetMouseButton(1); // Right click
+        if (playerCamera == null) return;
 
-        // Move gun between hip and aim positions
-        if (isAiming)
+        // Handle FOV changes
+        float targetFOV = normalFOV;
+        Transform targetPos = normalCameraPos;
+
+        if (HandSwitcher.IsAiming)
         {
-            transform.position = Vector3.Lerp(transform.position, aimPosition.position, Time.deltaTime * aimSpeed);
-            transform.rotation = Quaternion.Slerp(transform.rotation, aimPosition.rotation, Time.deltaTime * aimSpeed);
-        }
-        else
-        {
-            transform.position = Vector3.Lerp(transform.position, hipPosition.position, Time.deltaTime * aimSpeed);
-            transform.rotation = Quaternion.Slerp(transform.rotation, hipPosition.rotation, Time.deltaTime * aimSpeed);
+            if (HandSwitcher.CurrentMode == 1) // Hook aim
+            {
+                targetFOV = hookAimFOV;
+                targetPos = hookAimCameraPos;
+            }
+            else if (HandSwitcher.CurrentMode == 3) // Gun aim
+            {
+                targetFOV = gunAimFOV;
+                targetPos = gunAimCameraPos;
+            }
         }
 
-        // FOV change
-        if (playerCamera)
-        {
-            float targetFOV = isAiming ? aimFOV : normalFOV;
-            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * fovSpeed);
-        }
-    }
+        // Smooth transitions
+        playerCamera.fieldOfView = Mathf.Lerp(
+            playerCamera.fieldOfView, 
+            targetFOV, 
+            Time.deltaTime * fovTransitionSpeed
+        );
 
-    public bool IsAiming()
-    {
-        return isAiming;
+        playerCamera.transform.position = Vector3.Lerp(
+            playerCamera.transform.position,
+            targetPos.position,
+            Time.deltaTime * cameraMoveSpeed
+        );
+
+        playerCamera.transform.rotation = Quaternion.Slerp(
+            playerCamera.transform.rotation,
+            targetPos.rotation,
+            Time.deltaTime * cameraMoveSpeed
+        );
     }
 }
