@@ -2,11 +2,18 @@
 
 public class L3PlayerController : MonoBehaviour
 {
+    public static L3PlayerController instance;
+
     public float moveSpeed = 5f;
     public CharacterController charCon;
     public Transform cameraTransform; //拖入你的主相机
 
     public float mouseSensitivity;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Update()
     {

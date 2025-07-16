@@ -61,4 +61,19 @@ public class Boss2Controller : MonoBehaviour
         isSummoning = false;
     }
 
+    private void OnAnimatorMove()
+    {
+        // 获取动画的 Root Motion
+        Vector3 rootPosition = animator.rootPosition;
+
+        // 锁定 Y 高度，让熊保持在地面
+        rootPosition.y = transform.position.y;
+
+        // 应用修改后的 Root Motion
+        transform.position = rootPosition;
+
+        // 如果要保留动画的旋转：
+        transform.rotation = animator.rootRotation;
+    }
+
 }

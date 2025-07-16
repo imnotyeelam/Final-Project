@@ -7,16 +7,20 @@ public class MinionAI : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
 
+    public GameObject bullet;
+    public Transform firePoint;
+
     public float attackRange = 18f;
-    public float attackCooldown = 1.5f;
+    public float attackCooldown = 0.5f;
     private float lastAttackTime;
+
+    private bool hasShotInThisAttack = false; // Èò≤Ê≠¢‰∏ÄÊÆµÂä®ÁîªÂ∞ÑÂ§öÊ¨°Â≠êÂºπ
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-
-        agent.stoppingDistance = 15f; // ’˝»∑…Ë÷√£°
+        agent.stoppingDistance = 15f;
     }
 
     public void SetTarget(Transform t)
@@ -30,9 +34,6 @@ public class MinionAI : MonoBehaviour
 
         agent.SetDestination(target.position);
 
-        //Debug.Log("æ‡¿ÎŒ™£∫" + agent.remainingDistance);
-
-        // ≤•∑≈≈‹≤Ω∂Øª≠
         if (agent.remainingDistance > agent.stoppingDistance)
         {
             animator.SetBool("isRunning", true);
@@ -40,7 +41,6 @@ public class MinionAI : MonoBehaviour
         }
         else
         {
-            // µΩ¥ÔÕ£÷πµ„£¨≤•∑≈π•ª˜∂Øª≠
             animator.SetBool("isRunning", false);
             agent.isStopped = true;
 
@@ -49,10 +49,46 @@ public class MinionAI : MonoBehaviour
                 if (Time.time - lastAttackTime >= attackCooldown)
                 {
                     animator.SetTrigger("isAttacking");
-                    Debug.Log("π•ª˜ÕÊº“£°");
                     lastAttackTime = Time.time;
+                    hasShotInThisAttack = false; // ÈáçÁΩÆÂ∞ÑÂáªÊ†áËÆ∞
                 }
             }
+        }
+
+        HandleShootingByState();
+    }
+
+    void HandleShootingByState()
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // Ê£ÄÊü•ÂΩìÂâçÊòØ‰∏çÊòØÊîªÂáªÂä®Áîª
+        if (stateInfo.IsName("ShootSingleshot_RF01"))
+        {
+            //ÊúùÂêëÁé©ÂÆ∂
+            Vector3 lookPos = target.position + new Vector3(0f, 1.0f, -0.8f);
+            lookPos.y = transform.position.y; // ‰øùÊåÅÊ∞¥Âπ≥ÊóãËΩ¨
+            transform.LookAt(lookPos);
+
+            float normalizedTime = stateInfo.normalizedTime % 1;
+
+            if (normalizedTime > 0.3f && !hasShotInThisAttack)
+            {
+                Shoot();
+                hasShotInThisAttack = true;
+            }
+        }
+    }
+
+    void Shoot()
+    {
+        if (firePoint == null || bullet == null) return;
+
+        GameObject bulletObj = Instantiate(bullet, firePoint.position, firePoint.rotation);
+        Rigidbody rb = bulletObj.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = firePoint.forward * 25f;
         }
     }
 }
