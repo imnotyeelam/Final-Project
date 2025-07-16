@@ -10,24 +10,28 @@ public class HandSwitcher : MonoBehaviour
     public GameObject runHandPrefab;
     public GameObject deadCameraHandPrefab;
 
-    public static int CurrentMode = 0;
+    public static int CurrentMode = 0; // 0 = idle, 1 = hook, 2 = gun
     public static bool IsAiming { get; private set; }
 
     private bool isRunning = false;
     private bool isDead = false;
 
+    private float sprintTimer = 0f;
+    private float sprintDuration = 5f;
+    private bool sprintCooldownActive = false;
+
     void Update()
     {
         if (isDead) return;
 
-        // Q to switch between Idle (0), Hook (1), Gun (2)
+        // Hand switching
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            CurrentMode = (CurrentMode + 1) % 3;
+            CurrentMode = (CurrentMode + 1) % 3; // Idle, Hook, Gun
             SetHandMode(CurrentMode);
         }
 
-        // Aiming logic for Hook and Gun modes
+        // Aiming toggle
         if (CurrentMode == 1 || CurrentMode == 2)
         {
             bool aimingInput = Input.GetMouseButton(1);
@@ -43,12 +47,42 @@ public class HandSwitcher : MonoBehaviour
             SetHandMode(CurrentMode);
         }
 
-        // Running logic
-        bool runPressed = Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W);
-        if (runPressed != isRunning)
+        // Sprinting logic
+        bool shiftHeld = Input.GetKey(KeyCode.LeftShift);
+        bool forwardHeld = Input.GetKey(KeyCode.W);
+        bool shouldSprint = shiftHeld && forwardHeld;
+
+        if (shouldSprint && !isRunning && !sprintCooldownActive)
         {
-            isRunning = runPressed;
+            // Start sprint
+            isRunning = true;
+            sprintTimer = 0f;
             SetHandMode(CurrentMode);
+        }
+
+        if (isRunning)
+        {
+            sprintTimer += Time.deltaTime;
+
+            if (sprintTimer >= sprintDuration)
+            {
+                // Sprint ends after 5 seconds
+                isRunning = false;
+                sprintCooldownActive = true;
+                SetHandMode(CurrentMode);
+            }
+        }
+
+        // Reset sprint cooldown when player releases Shift or W
+        if (!shiftHeld || !forwardHeld)
+        {
+            sprintCooldownActive = false;
+
+            if (isRunning)
+            {
+                isRunning = false;
+                SetHandMode(CurrentMode);
+            }
         }
     }
 
@@ -56,11 +90,12 @@ public class HandSwitcher : MonoBehaviour
     {
         isDead = true;
         DisableAllHands();
+
         if (deadCameraHandPrefab != null)
             deadCameraHandPrefab.SetActive(true);
     }
 
-    void SetHandMode(int mode)
+    public void SetHandMode(int mode)
     {
         DisableAllHands();
 
@@ -72,9 +107,7 @@ public class HandSwitcher : MonoBehaviour
 
         switch (mode)
         {
-            case 0:
-                idleHandPrefab?.SetActive(true);
-                break;
+            case 0: idleHandPrefab?.SetActive(true); break;
             case 1:
                 if (IsAiming && hookAimHandPrefab != null)
                     hookAimHandPrefab.SetActive(true);

@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 16257287}
   - component: {fileID: 16257289}
   - component: {fileID: 16257288}
+  - component: {fileID: 16257290}
   m_Layer: 5
   m_Name: CrossHairUI
   m_TagString: Untagged
@@ -154,7 +155,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 11.200012, y: 0}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &16257288
 MonoBehaviour:
@@ -191,6 +192,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 16257286}
   m_CullTransparentMesh: 1
+--- !u!114 &16257290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16257286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268f24daad1fa184ca5843e726e7dd34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshairUI: {fileID: 16257286}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  aimColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &19460271 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: eb98e367d4f51524a9a2f18e6b393a8c, type: 3}
@@ -6856,7 +6872,6 @@ GameObject:
   - component: {fileID: 748513546}
   - component: {fileID: 748513553}
   - component: {fileID: 748513554}
-  - component: {fileID: 748513555}
   - component: {fileID: 748513556}
   m_Layer: 0
   m_Name: Player
@@ -7027,6 +7042,9 @@ MonoBehaviour:
     m_Bits: 8
   maxJumps: 2
   doubleJumpSpeedBoost: 1.2
+  maxSprintTime: 5
+  maxEnergy: 20
+  sprintEnergyCost: 5
   currentMoveVelocity: {x: 0, y: 0, z: 0}
   isGrounded: 0
 --- !u!114 &748513554
@@ -7042,21 +7060,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handAnimator: {fileID: 2129596786}
---- !u!114 &748513555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 748513545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 268f24daad1fa184ca5843e726e7dd34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crosshairUI: {fileID: 16257286}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  aimColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &748513556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10913,6 +10916,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4754782290425702832, guid: 10a08a899d715304fa2a7581d8752d0c, type: 3}
   lightningPrefab: {fileID: 4666016928129409062, guid: da22f0a50b8d94b4782f84f5f3c21647, type: 3}
   muzzleFlashPrefab: {fileID: 453128823}
+  shootClip: {fileID: 8300000, guid: ba3e6abfd82f8d845aa6e9aa752408d5, type: 3}
 --- !u!1 &1858933704
 GameObject:
   m_ObjectHideFlags: 0
@@ -15925,7 +15929,7 @@ GameObject:
   - component: {fileID: 1917973644}
   - component: {fileID: 1917973647}
   - component: {fileID: 1917973649}
-  - component: {fileID: 1917973648}
+  - component: {fileID: 1917973650}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -16061,21 +16065,6 @@ MonoBehaviour:
   gunAimFOV: 30
   hookAimFOV: 35
   transitionSpeed: 5
---- !u!114 &1917973648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917973642}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49e116d92a171454dbae9f035ceb0ca6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movement: {fileID: 748513553}
-  bounceAmount: 0.1
-  bounceSpeed: 4
 --- !u!114 &1917973649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16090,6 +16079,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tiltAmount: 4
   tiltSpeed: 5
+--- !u!81 &1917973650
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917973642}
+  m_Enabled: 1
 --- !u!1 &1949879678
 GameObject:
   m_ObjectHideFlags: 0
@@ -16241,6 +16238,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4754782290425702832, guid: 10a08a899d715304fa2a7581d8752d0c, type: 3}
   lightningPrefab: {fileID: 4666016928129409062, guid: da22f0a50b8d94b4782f84f5f3c21647, type: 3}
   muzzleFlashPrefab: {fileID: 1896416882}
+  shootClip: {fileID: 8300000, guid: ba3e6abfd82f8d845aa6e9aa752408d5, type: 3}
 --- !u!95 &2129596786 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 95000013609880944, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}

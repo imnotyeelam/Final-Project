@@ -166,10 +166,15 @@ public class GrapplingHook : MonoBehaviour
         Vector3 start = hookStartPoint.position;
         Vector3 end = grapplePoint;
         Vector3 dir = end - start;
+        float length = dir.magnitude;
 
         currentRopeCylinder.transform.position = start + dir * 0.5f;
-        currentRopeCylinder.transform.up = dir.normalized;
-        currentRopeCylinder.transform.localScale = new Vector3(0.1f, dir.magnitude * 0.5f, 0.1f);
+
+        // Always make rope face the correct direction
+        currentRopeCylinder.transform.rotation = Quaternion.LookRotation(dir);
+
+        // Resize rope cylinder along its Z-axis
+        currentRopeCylinder.transform.localScale = new Vector3(0.05f, 0.05f, length);
     }
 
     void OnDisable()

@@ -4,15 +4,14 @@ public class CrosshairManager : MonoBehaviour
 {
     public GameObject crosshairUI;
     public Color normalColor = Color.white;
-    public Color aimColor = Color.red; // Color change when aiming
+    public Color aimColor = Color.red;
 
     void Update()
     {
         if (crosshairUI == null) return;
 
-        // Show crosshair only in gun mode
-        bool shouldShow = HandSwitcher.CurrentMode == 3;
+        bool shouldShow = HandSwitcher.CurrentMode == 3 && HandSwitcher.IsAiming;
         crosshairUI.SetActive(shouldShow);
-
+        Debug.Log("Crosshair visible? " + shouldShow);
     }
 }

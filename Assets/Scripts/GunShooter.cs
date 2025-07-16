@@ -5,7 +5,19 @@ public class GunShooter : MonoBehaviour
     public Transform firePoint;
     public GameObject bulletPrefab;
     public LightningEffect lightningPrefab;
-    public GameObject muzzleFlashPrefab; // <- NEW
+    public GameObject muzzleFlashPrefab;
+    public AudioClip shootClip;
+
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+    }
 
     void Update()
     {
@@ -17,7 +29,6 @@ public class GunShooter : MonoBehaviour
 
     void Shoot()
     {
-        // 1. Perform a raycast to get the correct target point
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 targetPoint;
@@ -29,27 +40,29 @@ public class GunShooter : MonoBehaviour
         }
         else
         {
-            targetPoint = ray.GetPoint(100f); // If no hit, shoot far
+            targetPoint = ray.GetPoint(100f);
         }
 
-        // 2. Calculate the direction
         Vector3 direction = (targetPoint - firePoint.position).normalized;
 
-        // 3. Instantiate bullet and rotate it to face the direction
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
+        Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
 
-        // 4. Lightning Effect along the same path
         if (lightningPrefab != null)
         {
             LightningEffect lightning = Instantiate(lightningPrefab);
             lightning.ShowLightning(firePoint.position, targetPoint);
         }
 
-        // 5. Muzzle flash
         if (muzzleFlashPrefab != null)
         {
             GameObject flash = Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation);
             Destroy(flash, 1f);
+        }
+
+        // 🔊 Play gun sound
+        if (shootClip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(shootClip);
         }
     }
 }
