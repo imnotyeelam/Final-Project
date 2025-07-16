@@ -375,15 +375,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a95b236d5f2884596ab9418aa392a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToChase: 20
-  distanceToLose: 30
+  distanceToChase: 35
+  distanceToLose: 40
   distanceToStop: 10
   keepChasingTime: 3
   bullet: {fileID: 8555865319367664294, guid: 90d7f76c305f9804992c236efaceaea3, type: 3}
   firePoint: {fileID: 3417507175593915961}
   fireRate: 0.25
   waitBetweenShots: 3
-  timeToShoot: 0.5
+  timeToShoot: 1
   anim: {fileID: 1199761383167938554}
 --- !u!195 &3406404701919092149
 NavMeshAgent:
@@ -395,7 +395,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 4
   m_Acceleration: 80
   avoidancePriority: 50
   m_AngularSpeed: 1200
