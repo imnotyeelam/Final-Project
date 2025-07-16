@@ -6,8 +6,12 @@ public class SimpleFPSMovement : MonoBehaviour
     [Header("Movement Settings")]
     public float walkSpeed = 6f;
     public float runSpeed = 10f;
-    public float gravity = -9.81f;
+    public float gravity = -20f; // <- More game-like gravity
     public float jumpHeight = 2f;
+
+    [Header("Jump Physics")]
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
 
     [Header("Camera Reference")]
     public Transform cameraTransform;
@@ -22,7 +26,7 @@ public class SimpleFPSMovement : MonoBehaviour
     public float doubleJumpSpeedBoost = 1.2f;
 
     [HideInInspector]
-    public Vector3 currentMoveVelocity; // ← used by HeadBob or camera scripts
+    public Vector3 currentMoveVelocity;
     [HideInInspector]
     public bool isGrounded;
 
@@ -48,7 +52,7 @@ public class SimpleFPSMovement : MonoBehaviour
             usedDoubleJump = false;
         }
 
-        // Movement input
+        // Movement
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -60,12 +64,10 @@ public class SimpleFPSMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         Vector3 horizontalMove = move * currentSpeed;
 
-        // Save for HeadBob use
         currentMoveVelocity = horizontalMove;
-
         controller.Move(horizontalMove * Time.deltaTime);
 
-        // Jump input
+        // Jumping
         if (Input.GetButtonDown("Jump") && jumpCount < maxJumps)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -75,8 +77,22 @@ public class SimpleFPSMovement : MonoBehaviour
                 usedDoubleJump = true;
         }
 
-        // Apply gravity
-        velocity.y += gravity * Time.deltaTime;
+        // Apply gravity with better fall behavior
+        if (velocity.y < 0)
+        {
+            // Falling faster
+            velocity.y += gravity * fallMultiplier * Time.deltaTime;
+        }
+        else if (velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            // Letting go early = low jump
+            velocity.y += gravity * lowJumpMultiplier * Time.deltaTime;
+        }
+        else
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
+
         controller.Move(velocity * Time.deltaTime);
     }
 }
