@@ -3,57 +3,80 @@ using UnityEngine;
 
 public class Boss2Controller : MonoBehaviour
 {
+    [Header("Boss Settings")]
     public Animator animator;
-    public Transform[] summonPoints;
-    public GameObject minionPrefab;
     public Transform player;
 
+    [Header("Summon Settings")]
+    public Transform[] summonPoints;  // 小兵出生点
+    public GameObject minionPrefab;   // 小兵预制体
+    public int minionsPerWave = 5;    // 每波小兵数量
+    public int totalWaves = 2;        // 总波数
+    public float timeBetweenWaves = 2f; // 每波间隔时间
+
     private int currentWave = 0;
-    private int totalWaves = 3;
     private List<GameObject> currentMinions = new List<GameObject>();
     private bool isSummoning = false;
 
     void Update()
     {
+        // 检查是否所有小兵死亡，准备下一波
         if (!isSummoning && currentMinions.Count > 0)
         {
             currentMinions.RemoveAll(m => m == null);
             if (currentMinions.Count == 0 && currentWave < totalWaves)
             {
-                Invoke(nameof(StartSummon), 2f); // 2秒后召唤下一波
+                Invoke(nameof(StartSummon), timeBetweenWaves);
             }
         }
     }
 
-    // 用于 Trigger 调用
+    /// <summary>
+    /// 由 Trigger 调用，开始起身
+    /// </summary>
     public void StartGetUpAnimation()
     {
         Debug.Log("Boss 开始起身！");
         animator.SetTrigger("GetUp");
     }
 
-    // 当 GetUp 动画结束后，动画事件调用这个
+    /// <summary>
+    /// GetUp 动画结束后，调用
+    /// </summary>
     public void OnGetUpFinished()
     {
-        //animator.SetTrigger("BattleIdle");
         Invoke(nameof(StartSummon), 1.5f);
     }
 
+    /// <summary>
+    /// 播放召唤动画
+    /// </summary>
     void StartSummon()
     {
         isSummoning = true;
         animator.SetTrigger("Summon");
     }
 
-    // Animation Event 放在 Summon 动画上
+    /// <summary>
+    /// Summon 动画事件调用 → 生成小兵
+    /// </summary>
     public void SpawnMinions()
     {
         currentWave++;
         currentMinions.Clear();
 
-        foreach (Transform point in summonPoints)
+        Debug.Log("MinionPrefab: " + (minionPrefab != null));
+        Debug.Log("Player: " + (player != null));
+        Debug.Log("SummonPoints count: " + summonPoints.Length);
+        Debug.Log($"开始第 {currentWave} 波召唤，共 {minionsPerWave} 个小兵");
+
+        for (int i = 0; i < minionsPerWave; i++)
         {
-            GameObject minion = Instantiate(minionPrefab, point.position, Quaternion.identity);
+            // 随机选择出生点
+            Transform spawnPoint = summonPoints[Random.Range(0, summonPoints.Length)];
+
+            // 生成小兵
+            GameObject minion = Instantiate(minionPrefab, spawnPoint.position, Quaternion.identity);
             minion.GetComponent<MinionAI>().SetTarget(player);
             currentMinions.Add(minion);
         }
@@ -63,17 +86,9 @@ public class Boss2Controller : MonoBehaviour
 
     private void OnAnimatorMove()
     {
-        // 获取动画的 Root Motion
         Vector3 rootPosition = animator.rootPosition;
-
-        // 锁定 Y 高度，让熊保持在地面
         rootPosition.y = transform.position.y;
-
-        // 应用修改后的 Root Motion
         transform.position = rootPosition;
-
-        // 如果要保留动画的旋转：
         transform.rotation = animator.rootRotation;
     }
-
 }

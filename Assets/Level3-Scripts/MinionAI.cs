@@ -1,5 +1,5 @@
-using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine;
 
 public class MinionAI : MonoBehaviour
 {
@@ -66,7 +66,7 @@ public class MinionAI : MonoBehaviour
         if (stateInfo.IsName("ShootSingleshot_RF01"))
         {
             //朝向玩家
-            Vector3 lookPos = target.position + new Vector3(0f, 1.0f, -0.8f);
+            Vector3 lookPos = target.position + new Vector3(0f, 0f, -0.8f);
             lookPos.y = transform.position.y; // 保持水平旋转
             transform.LookAt(lookPos);
 
