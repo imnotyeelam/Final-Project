@@ -24,7 +24,8 @@ public class UIManager : MonoBehaviour
     public GameObject outOfAmmoWarning;  // Drag your No Ammo panel here
 
     [Header("Ammo UI")]
-    public Text ammoText;
+    public GameObject ammoPanel;   // Only visible when gun is equipped
+    public Text ammoText;          // Displays ammo count
 
 
     private int ammoProps = 0;
@@ -175,7 +176,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmoUI(int current, int max)
     {
-        if (ammoText) ammoText.text = $"{current}/{max}";
+        if (ammoText) ammoText.text = $"{current}";
 
         if (current > 0 && outOfAmmoWarning)
             outOfAmmoWarning.SetActive(false);
