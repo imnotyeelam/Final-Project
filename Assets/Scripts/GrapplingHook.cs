@@ -8,15 +8,15 @@ public class GrapplingHook : MonoBehaviour
     public Transform cameraTransform;
     public Transform hookStartPoint;
     public float maxGrappleDistance = 30f;
-    public float grappleSpeed = 10f;
+    public float grappleSpeed = 20f;
     public LayerMask grappleMask;
     public GameObject ropeCylinderPrefab;
 
     [Header("Aiming Settings")]
     public float normalMaxDistance = 30f;
     public float aimMaxDistance = 50f;
-    public float normalSpeed = 10f;
-    public float aimSpeed = 15f;
+    public float normalSpeed = 12f;
+    public float aimSpeed = 18f;
 
     [Header("Visuals")]
     public Animator handAnimator;
@@ -28,45 +28,49 @@ public class GrapplingHook : MonoBehaviour
     private bool isGrappling = false;
     private GameObject currentRopeCylinder;
     private float lastGrappleTime;
+    private bool initialBoostApplied = false;
+
+    // Gravity override
+    private SimpleFPSMovement movementScript;
+    private float originalGravity;
+    private bool gravityOverridden = false;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        movementScript = GetComponent<SimpleFPSMovement>();
+        if (movementScript != null)
+        {
+            originalGravity = movementScript.gravity;
+        }
+
         if (aimIndicator) aimIndicator.SetActive(false);
     }
 
-void Update()
+    void Update()
     {
-        // Only allow grappling in hook mode
-        if (HandSwitcher.CurrentMode != 1) 
+        if (HandSwitcher.CurrentMode != 1)
         {
             if (isGrappling) ReleaseGrapple();
             return;
         }
 
-        // Update aiming visual
         if (aimIndicator)
         {
             bool showIndicator = HandSwitcher.IsAiming;
             aimIndicator.SetActive(showIndicator);
-            
-            if (showIndicator)
-            {
-                UpdateAimIndicatorColor();
-            }
+
+            if (showIndicator) UpdateAimIndicatorColor();
         }
 
-        // Adjust values based on aiming state
         maxGrappleDistance = HandSwitcher.IsAiming ? aimMaxDistance : normalMaxDistance;
         grappleSpeed = HandSwitcher.IsAiming ? aimSpeed : normalSpeed;
 
-        // Start grappling on left-click down
         if (Input.GetMouseButtonDown(0) && !isGrappling && Time.time > lastGrappleTime + cooldown)
         {
             TryStartGrapple();
         }
 
-        // Release grappling on left-click up
         if (Input.GetMouseButtonUp(0) && isGrappling)
         {
             ReleaseGrapple();
@@ -83,7 +87,7 @@ void Update()
     {
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
         bool canGrapple = Physics.Raycast(ray, maxGrappleDistance, grappleMask);
-        
+
         if (aimIndicator.TryGetComponent<Image>(out var image))
         {
             image.color = canGrapple ? Color.green : Color.red;
@@ -92,7 +96,7 @@ void Update()
 
     void TryStartGrapple()
     {
-        Ray ray = HandSwitcher.IsAiming 
+        Ray ray = HandSwitcher.IsAiming
             ? new Ray(cameraTransform.position, cameraTransform.forward)
             : new Ray(hookStartPoint.position, hookStartPoint.forward);
 
@@ -101,15 +105,18 @@ void Update()
             grapplePoint = hit.point;
             isGrappling = true;
             lastGrappleTime = Time.time;
+            initialBoostApplied = false;
 
-            if (handAnimator != null)
-            {
-                handAnimator.SetBool("IsGrappling", true);
-            }
+            if (handAnimator) handAnimator.SetBool("IsGrappling", true);
 
             if (ropeCylinderPrefab != null && currentRopeCylinder == null)
-            {
                 currentRopeCylinder = Instantiate(ropeCylinderPrefab);
+
+            // Override gravity
+            if (movementScript && !gravityOverridden)
+            {
+                movementScript.gravity = -1f; // Weak gravity during grapple
+                gravityOverridden = true;
             }
         }
     }
@@ -119,22 +126,37 @@ void Update()
         isGrappling = false;
         lastGrappleTime = Time.time;
 
-        if (handAnimator != null)
-        {
-            handAnimator.SetBool("IsGrappling", false);
-        }
+        if (handAnimator) handAnimator.SetBool("IsGrappling", false);
 
-        if (currentRopeCylinder)
+        if (currentRopeCylinder) Destroy(currentRopeCylinder);
+
+        // Restore gravity
+        if (movementScript && gravityOverridden)
         {
-            Destroy(currentRopeCylinder);
+            movementScript.gravity = originalGravity;
+            gravityOverridden = false;
         }
     }
 
     void PerformGrappleMovement()
     {
         Vector3 direction = (grapplePoint - transform.position).normalized;
-        controller.Move(direction * grappleSpeed * Time.deltaTime);
-        controller.Move(Vector3.up * grappleSpeed * 0.2f * Time.deltaTime);
+        float distance = Vector3.Distance(transform.position, grapplePoint);
+
+        float pullSpeed = Mathf.Lerp(grappleSpeed * 1.8f, grappleSpeed * 0.6f, distance / maxGrappleDistance);
+
+        if (!initialBoostApplied)
+        {
+            pullSpeed *= 2.5f;
+            initialBoostApplied = true;
+        }
+
+        controller.Move(direction * pullSpeed * Time.deltaTime);
+
+        if (distance < 1.2f)
+        {
+            ReleaseGrapple();
+        }
     }
 
     void UpdateRopeVisual()

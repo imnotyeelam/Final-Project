@@ -1,17 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Health Settings")]
     public int maxHealth = 100;
     public int currentHealth;
 
-    public GameObject playerModel;
-    public GameObject cameraHolder;
+    [Header("Death Visuals")]
+    public GameObject playerModel;         // Player's visible body
+    public GameObject cameraHolder;        // Usually the CameraHolder object
     public float deathFallSpeed = 2f;
 
-    private MonoBehaviour gunScript;
-    private MonoBehaviour hookScript;
+    [Header("Fade Effect")]
+    public CanvasGroup fadeCanvasGroup;    // A UI panel with CanvasGroup for fade
+    public float fadeDuration = 2f;
 
     private bool isDead = false;
 
@@ -19,9 +24,19 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
 
-        // Automatically find disabled components too
-        gunScript = GetComponentInChildren<GunShooter>(true);
-        hookScript = GetComponentInChildren<GrapplingHook>(true);
+        // Optional: Ensure fade screen starts invisible
+        if (fadeCanvasGroup != null)
+            fadeCanvasGroup.alpha = 0f;
+    }
+
+    [System.Obsolete]
+    void Update()
+    {
+        // Optional: Press K to test death manually
+        if (Input.GetKeyDown(KeyCode.K) && !isDead)
+        {
+            TakeDamage(maxHealth);
+        }
     }
 
     [System.Obsolete]
@@ -41,42 +56,74 @@ public class PlayerHealth : MonoBehaviour
     {
         isDead = true;
 
-        // Disable player movement and abilities
-        GetComponent<SimpleFPSMovement>().enabled = false;
-        GetComponent<CharacterController>().enabled = false;
+        // Disable movement and control scripts
+        var move = GetComponent<SimpleFPSMovement>() ?? GetComponentInParent<SimpleFPSMovement>();
+        if (move != null) move.enabled = false;
 
-        if (gunScript) gunScript.enabled = false;
-        if (hookScript) hookScript.enabled = false;
+        var controller = GetComponent<CharacterController>() ?? GetComponentInParent<CharacterController>();
+        if (controller != null) controller.enabled = false;
 
+        var gun = GetComponentInChildren<GunShooter>();
+        if (gun != null) gun.enabled = false;
+
+        var hook = GetComponentInChildren<GrapplingHook>();
+        if (hook != null) hook.enabled = false;
+
+        var camController = GetComponentInChildren<FPSCameraController>();
+        if (camController != null) camController.enabled = false;
+
+        // Disable player model
         if (playerModel) playerModel.SetActive(false);
 
-        if (cameraHolder)
-            StartCoroutine(FallAndTiltCamera());
+        // Switch to dead camera hands
+        HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
+        if (handSwitcher != null)
+        {
+            handSwitcher.SwitchToDeadState();
+        }
 
-        // Switch to dead state: No hands
-        FindObjectOfType<HandSwitcher>()?.SwitchToDeadState();
+        // Tilt the camera down
+        if (cameraHolder != null)
+        {
+            StartCoroutine(FallDown());
+        }
+
+        // Start screen fade out
+        if (fadeCanvasGroup != null)
+        {
+            StartCoroutine(FadeOutAndRestart());
+        }
     }
 
-    System.Collections.IEnumerator FallAndTiltCamera()
+    IEnumerator FallDown()
     {
-        float duration = 1f;
         float timer = 0f;
-
         Vector3 startPos = cameraHolder.transform.position;
         Vector3 endPos = startPos + Vector3.down * 1.5f;
 
-        Quaternion startRot = cameraHolder.transform.rotation;
-        Quaternion endRot = startRot * Quaternion.Euler(0, 0, 30f);
-
-        while (timer < duration)
+        while (timer < 1f)
         {
-            float t = timer / duration;
-
-            cameraHolder.transform.position = Vector3.Lerp(startPos, endPos, t);
-            cameraHolder.transform.rotation = Quaternion.Slerp(startRot, endRot, t);
-
+            cameraHolder.transform.position = Vector3.Lerp(startPos, endPos, timer);
             timer += Time.deltaTime * deathFallSpeed;
             yield return null;
         }
+    }
+
+    IEnumerator FadeOutAndRestart()
+    {
+        yield return new WaitForSeconds(1f); // Small delay before fade
+
+        float t = 0f;
+        while (t < fadeDuration)
+        {
+            t += Time.deltaTime;
+            fadeCanvasGroup.alpha = Mathf.Lerp(0, 1, t / fadeDuration);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1f); // Optional: wait before restart
+
+        // Reload the scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
