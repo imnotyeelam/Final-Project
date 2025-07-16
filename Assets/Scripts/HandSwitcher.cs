@@ -52,33 +52,38 @@ public class HandSwitcher : MonoBehaviour
 
     void SetHandMode(int mode)
     {
-        // Running takes priority
-        if (isRunning)
+        // First disable ALL hands
+        DisableAllHands();
+        
+        // If running, show run hand and exit
+        if (isRunning && runHandPrefab != null)
         {
-            DisableAllHands();
-            if (runHandPrefab != null) runHandPrefab.SetActive(true);
+            runHandPrefab.SetActive(true);
             return;
         }
 
-        // Handle regular modes
-        idleHandPrefab.SetActive(mode == 0);
-        fightHandPrefab.SetActive(mode == 2);
-        
-        // Hook mode with aiming
-        if (mode == 1)
+        // Enable the correct hand based on mode
+        switch(mode)
         {
-            hookHandPrefab.SetActive(!IsAiming);
-            if (hookAimHandPrefab != null) hookAimHandPrefab.SetActive(IsAiming);
+            case 0: // Idle
+                idleHandPrefab.SetActive(true);
+                break;
+            case 1: // Hook
+                if (IsAiming && hookAimHandPrefab != null)
+                    hookAimHandPrefab.SetActive(true);
+                else
+                    hookHandPrefab.SetActive(true);
+                break;
+            case 2: // Fight
+                fightHandPrefab.SetActive(true);
+                break;
+            case 3: // Gun
+                if (IsAiming && gunAimHandPrefab != null)
+                    gunAimHandPrefab.SetActive(true);
+                else
+                    gunHandPrefab.SetActive(true);
+                break;
         }
-        
-        // Gun mode with aiming
-        if (mode == 3)
-        {
-            gunHandPrefab.SetActive(!IsAiming);
-            if (gunAimHandPrefab != null) gunAimHandPrefab.SetActive(IsAiming);
-        }
-        
-        if (runHandPrefab != null) runHandPrefab.SetActive(false);
     }
 
     void DisableAllHands()

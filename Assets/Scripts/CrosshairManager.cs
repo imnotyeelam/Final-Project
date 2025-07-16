@@ -10,18 +10,9 @@ public class CrosshairManager : MonoBehaviour
     {
         if (crosshairUI == null) return;
 
-        // Show crosshair only in gun or hook modes
-        bool shouldShow = HandSwitcher.CurrentMode == 1 || HandSwitcher.CurrentMode == 3;
+        // Show crosshair only in gun mode
+        bool shouldShow = HandSwitcher.CurrentMode == 3;
         crosshairUI.SetActive(shouldShow);
 
-        // Change color when aiming
-        if (shouldShow)
-        {
-            var image = crosshairUI.GetComponent<UnityEngine.UI.Image>();
-            if (image != null)
-            {
-                image.color = HandSwitcher.IsAiming ? aimColor : normalColor;
-            }
-        }
     }
 }
