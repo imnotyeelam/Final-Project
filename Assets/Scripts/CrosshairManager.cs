@@ -3,26 +3,39 @@ using UnityEngine.UI;
 
 public class CrosshairManager : MonoBehaviour
 {
-    public Image crosshairImage; // Assign your crosshair UI Image here
-    public Color normalColor = Color.white;
-    public Color aimColor = Color.red; // Color when aiming down sights
-    
+    public RawImage crosshairImage; 
+    public Color gunAimColor = Color.red;
+    public Color defaultColor = Color.white;
+
+    void Start()
+    {
+        if (crosshairImage != null)
+        {
+            crosshairImage.enabled = false;
+        }
+    }
+
     void Update()
     {
         if (crosshairImage == null) return;
-        
-        // Always show crosshair in gun mode (mode 3)
-        bool shouldShow = HandSwitcher.CurrentMode == 3 && HandSwitcher.IsAiming;
+
+        // ✅ Only show crosshair when aiming in GUN mode
+        bool shouldShow = HandSwitcher.CurrentMode == HandSwitcher.Mode.Gun && HandSwitcher.IsAiming;
+
         crosshairImage.enabled = shouldShow;
-        
+
         if (shouldShow)
         {
-            // Change color based on aiming state
-            crosshairImage.color = HandSwitcher.IsAiming ? aimColor : normalColor;
-            
-            // Optional: Scale effect when aiming
-            float scale = HandSwitcher.IsAiming ? 0.8f : 1f;
-            crosshairImage.transform.localScale = Vector3.one * scale;
+            crosshairImage.color = gunAimColor;
+            crosshairImage.transform.localScale = Vector3.one * 0.8f;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (crosshairImage != null)
+        {
+            crosshairImage.enabled = false;
         }
     }
 }

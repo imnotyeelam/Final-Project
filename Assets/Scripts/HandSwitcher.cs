@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HandSwitcher : MonoBehaviour
 {
+    [Header("Hand Prefabs")]
     public GameObject idleHandPrefab;
     public GameObject hookHandPrefab;
     public GameObject hookAimHandPrefab;
@@ -10,7 +13,15 @@ public class HandSwitcher : MonoBehaviour
     public GameObject runHandPrefab;
     public GameObject deadCameraHandPrefab;
 
-    public static int CurrentMode = 0; // 0 = idle, 1 = hook, 2 = gun
+    [Header("Death Effect")]
+    public Image fadeToBlackImage;                // Fullscreen UI image (black)
+    public float fadeDuration = 2f;               // Fade time
+    public Transform playerCameraTransform;       // Drag your main camera here
+    public Vector3 deathTiltRotation = new Vector3(-50f, 0f, 0f);
+    public Vector3 deathFallOffset = new Vector3(0f, -0.3f, 0.3f);
+
+    public enum Mode { Idle = 0, Hook = 1, Gun = 2 }
+    public static Mode CurrentMode = Mode.Idle;
     public static bool IsAiming { get; private set; }
 
     private bool isRunning = false;
@@ -20,19 +31,43 @@ public class HandSwitcher : MonoBehaviour
     private float sprintDuration = 5f;
     private bool sprintCooldownActive = false;
 
+    private float fadeTimer = 0f;
+    private Quaternion initialCameraRotation;
+    private Quaternion targetCameraRotation;
+    private Vector3 initialCameraPosition;
+    private Vector3 targetCameraPosition;
+
+    [Header("Audio")]
+    public AudioClip deathImpactClip;
+
     void Update()
     {
-        if (isDead) return;
+        if (Input.GetKeyDown(KeyCode.K)) // Test: press K to die
+            SwitchToDeadState();
 
-        // Hand switching
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (isDead)
         {
-            CurrentMode = (CurrentMode + 1) % 3; // Idle, Hook, Gun
-            SetHandMode(CurrentMode);
+            HandleDeathEffects();
+            return;
         }
 
-        // Aiming toggle
-        if (CurrentMode == 1 || CurrentMode == 2)
+        HandleHandSwitching();
+        HandleAiming();
+        HandleSprinting();
+    }
+
+    void HandleHandSwitching()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CurrentMode = (Mode)(((int)CurrentMode + 1) % 3);
+            SetHandMode(CurrentMode);
+        }
+    }
+
+    void HandleAiming()
+    {
+        if (CurrentMode == Mode.Hook || CurrentMode == Mode.Gun)
         {
             bool aimingInput = Input.GetMouseButton(1);
             if (aimingInput != IsAiming)
@@ -46,15 +81,16 @@ public class HandSwitcher : MonoBehaviour
             IsAiming = false;
             SetHandMode(CurrentMode);
         }
+    }
 
-        // Sprinting logic
+    void HandleSprinting()
+    {
         bool shiftHeld = Input.GetKey(KeyCode.LeftShift);
         bool forwardHeld = Input.GetKey(KeyCode.W);
         bool shouldSprint = shiftHeld && forwardHeld;
 
         if (shouldSprint && !isRunning && !sprintCooldownActive)
         {
-            // Start sprint
             isRunning = true;
             sprintTimer = 0f;
             SetHandMode(CurrentMode);
@@ -66,14 +102,12 @@ public class HandSwitcher : MonoBehaviour
 
             if (sprintTimer >= sprintDuration)
             {
-                // Sprint ends after 5 seconds
                 isRunning = false;
                 sprintCooldownActive = true;
                 SetHandMode(CurrentMode);
             }
         }
 
-        // Reset sprint cooldown when player releases Shift or W
         if (!shiftHeld || !forwardHeld)
         {
             sprintCooldownActive = false;
@@ -93,9 +127,51 @@ public class HandSwitcher : MonoBehaviour
 
         if (deadCameraHandPrefab != null)
             deadCameraHandPrefab.SetActive(true);
+
+        // 🔊 Play death sound
+        if (deathImpactClip != null)
+        {
+            AudioSource.PlayClipAtPoint(deathImpactClip, playerCameraTransform.position);
+        }
+
+        // Fade to black setup
+        if (fadeToBlackImage != null)
+        {
+            fadeToBlackImage.gameObject.SetActive(true);
+            fadeToBlackImage.color = new Color(0, 0, 0, 0);
+            fadeTimer = 0f;
+        }
+
+        // Tilt & fall camera setup
+        if (playerCameraTransform != null)
+        {
+            initialCameraRotation = playerCameraTransform.rotation;
+            targetCameraRotation = Quaternion.Euler(deathTiltRotation);
+
+            initialCameraPosition = playerCameraTransform.position;
+            targetCameraPosition = initialCameraPosition + deathFallOffset;
+        }
     }
 
-    public void SetHandMode(int mode)
+
+    void HandleDeathEffects()
+    {
+        fadeTimer += Time.deltaTime;
+        float t = Mathf.Clamp01(fadeTimer / fadeDuration);
+
+        if (fadeToBlackImage != null)
+        {
+            fadeToBlackImage.color = new Color(0f, 0f, 0f, t);
+        }
+
+        if (playerCameraTransform != null)
+        {
+            playerCameraTransform.rotation = Quaternion.Slerp(initialCameraRotation, targetCameraRotation, t);
+            playerCameraTransform.position = Vector3.Lerp(initialCameraPosition, targetCameraPosition, t);
+        }
+    }
+
+    public void SetHandMode(Mode mode)
     {
         DisableAllHands();
 
@@ -107,16 +183,18 @@ public class HandSwitcher : MonoBehaviour
 
         switch (mode)
         {
-            case 0: idleHandPrefab?.SetActive(true); break;
-            case 1:
-                if (IsAiming && hookAimHandPrefab != null)
-                    hookAimHandPrefab.SetActive(true);
+            case Mode.Idle:
+                idleHandPrefab?.SetActive(true);
+                break;
+            case Mode.Hook:
+                if (IsAiming)
+                    hookAimHandPrefab?.SetActive(true);
                 else
                     hookHandPrefab?.SetActive(true);
                 break;
-            case 2:
-                if (IsAiming && gunAimHandPrefab != null)
-                    gunAimHandPrefab.SetActive(true);
+            case Mode.Gun:
+                if (IsAiming)
+                    gunAimHandPrefab?.SetActive(true);
                 else
                     gunHandPrefab?.SetActive(true);
                 break;

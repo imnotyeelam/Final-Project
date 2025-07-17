@@ -26,7 +26,6 @@ public class GrapplingHook : MonoBehaviour
     [Header("Audio")]
     public AudioClip hookShootClip;
     public AudioClip hookLatchClip;
-    private AudioSource audioSource;
 
     private CharacterController controller;
     private Vector3 grapplePoint;
@@ -37,14 +36,13 @@ public class GrapplingHook : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        audioSource = GetComponent<AudioSource>();
         if (aimIndicator) aimIndicator.SetActive(false);
     }
 
     void Update()
     {
         // Exit if not in hook mode
-        if (HandSwitcher.CurrentMode != 1)
+        if (HandSwitcher.CurrentMode != HandSwitcher.Mode.Hook)
         {
             if (isGrappling) ReleaseGrapple();
             if (aimIndicator && aimIndicator.activeSelf)
@@ -111,12 +109,9 @@ public class GrapplingHook : MonoBehaviour
             if (ropeCylinderPrefab != null && currentRopeCylinder == null)
                 currentRopeCylinder = Instantiate(ropeCylinderPrefab);
 
-            // 🔊 Play shoot + latch sounds
-            if (audioSource)
-            {
-                if (hookShootClip) audioSource.PlayOneShot(hookShootClip);
-                if (hookLatchClip) audioSource.PlayOneShot(hookLatchClip, 0.7f);
-            }
+            // 🔊 Play shoot + latch sounds at the camera position
+            if (hookShootClip) AudioSource.PlayClipAtPoint(hookShootClip, Camera.main.transform.position);
+            if (hookLatchClip) AudioSource.PlayClipAtPoint(hookLatchClip, Camera.main.transform.position, 0.7f);
         }
     }
 

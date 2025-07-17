@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GunShooter : MonoBehaviour
 {
@@ -18,109 +17,68 @@ public class GunShooter : MonoBehaviour
     public AudioClip shootClip;
     [Range(0, 1)] public float volume = 0.7f;
 
-    [Header("Crosshair")]
-    public Image crosshairImage; // Changed to direct Image reference
-    public Color normalCrosshairColor = Color.white;
-    public Color aimingCrosshairColor = Color.red;
-
     private AudioSource audioSource;
     private float nextFireTime;
     private Camera mainCamera;
 
     void Start()
     {
+        mainCamera = Camera.main;
+
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.volume = volume;
         }
 
-        mainCamera = Camera.main;
-        
-        // Initialize crosshair as hidden
-        if (crosshairImage != null)
-        {
-            crosshairImage.enabled = false;
-        }
+        audioSource.spatialBlend = 0f; // 2D sound
+        audioSource.playOnAwake = false;
+        audioSource.volume = volume;
     }
 
     [System.Obsolete]
     void Update()
     {
-        UpdateCrosshair();
-        
-        // Only process shooting in gun mode (mode 3)
-        if (HandSwitcher.CurrentMode == 3)
+        if (HandSwitcher.CurrentMode == HandSwitcher.Mode.Gun && Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
-            if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
-            {
-                Shoot();
-                nextFireTime = Time.time + fireRate;
-            }
+            Shoot();
+            nextFireTime = Time.time + fireRate;
         }
     }
 
     [System.Obsolete]
     void Shoot()
     {
-        // Calculate shot direction from center of screen
+        // Calculate direction based on screen center
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit, 100f) ? hit.point : ray.GetPoint(100f);
-        Vector3 direction = (targetPoint - firePoint.position).normalized;
+        Vector3 target = Physics.Raycast(ray, out RaycastHit hit, 100f) ? hit.point : ray.GetPoint(100f);
+        Vector3 dir = (target - firePoint.position).normalized;
 
-        // Create and launch bullet
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
+        // Instantiate and shoot bullet
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(dir));
         if (bullet.TryGetComponent<Rigidbody>(out var rb))
         {
-            rb.velocity = direction * bulletSpeed;
+            rb.velocity = dir * bulletSpeed;
         }
 
-        // Visual effects
+        // Lightning effect
         if (lightningPrefab != null)
         {
-            LightningEffect lightning = Instantiate(lightningPrefab);
-            lightning.ShowLightning(firePoint.position, targetPoint);
+            LightningEffect l = Instantiate(lightningPrefab);
+            l.ShowLightning(firePoint.position, target);
         }
 
+        // Muzzle flash
         if (muzzleFlashPrefab != null)
         {
             GameObject flash = Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation, firePoint);
             Destroy(flash, muzzleFlashDuration);
         }
 
-        // Play sound
+        // Audio
         if (shootClip != null)
         {
             audioSource.PlayOneShot(shootClip);
-        }
-    }
-
-    void UpdateCrosshair()
-    {
-        if (crosshairImage == null) return;
-        
-        // Only show in gun aim mode
-        bool shouldShow = HandSwitcher.CurrentMode == 3 && HandSwitcher.IsAiming;
-        crosshairImage.enabled = shouldShow;
-
-        if (shouldShow)
-        {
-            // Update color based on aiming state
-            crosshairImage.color = HandSwitcher.IsAiming ? aimingCrosshairColor : normalCrosshairColor;
-
-            // Optional: Add scaling effect when aiming
-            float scale = HandSwitcher.IsAiming ? 0.8f : 1f;
-            crosshairImage.transform.localScale = Vector3.one * scale;
-        }
-    }
-
-    void OnDisable()
-    {
-        // Hide crosshair when disabled
-        if (crosshairImage != null)
-        {
-            crosshairImage.enabled = false;
         }
     }
 }

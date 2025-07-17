@@ -30,6 +30,16 @@ public class SimpleFPSMovement : MonoBehaviour
     public int maxEnergy = 20;
     public int sprintEnergyCost = 5;
 
+    [Header("Audio")]
+    public AudioClip walkClip;
+    public AudioClip sprintClip;
+    public AudioClip jumpClip;
+    public AudioClip landClip;
+    public float stepRate = 0.5f;
+
+    private AudioSource audioSource;
+    private float stepTimer;
+
     [HideInInspector] public Vector3 currentMoveVelocity;
     [HideInInspector] public bool isGrounded;
 
@@ -41,10 +51,12 @@ public class SimpleFPSMovement : MonoBehaviour
     private bool isSprinting = false;
     private float sprintTimer = 0f;
     private int currentEnergy;
+    private bool wasGroundedLastFrame;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        audioSource = GetComponent<AudioSource>(); // You must add an AudioSource in Unity
         currentEnergy = maxEnergy;
     }
 
@@ -53,6 +65,10 @@ public class SimpleFPSMovement : MonoBehaviour
     {
         // Ground check
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundMask);
+
+        // Landing sound
+        if (!wasGroundedLastFrame && isGrounded && landClip != null)
+            audioSource.PlayOneShot(landClip);
 
         if (isGrounded && velocity.y < 0)
         {
@@ -67,7 +83,7 @@ public class SimpleFPSMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         float currentSpeed = walkSpeed;
 
-        // Sprinting logic
+        // Sprinting
         bool sprintKey = Input.GetKey(KeyCode.LeftShift);
         bool canSprint = isGrounded && sprintKey && z > 0 && currentEnergy >= sprintEnergyCost;
 
@@ -93,21 +109,43 @@ public class SimpleFPSMovement : MonoBehaviour
 
                 HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
                 if (handSwitcher != null)
-                {
                     handSwitcher.SetHandMode(0);
-                }
             }
         }
 
+        // Move player
         Vector3 horizontalMove = move * currentSpeed;
         currentMoveVelocity = horizontalMove;
         controller.Move(horizontalMove * Time.deltaTime);
+
+        // 🔊 Footsteps (simple timer-based system)
+        if (move.magnitude > 0.1f && isGrounded)
+        {
+            stepTimer -= Time.deltaTime;
+            if (stepTimer <= 0f)
+            {
+                if (isSprinting && sprintClip != null)
+                    audioSource.PlayOneShot(sprintClip);
+                else if (walkClip != null)
+                    audioSource.PlayOneShot(walkClip);
+
+                stepTimer = stepRate;
+            }
+        }
+        else
+        {
+            stepTimer = 0f;
+        }
 
         // Jumping
         if (Input.GetButtonDown("Jump") && jumpCount < maxJumps)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             jumpCount++;
+
+            // 🔊 Jump sound
+            if (jumpClip != null)
+                audioSource.PlayOneShot(jumpClip);
 
             if (jumpCount == 2)
                 usedDoubleJump = true;
@@ -122,5 +160,6 @@ public class SimpleFPSMovement : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+        wasGroundedLastFrame = isGrounded;
     }
 }

@@ -152,7 +152,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 50
   lifetime: 2
+  damage: 1
   hitEffectPrefab: {fileID: 339158821923109191, guid: 108ca465382c11742bd2c91fe4fdb13f, type: 3}
+  hitSound: {fileID: 8300000, guid: 1e3e2a1568fb51b4d94c62511a90eb84, type: 3}
+  hitVolume: 3
 --- !u!1001 &3674622179339377906
 PrefabInstance:
   m_ObjectHideFlags: 0
