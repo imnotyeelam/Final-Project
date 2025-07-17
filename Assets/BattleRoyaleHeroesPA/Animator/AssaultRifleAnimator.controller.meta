@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/BattleRoyaleHeroesPA/Animator/AssaultRifleAnimator.controller.meta
 guid: f995ccec4eb03694d8b4fd525e26bccc
+========
+guid: 64b089d69ec575145a360f0d379c2210
+>>>>>>>> Scene4:Assets/BattleRoyaleHeroesPA/Animator/CrossBowAnimator.controller.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 9100000
