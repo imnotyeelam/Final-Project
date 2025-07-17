@@ -1132,6 +1132,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.00013
       objectReference: {fileID: 0}
+    - target: {fileID: 95000013609880944, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 137000012034622678, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
       propertyPath: 'm_Bones.Array.data[46]'
       value: 
@@ -10047,6 +10051,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.4221
       objectReference: {fileID: 0}
+    - target: {fileID: 95000013609880944, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 137000010786910884, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -10478,6 +10486,10 @@ PrefabInstance:
     - target: {fileID: 4000013496958324, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.4221
+      objectReference: {fileID: 0}
+    - target: {fileID: 95000013609880944, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 95000013609880944, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
       propertyPath: m_Controller
