@@ -46,7 +46,6 @@ public class SimpleFPSMovement : MonoBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     private int jumpCount = 0;
-    private bool usedDoubleJump = false;
 
     private bool isSprinting = false;
     private float sprintTimer = 0f;
@@ -74,7 +73,6 @@ public class SimpleFPSMovement : MonoBehaviour
         {
             velocity.y = -2f;
             jumpCount = 0;
-            usedDoubleJump = false;
         }
 
         float x = Input.GetAxisRaw("Horizontal");
@@ -147,8 +145,6 @@ public class SimpleFPSMovement : MonoBehaviour
             if (jumpClip != null)
                 audioSource.PlayOneShot(jumpClip);
 
-            if (jumpCount == 2)
-                usedDoubleJump = true;
         }
 
         // Gravity

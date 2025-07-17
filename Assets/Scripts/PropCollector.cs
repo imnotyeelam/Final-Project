@@ -2,28 +2,15 @@ using UnityEngine;
 
 public class PropCollector : MonoBehaviour
 {
-    [System.Obsolete]
-    private void OnTriggerEnter(Collider other)
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
-        if (other.CompareTag("HPProp"))
-        {
-            UIManager.Instance.AddProp("HP");
-            Destroy(other.gameObject);
-        }
-        else if (other.CompareTag("EnergyProp"))
-        {
-            UIManager.Instance.AddProp("Energy");
-            Destroy(other.gameObject);
-        }
-        else if (other.CompareTag("AmmoProp"))
-        {
-            UIManager.Instance.AddProp("Ammo");
-            Destroy(other.gameObject);
-        }
-        else if (other.CompareTag("Piece"))
-        {
-            FindObjectOfType<PlayerVitalsManager>().CollectPiece();
-            Destroy(other.gameObject);
-        }
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }
