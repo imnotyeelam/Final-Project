@@ -26,7 +26,7 @@ public class Boss1Controller : MonoBehaviour
 
     public void ThrowGrenade()
     {
-        Vector3 targetPos = Player.instance.transform.position + new Vector3(0f, 0.4f, 0f);
+        Vector3 targetPos = PlayerController1.instance.transform.position + new Vector3(0f, 0.4f, 0f);
         Vector3 direction = (targetPos - firePoint.position).normalized;
 
         Quaternion rotation = Quaternion.LookRotation(direction);
@@ -43,9 +43,9 @@ public class Boss1Controller : MonoBehaviour
 
     void Update()
     {
-        if (Player.instance == null) return;
+        if (PlayerController1.instance == null) return;
 
-        targetPoint = Player.instance.transform.position;
+        targetPoint = PlayerController1.instance.transform.position;
         float distanceToPlayer = Vector3.Distance(transform.position, targetPoint);
 
         switch (currentState)
@@ -83,7 +83,7 @@ public class Boss1Controller : MonoBehaviour
                 break;
 
             case BossState.Attacking:
-                transform.LookAt(new Vector3(Player.instance.transform.position.x, transform.position.y, Player.instance.transform.position.z));
+                transform.LookAt(new Vector3(PlayerController1.instance.transform.position.x, transform.position.y, PlayerController1.instance.transform.position.z));
                 agent.isStopped = true;
 
                 // Changed to agentDistanceToStop
@@ -108,7 +108,7 @@ public class Boss1Controller : MonoBehaviour
                         shootTimeCounter = timeToShoot;
                     }
                 }
-                else if (Player.instance.gameObject.activeInHierarchy)
+                else if (PlayerController1.instance.gameObject.activeInHierarchy)
                 {
                     shootTimeCounter -= Time.deltaTime;
 
@@ -121,7 +121,7 @@ public class Boss1Controller : MonoBehaviour
                             fireCount = fireRate;
 
                             firePoint.LookAt(targetPoint + new Vector3(0f, 0.4f, 0f));
-                            Vector3 targetDir = Player.instance.transform.position - transform.position;
+                            Vector3 targetDir = PlayerController1.instance.transform.position - transform.position;
                             float angle = Vector3.SignedAngle(targetDir, transform.forward, Vector3.up);
 
                             if (Mathf.Abs(angle) < 30f)
