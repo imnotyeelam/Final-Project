@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TargetReaction : MonoBehaviour
+public class L2TargetReaction : MonoBehaviour
 {
     public GameObject objectToMove; // 这个是你希望被移动的物体，比如一个门、箱子
     public Vector3 moveOffset = new Vector3(0, 5, 0); // 移动的距离

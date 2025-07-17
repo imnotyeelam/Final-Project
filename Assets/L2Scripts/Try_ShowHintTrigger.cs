@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro; // 如果你用的是 TextMeshPro
 
-public class ShowHintTrigger : MonoBehaviour
+public class Try_ShowHintTrigger : MonoBehaviour
 {
     public GameObject hintUI; // 拖入 UI 物体（带有 Text 组件）
 
