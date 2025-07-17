@@ -3,29 +3,62 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public Slider healthBar;
-    public Slider energyBar;
+    public static UIManager Instance { get; private set; }
+
+    [Header("Health UI")]
+    public Text healthText;
+    public Slider healthSlider;
+
+    [Header("Energy UI")]
+    public Text energyText;
+    public Slider energySlider;
+
+    [Header("Ammo UI")]
     public Text ammoText;
+    public Slider ammoSlider;
 
-    public PlayerStatus playerStatus;
-    public WeaponManager weaponManager;
-
-    void Update()
+    private void Awake()
     {
-        UpdateUI();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 
-    void UpdateUI()
+    public void UpdateHealth(int current, int max)
     {
-        if (playerStatus != null)
+        if (healthText != null)
+            healthText.text = $"HP: {current}/{max}";
+        if (healthSlider != null)
         {
-            healthBar.value = playerStatus.health;
-            energyBar.value = playerStatus.energy;
+            healthSlider.maxValue = max;
+            healthSlider.value = current;
         }
+    }
 
-        if (weaponManager != null)
+    public void UpdateEnergy(int current, int max)
+    {
+        if (energyText != null)
+            energyText.text = $"Energy: {current}/{max}";
+        if (energySlider != null)
         {
-            ammoText.text = "Ammo: " + weaponManager.currentAmmo + "/" + weaponManager.maxAmmo;
+            energySlider.maxValue = max;
+            energySlider.value = current;
+        }
+    }
+
+    public void UpdateAmmo(int current, int max)
+    {
+        if (ammoText != null)
+            ammoText.text = $"Ammo: {current}/{max}";
+        if (ammoSlider != null)
+        {
+            ammoSlider.maxValue = max;
+            ammoSlider.value = current;
         }
     }
 }

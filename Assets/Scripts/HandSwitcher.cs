@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using WeaponType = PlayerStatsManager.WeaponType;
 
 public class HandSwitcher : MonoBehaviour
 {
@@ -14,11 +15,17 @@ public class HandSwitcher : MonoBehaviour
     public GameObject deadCameraHandPrefab;
 
     [Header("Death Effect")]
-    public Image fadeToBlackImage;                // Fullscreen UI image (black)
-    public float fadeDuration = 2f;               // Fade time
-    public Transform playerCameraTransform;       // Drag your main camera here
+    public Image fadeToBlackImage;
+    public float fadeDuration = 2f;
+    public Transform playerCameraTransform;
     public Vector3 deathTiltRotation = new Vector3(-50f, 0f, 0f);
     public Vector3 deathFallOffset = new Vector3(0f, -0.3f, 0.3f);
+
+    [Header("Audio")]
+    public AudioClip deathImpactClip;
+
+    [Header("Settings")]
+    public float modeSwitchCooldown = 0.3f;
 
     public enum Mode { Idle = 0, Hook = 1, Gun = 2 }
     public static Mode CurrentMode = Mode.Idle;
@@ -26,23 +33,28 @@ public class HandSwitcher : MonoBehaviour
 
     private bool isRunning = false;
     private bool isDead = false;
-
     private float sprintTimer = 0f;
     private float sprintDuration = 5f;
     private bool sprintCooldownActive = false;
-
     private float fadeTimer = 0f;
+    private float lastModeSwitchTime;
     private Quaternion initialCameraRotation;
     private Quaternion targetCameraRotation;
     private Vector3 initialCameraPosition;
     private Vector3 targetCameraPosition;
 
-    [Header("Audio")]
-    public AudioClip deathImpactClip;
+    void Start()
+    {
+        if (playerCameraTransform != null)
+        {
+            initialCameraRotation = playerCameraTransform.rotation;
+            initialCameraPosition = playerCameraTransform.position;
+        }
+    }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) // Test: press K to die
+        if (Input.GetKeyDown(KeyCode.K))
             SwitchToDeadState();
 
         if (isDead)
@@ -58,8 +70,11 @@ public class HandSwitcher : MonoBehaviour
 
     void HandleHandSwitching()
     {
+        if (Time.time < lastModeSwitchTime + modeSwitchCooldown) return;
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            lastModeSwitchTime = Time.time;
             CurrentMode = (Mode)(((int)CurrentMode + 1) % 3);
             SetHandMode(CurrentMode);
         }
@@ -99,7 +114,6 @@ public class HandSwitcher : MonoBehaviour
         if (isRunning)
         {
             sprintTimer += Time.deltaTime;
-
             if (sprintTimer >= sprintDuration)
             {
                 isRunning = false;
@@ -111,7 +125,6 @@ public class HandSwitcher : MonoBehaviour
         if (!shiftHeld || !forwardHeld)
         {
             sprintCooldownActive = false;
-
             if (isRunning)
             {
                 isRunning = false;
@@ -122,19 +135,17 @@ public class HandSwitcher : MonoBehaviour
 
     public void SwitchToDeadState()
     {
+        if (isDead) return;
+
         isDead = true;
         DisableAllHands();
 
         if (deadCameraHandPrefab != null)
             deadCameraHandPrefab.SetActive(true);
 
-        // 🔊 Play death sound
-        if (deathImpactClip != null)
-        {
+        if (deathImpactClip != null && playerCameraTransform != null)
             AudioSource.PlayClipAtPoint(deathImpactClip, playerCameraTransform.position);
-        }
 
-        // Fade to black setup
         if (fadeToBlackImage != null)
         {
             fadeToBlackImage.gameObject.SetActive(true);
@@ -142,33 +153,33 @@ public class HandSwitcher : MonoBehaviour
             fadeTimer = 0f;
         }
 
-        // Tilt & fall camera setup
         if (playerCameraTransform != null)
         {
             initialCameraRotation = playerCameraTransform.rotation;
             targetCameraRotation = Quaternion.Euler(deathTiltRotation);
-
             initialCameraPosition = playerCameraTransform.position;
             targetCameraPosition = initialCameraPosition + deathFallOffset;
         }
     }
 
-
     void HandleDeathEffects()
     {
+        if (playerCameraTransform == null) return;
+
         fadeTimer += Time.deltaTime;
         float t = Mathf.Clamp01(fadeTimer / fadeDuration);
 
         if (fadeToBlackImage != null)
-        {
             fadeToBlackImage.color = new Color(0f, 0f, 0f, t);
-        }
 
-        if (playerCameraTransform != null)
-        {
-            playerCameraTransform.rotation = Quaternion.Slerp(initialCameraRotation, targetCameraRotation, t);
-            playerCameraTransform.position = Vector3.Lerp(initialCameraPosition, targetCameraPosition, t);
-        }
+        playerCameraTransform.rotation = Quaternion.Slerp(
+            initialCameraRotation, 
+            targetCameraRotation, 
+            t);
+        playerCameraTransform.position = Vector3.Lerp(
+            initialCameraPosition, 
+            targetCameraPosition, 
+            t);
     }
 
     public void SetHandMode(Mode mode)
@@ -200,19 +211,20 @@ public class HandSwitcher : MonoBehaviour
                 break;
         }
 
-                // Tell PlayerStatsManager to sync icon based on mode
         if (PlayerStatsManager.Instance != null)
         {
             switch (mode)
             {
                 case Mode.Idle:
-                    PlayerStatsManager.Instance.SetWeapon(PlayerStatsManager.WeaponType.Unarmed);
+                    PlayerStatsManager.Instance.SetWeapon(WeaponType.Unarmed);
                     break;
                 case Mode.Hook:
-                    PlayerStatsManager.Instance.SetWeapon(PlayerStatsManager.WeaponType.Hook);
+                    PlayerStatsManager.Instance.SetWeapon(WeaponType.Hook);
                     break;
                 case Mode.Gun:
-                    PlayerStatsManager.Instance.SetWeapon(PlayerStatsManager.WeaponType.Gun);
+                    PlayerStatsManager.Instance.SetWeapon(WeaponType.Gun);
+                    if (WeaponManager.Instance != null)
+                        WeaponManager.Instance.SetWeapon(0);
                     break;
             }
         }

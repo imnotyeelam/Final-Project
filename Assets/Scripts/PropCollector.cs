@@ -2,15 +2,24 @@ using UnityEngine;
 
 public class PropCollector : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public PlayerStatsManager statsManager;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag("Health"))
+        {
+            statsManager.Heal(20);
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Ammo"))
+        {
+            statsManager.AddAmmo(10);
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Energy"))
+        {
+            statsManager.AddEnergy(15);
+            Destroy(other.gameObject);
+        }
     }
 }
