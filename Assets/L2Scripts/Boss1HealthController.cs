@@ -1,14 +1,16 @@
 using UnityEngine;
-using System.Collections; // 别忘了加这一行才能用 IEnumerator
+using System.Collections;
 
 public class Boss1HealthController : MonoBehaviour
 {
     public enum BossType { MainBoss, Clone }
     public BossType bossType = BossType.MainBoss;
 
-    public int currentHealth = 2;
-
+    public int currentHealth = 20;
     private Vector3 spawnPosition;
+
+    public GameObject portalPrefab;         // 添加这行
+    public Transform portalSpawnPoint;      // 添加这行
 
     void Start()
     {
@@ -28,13 +30,20 @@ public class Boss1HealthController : MonoBehaviour
         {
             if (bossType == BossType.MainBoss)
             {
+                // 生成传送门
+                if (portalPrefab != null)
+                {
+                    Vector3 spawnPos = portalSpawnPoint != null ? portalSpawnPoint.position : transform.position;
+                    Instantiate(portalPrefab, spawnPos, Quaternion.identity);
+                }
+
                 BossManager.instance.MainBossDied();
                 Destroy(gameObject);
             }
             else
             {
                 if (!BossManager.instance.IsMainBossDead())
-                    StartCoroutine(ReviveAfterSeconds(5f)); // 5秒后复活
+                    StartCoroutine(ReviveAfterSeconds(5f));
 
                 gameObject.SetActive(false);
             }
@@ -49,7 +58,7 @@ public class Boss1HealthController : MonoBehaviour
     private IEnumerator ReviveAfterSeconds(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        currentHealth = 2;
+        currentHealth = 20;
         transform.position = spawnPosition;
         gameObject.SetActive(true);
     }
