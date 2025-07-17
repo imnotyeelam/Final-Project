@@ -45,7 +45,8 @@ public class SimpleFPSMovement : MonoBehaviour
 
     private CharacterController controller;
     private Vector3 velocity;
-    private int jumpCount = 0
+    private int jumpCount = 0;
+    private bool usedDoubleJump = false;
 
     private bool isSprinting = false;
     private float sprintTimer = 0f;
@@ -57,10 +58,6 @@ public class SimpleFPSMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         audioSource = GetComponent<AudioSource>(); // You must add an AudioSource in Unity
         currentEnergy = maxEnergy;
-
-        // 🔒 Lock and hide the mouse cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     [System.Obsolete]
@@ -77,6 +74,7 @@ public class SimpleFPSMovement : MonoBehaviour
         {
             velocity.y = -2f;
             jumpCount = 0;
+            usedDoubleJump = false;
         }
 
         float x = Input.GetAxisRaw("Horizontal");
@@ -148,6 +146,9 @@ public class SimpleFPSMovement : MonoBehaviour
             // 🔊 Jump sound
             if (jumpClip != null)
                 audioSource.PlayOneShot(jumpClip);
+
+            if (jumpCount == 2)
+                usedDoubleJump = true;
         }
 
         // Gravity

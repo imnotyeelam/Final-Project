@@ -17,20 +17,18 @@ public class HeadBob : MonoBehaviour
     public float strafeTiltAngle = 5f;          // degrees of tilt
     public float tiltSpeed = 5f;                // how fast it rotates
 
-    private SimpleFPSMovement playerMovement;
+    public SimpleFPSMovement playerMovement;
 
     private float timer = 0f;
     private Vector3 startLocalPosition;
     private Quaternion startLocalRotation;
-
-    public SimpleFPSMovement PlayerMovement { get => playerMovement; set => playerMovement = value; }
 
     void Start()
     {
         startLocalPosition = transform.localPosition;
         startLocalRotation = transform.localRotation;
 
-        if (PlayerMovement == null)
+        if (playerMovement == null)
         {
             Debug.LogError("HeadBob: Missing playerMovement reference!");
         }
@@ -38,11 +36,12 @@ public class HeadBob : MonoBehaviour
 
     void Update()
     {
-        if (PlayerMovement == null) return;
+        if (playerMovement == null) return;
 
-        Vector3 horizontalVelocity = PlayerMovement.CurrentMoveVelocity;
+        Vector3 horizontalVelocity = playerMovement.currentMoveVelocity;
         float speed = horizontalVelocity.magnitude;
-        bool isMoving = speed > 0.1f && PlayerMovement.IsGrounded;
+
+        bool isMoving = speed > 0.1f && playerMovement.isGrounded;
         bool isSprinting = Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W);
         bool isStrafingLeft = Input.GetKey(KeyCode.A);
         bool isStrafingRight = Input.GetKey(KeyCode.D);
