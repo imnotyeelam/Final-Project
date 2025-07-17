@@ -4,17 +4,19 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - TaskToggleButton
+  - Enemy
+  - PlayerBullet
+  - Shootable
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Grappleable
+  - ArmsOnly
+  - Enemy
   - 
   - 
   - 
