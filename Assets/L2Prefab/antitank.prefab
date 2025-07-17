@@ -795,7 +795,7 @@ MonoBehaviour:
   moveSpeed: 15
   lifeTime: 5
   explosionRadius: 5
-  damage: 2
+  damage: 5
   LaserImpact: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312, type: 3}
   attackPlayer: 1
 --- !u!1 &4629605680689172810

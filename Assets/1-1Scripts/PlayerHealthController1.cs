@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerHealthController1 : MonoBehaviour//, IDamageable
+public class PlayerHealthController1 : MonoBehaviour, Boss1IDamageable
 {
     public static PlayerHealthController1 instance;
 
@@ -17,10 +17,6 @@ public class PlayerHealthController1 : MonoBehaviour//, IDamageable
     void Start()
     {
         currentHealth = maxHealth;
-
-       // UIController.instance.HealthSlider.maxValue = maxHealth;
-        //UIController.instance.HealthSlider.value = currentHealth;
-        //UIController.instance.HealthText.text = "HEALTH: " + currentHealth + "/" + maxHealth;
     }
 
     // Update is called once per frame
