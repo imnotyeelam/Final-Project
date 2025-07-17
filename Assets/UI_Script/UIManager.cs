@@ -1,201 +1,107 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [Header("Player Status UI")]
-    public Slider healthBar;
-    public Text healthText;
-    public Slider energyBar;
+    [Header("Vitals")]
+    public Slider healthSlider;
+    public Slider energySlider;
     public Text piecesText;
 
-    [Header("TaskPanel UI")]
-    public Transform taskContent;
+    [Header("Prop Icons")]
+    public GameObject ammoPanel;
+    public GameObject heartPanel;
+    public GameObject energyPanel;
+
+    [Header("Task Panel")]
+    public Transform taskPanel;
     public GameObject taskPrefab;
 
-    [Header("Props UI")]
-    public Text ammoPropText;
-    public Text hpPropText;
-    public Text energyPropText;
-
-    [Header("Weapon UI")]
-    public GameObject outOfAmmoWarning;  // Drag your No Ammo panel here
-
-    [Header("Ammo UI")]
-    public GameObject ammoPanel;   // Only visible when gun is equipped
-    public Text ammoText;          // Displays ammo count
-
-
-    private int ammoProps = 0;
-    private int hpProps = 0;
-    private int energyProps = 0;
+    private List<GameObject> currentTasks = new List<GameObject>();
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
     }
 
-    // ---------------- Player HP / Energy ----------------
     public void UpdateHealth(float current, float max)
     {
-        float percent = current / max;
-
-        if (healthBar)
-        {
-            healthBar.value = percent;
-
-            Color highColor = Color.green;
-            Color midColor = Color.yellow;
-            Color lowColor = Color.red;
-
-            Image fillImage = healthBar.fillRect.GetComponent<Image>();
-
-            if (percent > 0.5f)
-            {
-                float t = (percent - 0.5f) / 0.5f;
-                fillImage.color = Color.Lerp(midColor, highColor, t);
-            }
-            else
-            {
-                float t = percent / 0.5f;
-                fillImage.color = Color.Lerp(lowColor, midColor, t);
-            }
-        }
-
-        if (healthText) healthText.text = $"{current}/{max}";
+        healthSlider.value = current / max;
     }
 
     public void UpdateEnergy(float current, float max)
     {
-        float percent = current / max;
-
-        if (energyBar)
-        {
-            energyBar.value = percent;
-
-            Color highColor = Color.cyan;
-            Color midColor = Color.yellow;
-            Color lowColor = Color.red;
-
-            Image fillImage = energyBar.fillRect.GetComponent<Image>();
-
-            if (percent > 0.5f)
-            {
-                float t = (percent - 0.5f) / 0.5f;
-                fillImage.color = Color.Lerp(midColor, highColor, t);
-            }
-            else
-            {
-                float t = percent / 0.5f;
-                fillImage.color = Color.Lerp(lowColor, midColor, t);
-            }
-        }
+        energySlider.value = current / max;
     }
 
     public void UpdatePieces(int collected, int total)
     {
-        if (piecesText) piecesText.text = $"Pieces: {collected}/{total}";
+        piecesText.text = $"Pieces: {collected}/{total}";
     }
 
-    // ---------------- Tasks ----------------
-    public GameObject AddTask(string taskName)
+    public void AddAmmoIcon()
     {
-        if (!taskPrefab) Debug.LogError("taskPrefab not assigned!");
-        if (!taskContent) Debug.LogError("taskContent not assigned!");
-
-        GameObject newTask = Instantiate(taskPrefab, taskContent);
-
-        Text txt = newTask.GetComponentInChildren<Text>();
-        if (!txt) Debug.LogError("taskPrefab has no text component!");
-
-        if (txt) txt.text = taskName;
-
-        return newTask;
+        ammoPanel.SetActive(true);
     }
 
-    public void RemoveTask(GameObject taskItem)
+    public void AddHeartIcon()
     {
-        Destroy(taskItem);
+        heartPanel.SetActive(true);
+    }
+
+    public void AddEnergyIcon()
+    {
+        energyPanel.SetActive(true);
     }
 
     public void ClearAllTasks()
     {
-        foreach (Transform child in taskContent)
+        foreach (var task in currentTasks)
         {
-            Destroy(child.gameObject);
+            Destroy(task);
+        }
+        currentTasks.Clear();
+    }
+
+    public GameObject AddTask(string description)
+    {
+        GameObject newTask = Instantiate(taskPrefab, taskPanel);
+        newTask.GetComponentInChildren<Text>().text = description;
+        currentTasks.Add(newTask);
+        return newTask;
+    }
+
+    public void RemoveTask(GameObject task)
+    {
+        if (currentTasks.Contains(task))
+        {
+            currentTasks.Remove(task);
+            Destroy(task);
         }
     }
 
-    // ---------------- Props ----------------
-    public void AddProp(string type)
+    private void Update()
     {
-        switch (type)
+        if (Input.GetKeyDown(KeyCode.I))
         {
-            case "Ammo": ammoProps++; break;
-            case "HP": hpProps++; break;
-            case "Energy": energyProps++; break;
+            ammoPanel.SetActive(false);
+            WeaponManager.Instance.RefillAmmo();
         }
-        UpdatePropsUI();
-    }
-
-    public bool UseProp(string type)
-    {
-        bool success = false;
-        switch (type)
+        if (Input.GetKeyDown(KeyCode.O))
         {
-            case "Ammo":
-                if (ammoProps > 0)
-                {
-                    ammoProps--;
-                    success = true;
-                    WeaponManager.Instance.AddAmmo(0);
-                }
-                break;
-
-            case "HP":
-                if (hpProps > 0)
-                {
-                    hpProps--;
-                    success = true;
-                }
-                break;
-
-            case "Energy":
-                if (energyProps > 0)
-                {
-                    energyProps--;
-                    success = true;
-                }
-                break;
+            heartPanel.SetActive(false);
+            FindObjectOfType<PlayerVitalsManager>()?.AddHP(20f);
         }
-
-        if (success) UpdatePropsUI();
-        return success;
-    }
-
-
-    private void UpdatePropsUI()
-    {
-        if (ammoPropText) ammoPropText.text = $"{ammoProps}";
-        if (hpPropText) hpPropText.text = $"{hpProps}";
-        if (energyPropText) energyPropText.text = $"{energyProps}";
-    }
-
-    // ---------------- Weapon & Ammo ----------------
-    public void ShowOutOfAmmo(bool show)
-    {
-        if (outOfAmmoWarning)
-            outOfAmmoWarning.SetActive(show);
-    }
-
-    public void UpdateAmmoUI(int current, int max)
-    {
-        if (ammoText) ammoText.text = $"{current}";
-
-        if (current > 0 && outOfAmmoWarning)
-            outOfAmmoWarning.SetActive(false);
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            energyPanel.SetActive(false);
+            FindObjectOfType<PlayerVitalsManager>()?.AddEnergy(20f);
+        }
     }
 }

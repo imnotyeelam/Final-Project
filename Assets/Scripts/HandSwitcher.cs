@@ -14,14 +14,14 @@ public class HandSwitcher : MonoBehaviour
     public GameObject deadCameraHandPrefab;
 
     [Header("Death Effect")]
-    public Image fadeToBlackImage;                // Fullscreen UI image (black)
-    public float fadeDuration = 2f;               // Fade time
-    public Transform playerCameraTransform;       // Drag your main camera here
+    public Image fadeToBlackImage;
+    public float fadeDuration = 2f;
+    public Transform playerCameraTransform;
     public Vector3 deathTiltRotation = new Vector3(-50f, 0f, 0f);
     public Vector3 deathFallOffset = new Vector3(0f, -0.3f, 0.3f);
 
     public enum Mode { Idle = 0, Hook = 1, Gun = 2 }
-    public static Mode CurrentMode = Mode.Idle;
+    public static Mode CurrentMode { get; private set; } = Mode.Idle;
     public static bool IsAiming { get; private set; }
 
     private bool isRunning = false;
@@ -42,7 +42,7 @@ public class HandSwitcher : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) // Test: press K to die
+        if (Input.GetKeyDown(KeyCode.K))
             SwitchToDeadState();
 
         if (isDead)
@@ -125,16 +125,11 @@ public class HandSwitcher : MonoBehaviour
         isDead = true;
         DisableAllHands();
 
-        if (deadCameraHandPrefab != null)
-            deadCameraHandPrefab.SetActive(true);
+        deadCameraHandPrefab?.SetActive(true);
 
-        // 🔊 Play death sound
         if (deathImpactClip != null)
-        {
             AudioSource.PlayClipAtPoint(deathImpactClip, playerCameraTransform.position);
-        }
 
-        // Fade to black setup
         if (fadeToBlackImage != null)
         {
             fadeToBlackImage.gameObject.SetActive(true);
@@ -142,7 +137,6 @@ public class HandSwitcher : MonoBehaviour
             fadeTimer = 0f;
         }
 
-        // Tilt & fall camera setup
         if (playerCameraTransform != null)
         {
             initialCameraRotation = playerCameraTransform.rotation;
@@ -153,16 +147,13 @@ public class HandSwitcher : MonoBehaviour
         }
     }
 
-
     void HandleDeathEffects()
     {
         fadeTimer += Time.deltaTime;
         float t = Mathf.Clamp01(fadeTimer / fadeDuration);
 
         if (fadeToBlackImage != null)
-        {
             fadeToBlackImage.color = new Color(0f, 0f, 0f, t);
-        }
 
         if (playerCameraTransform != null)
         {
@@ -200,22 +191,7 @@ public class HandSwitcher : MonoBehaviour
                 break;
         }
 
-                // Tell WeaponManager to sync icon based on mode
-        if (WeaponManager.Instance != null)
-        {
-            switch (mode)
-            {
-                case Mode.Idle:
-                    WeaponManager.Instance.SetWeapon(WeaponManager.WeaponType.Unarmed);
-                    break;
-                case Mode.Hook:
-                    WeaponManager.Instance.SetWeapon(WeaponManager.WeaponType.Hook);
-                    break;
-                case Mode.Gun:
-                    WeaponManager.Instance.SetWeapon(WeaponManager.WeaponType.Gun);
-                    break;
-            }
-        }
+        WeaponManager.Instance?.SetWeapon((WeaponManager.WeaponType)mode);
     }
 
     void DisableAllHands()

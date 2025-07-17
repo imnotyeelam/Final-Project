@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+
 public class UITest : MonoBehaviour
 {
     private List<GameObject> taskList = new List<GameObject>();
@@ -21,9 +22,7 @@ public class UITest : MonoBehaviour
             {
                 GameObject finishedTask = taskList[0];
                 UIManager.Instance.RemoveTask(finishedTask);
-
                 taskList.RemoveAt(0);
-
                 Debug.Log("task done! left:" + taskList.Count);
             }
             else
