@@ -199,6 +199,23 @@ public class HandSwitcher : MonoBehaviour
                     gunHandPrefab?.SetActive(true);
                 break;
         }
+
+                // Tell WeaponManager to sync icon based on mode
+        if (WeaponManager.Instance != null)
+        {
+            switch (mode)
+            {
+                case Mode.Idle:
+                    WeaponManager.Instance.SetWeapon(WeaponManager.WeaponType.Unarmed);
+                    break;
+                case Mode.Hook:
+                    WeaponManager.Instance.SetWeapon(WeaponManager.WeaponType.Hook);
+                    break;
+                case Mode.Gun:
+                    WeaponManager.Instance.SetWeapon(WeaponManager.WeaponType.Gun);
+                    break;
+            }
+        }
     }
 
     void DisableAllHands()

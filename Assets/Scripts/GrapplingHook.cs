@@ -104,7 +104,7 @@ public class GrapplingHook : MonoBehaviour
             isGrappling = true;
             lastGrappleTime = Time.time;
 
-            handAnimator?.SetBool("IsGrappling", true);
+            handAnimator?.SetBool("IsHooking", true);
 
             if (ropeCylinderPrefab != null && currentRopeCylinder == null)
                 currentRopeCylinder = Instantiate(ropeCylinderPrefab);
@@ -120,7 +120,7 @@ public class GrapplingHook : MonoBehaviour
         isGrappling = false;
         lastGrappleTime = Time.time;
 
-        handAnimator?.SetBool("IsGrappling", false);
+        handAnimator?.SetBool("IsHooking", false);
 
         if (currentRopeCylinder)
             Destroy(currentRopeCylinder);

@@ -13,7 +13,7 @@ public class PlayerAttack : MonoBehaviour
 
             if (handAnimator != null)
             {
-                handAnimator.SetBool("IsShooting", isShooting);
+                handAnimator.SetBool("IsHooking", isShooting);
             }
         }
     }
