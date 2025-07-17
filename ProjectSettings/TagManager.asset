@@ -7,6 +7,9 @@ TagManager:
   - Enemy
   - PlayerBullet
   - Shootable
+  - HPProp
+  - EnergyProp
+  - AmmoProp
   layers:
   - Default
   - TransparentFX
