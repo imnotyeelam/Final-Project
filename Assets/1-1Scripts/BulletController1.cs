@@ -46,11 +46,7 @@ public class BulletController : MonoBehaviour
             other.gameObject.GetComponent<Boss1HealthController>().DamageEnemy(damage);
         }
 
-        if (other.CompareTag("Boss2") && damageEnemy)
-        {
-            //Destroy(other.gameObject);
-            other.gameObject.GetComponent<Boss1HealthController>().DamageEnemy(damage);
-        }
+        
 
         if (other.gameObject.tag == "headShot" && damageEnemy)
         {
@@ -65,7 +61,7 @@ public class BulletController : MonoBehaviour
 
         if (other.CompareTag("Target"))
         {
-            TargetReaction reaction = other.GetComponent<TargetReaction>();
+            L2TargetReaction reaction = other.GetComponent<L2TargetReaction>();
             if (reaction != null)
             {
                 reaction.TriggerAction();

@@ -2,21 +2,41 @@ using UnityEngine;
 
 public class L2TargetReaction : MonoBehaviour
 {
-    public GameObject objectToMove; // 这个是你希望被移动的物体，比如一个门、箱子
-    public Vector3 moveOffset = new Vector3(0, 5, 0); // 移动的距离
-    public float moveSpeed = 2f;
+    public GameObject objectToMove;               // 要移动的物体
+    public Vector3 moveOffset = new Vector3(15, 0, 0); // 移动的偏移量
+    public float moveSpeed = 4f;
 
     private bool shouldMove = false;
-    private Vector3 targetPos;
+    private Vector3 originPos;    // 初始位置
+    private Vector3 targetPos;    // 当前目标位置
+
+    private bool movedOut = false; // 是否已经移动到目标位置
+
+    void Start()
+    {
+        if (objectToMove != null)
+        {
+            originPos = objectToMove.transform.position;
+        }
+    }
 
     public void TriggerAction()
     {
-        Debug.Log("Trigger received, object will move!");
-        if (objectToMove != null)
+        if (objectToMove == null) return;
+
+        // 切换目标位置
+        if (!movedOut)
         {
-            targetPos = objectToMove.transform.position + moveOffset;
-            shouldMove = true;
+            targetPos = originPos + moveOffset;
+            movedOut = true;
         }
+        else
+        {
+            targetPos = originPos;
+            movedOut = false;
+        }
+
+        shouldMove = true;
     }
 
     void Update()
