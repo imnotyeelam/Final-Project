@@ -26,18 +26,18 @@ public class UIManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        else
+        else if (Instance != this)
             Destroy(gameObject);
     }
 
     public void UpdateHealth(float current, float max)
     {
-        healthSlider.value = current / max;
+        healthSlider.value = Mathf.Clamp01(current / max);
     }
 
     public void UpdateEnergy(float current, float max)
     {
-        energySlider.value = current / max;
+        energySlider.value = Mathf.Clamp01(current / max);
     }
 
     public void UpdatePieces(int collected, int total)
@@ -45,34 +45,25 @@ public class UIManager : MonoBehaviour
         piecesText.text = $"Pieces: {collected}/{total}";
     }
 
-    public void AddAmmoIcon()
-    {
-        ammoPanel.SetActive(true);
-    }
-
-    public void AddHeartIcon()
-    {
-        heartPanel.SetActive(true);
-    }
-
-    public void AddEnergyIcon()
-    {
-        energyPanel.SetActive(true);
-    }
+    public void AddAmmoIcon() => ammoPanel.SetActive(true);
+    public void AddHeartIcon() => heartPanel.SetActive(true);
+    public void AddEnergyIcon() => energyPanel.SetActive(true);
 
     public void ClearAllTasks()
     {
         foreach (var task in currentTasks)
-        {
             Destroy(task);
-        }
+
         currentTasks.Clear();
     }
 
     public GameObject AddTask(string description)
     {
         GameObject newTask = Instantiate(taskPrefab, taskPanel);
-        newTask.GetComponentInChildren<Text>().text = description;
+        Text taskText = newTask.GetComponentInChildren<Text>();
+        if (taskText != null)
+            taskText.text = description;
+
         currentTasks.Add(newTask);
         return newTask;
     }
@@ -86,12 +77,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
             ammoPanel.SetActive(false);
-            WeaponManager.Instance.RefillAmmo();
+            WeaponManager.Instance?.RefillAmmo();
         }
         if (Input.GetKeyDown(KeyCode.O))
         {

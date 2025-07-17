@@ -2,39 +2,28 @@ using UnityEngine;
 
 public class PropCollector : MonoBehaviour
 {
-    public Camera playerCamera;
-    public float collectRange = 3f;
-
-    void Update()
+    [System.Obsolete]
+    private void OnTriggerEnter(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (other.CompareTag("HPProp"))
         {
-            TryCollectProp();
+            UIManager.Instance.AddProp("HP");
+            Destroy(other.gameObject);
         }
-    }
-
-    void TryCollectProp()
-    {
-        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, collectRange))
+        else if (other.CompareTag("EnergyProp"))
         {
-            Prop prop = hit.collider.GetComponent<Prop>();
-            if (prop != null)
-            {
-                if (prop.isWeapon && prop.weaponPrefab != null)
-                {
-                    WeaponManager.Instance?.EquipWeapon(prop.weaponPrefab);
-                    UIManager.Instance?.AddTask("Picked up weapon: " + prop.weaponName);
-                }
-                else
-                {
-                    UIManager.Instance?.AddTask("Collected prop: " + prop.propName);
-                }
-
-                Destroy(hit.collider.gameObject);
-            }
+            UIManager.Instance.AddProp("Energy");
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("AmmoProp"))
+        {
+            UIManager.Instance.AddProp("Ammo");
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Piece"))
+        {
+            FindObjectOfType<PlayerVitalsManager>().CollectPiece();
+            Destroy(other.gameObject);
         }
     }
 }

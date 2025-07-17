@@ -120,6 +120,7 @@ public class GrapplingHook : MonoBehaviour
         isGrappling = false;
         lastGrappleTime = Time.time;
 
+        handAnimator?.SetBool("IsGrappling", false);
         handAnimator?.SetBool("IsHooking", false);
 
         if (currentRopeCylinder)
