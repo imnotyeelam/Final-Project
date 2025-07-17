@@ -50,8 +50,18 @@ public class BulletController : MonoBehaviour
             //Debug.Log("Hit the player");
             PlayerHealthController1.instance.DamagePlayer(damage);
         }
-        
-
+        /*等combine完之后comment删掉，这个是逸颖的boss script
+        if (other.CompareTag("Boss1") && damageEnemy)
+        {
+            //Destroy(other.gameObject);
+            other.gameObject.GetComponent<Boss1HealthController>().DamageEnemy(damage);
+        }
+        if (other.CompareTag("Boss2") && damageEnemy)
+        {
+            //Destroy(other.gameObject);
+            other.gameObject.GetComponent<Boss1HealthController>().DamageEnemy(damage);
+        }
+        */
         //IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
         //try to interact with the other object that implements IDamageable
         /*
