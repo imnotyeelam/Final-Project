@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Boss2Controller : MonoBehaviour
@@ -14,6 +16,12 @@ public class Boss2Controller : MonoBehaviour
     public int totalWaves = 2;        // 总波数
     public float timeBetweenWaves = 2f; // 每波间隔时间
 
+    [Header("Camera & Dialogue")]
+    public CinemachineCamera bossCamera; // Boss 专用相机
+    public CinemachineCamera playerCamera; // 玩家相机
+    //public Text dialogueText; // 屏幕下方字幕
+    //public float dialogueDuration = 3f; // 字幕显示时间
+
     private int currentWave = 0;
     private List<GameObject> currentMinions = new List<GameObject>();
     private bool isSummoning = false;
@@ -27,16 +35,23 @@ public class Boss2Controller : MonoBehaviour
         if (!isSummoning && currentMinions.Count > 0)
         {
             currentMinions.RemoveAll(m => m == null);
+
             if (currentMinions.Count == 0 && currentWave < totalWaves)
             {
-                Invoke(nameof(StartSummon), timeBetweenWaves);
+                if (currentWave == 1) // 第一波结束后触发对话
+                {
+                    StartCoroutine(BossTalkSequence());
+                }
+                else
+                {
+                    Invoke(nameof(StartSummon), timeBetweenWaves);
+                }
             }
         }
     }
 
     /// <summary>
     /// 由 Trigger 调用，开始起身
-    /// </summary>
     public void StartGetUpAnimation()
     {
         Debug.Log("Boss 开始起身！");
@@ -45,7 +60,6 @@ public class Boss2Controller : MonoBehaviour
 
     /// <summary>
     /// GetUp 动画结束后，调用
-    /// </summary>
     public void OnGetUpFinished()
     {
         Invoke(nameof(StartSummon), 1.5f);
@@ -53,16 +67,25 @@ public class Boss2Controller : MonoBehaviour
 
     /// <summary>
     /// 播放召唤动画
-    /// </summary>
     void StartSummon()
     {
         isSummoning = true;
         animator.SetTrigger("Summon");
     }
 
+    // 新增：Boss 对话流程控制
+    public void StartBossTalk()
+    {
+        animator.SetBool("isTalking", true);
+    }
+
+    public void EndBossTalk()
+    {
+        animator.SetBool("isTalking", false);
+    }
+
     /// <summary>
     /// Summon 动画事件调用 → 生成小兵
-    /// </summary>
     public void SpawnMinions()
     {
         currentWave++;
@@ -110,4 +133,35 @@ public class Boss2Controller : MonoBehaviour
             // 或者使用：lyingColliderObject.GetComponent<Collider>().enabled = false;
         }
     }
+
+    IEnumerator BossTalkSequence()
+    {
+        // 1. 停止召唤逻辑
+        isSummoning = true;
+
+        // 2. 切换到 Boss 摄像机（如果用 Cinemachine）
+        bossCamera.Priority = 20;
+        playerCamera.Priority = 10;
+
+        // 3. 播放 Talk Idle
+        StartBossTalk();
+
+        // 4. 显示对白 UI（如果后面接 UI）
+        Debug.Log("It's all your fault for not treating me well!");
+
+        // 5. 等待对白播放完成（假设 3 秒）
+        yield return new WaitForSeconds(3f);
+
+        // 6. 停止 Talk 动画
+        EndBossTalk();
+
+        // 7. 切回玩家摄像机
+        bossCamera.Priority = 10;
+        playerCamera.Priority = 20;
+
+        // 8. 继续召唤第二波
+        isSummoning = false;
+        StartSummon();
+    }
+
 }

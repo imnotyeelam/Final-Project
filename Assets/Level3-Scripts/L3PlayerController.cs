@@ -6,9 +6,12 @@ public class L3PlayerController : MonoBehaviour
 
     public float moveSpeed = 5f;
     public CharacterController charCon;
-    public Transform cameraTransform; //拖入你的主相机
 
-    public float mouseSensitivity;
+    public float mouseSensitivity = 2f;
+    private float verticalLookRotation = 0f;
+
+    [Header("Camera Target")]
+    public Transform CameraTarget; // 绑定 Player 头部的空物体
 
     private void Awake()
     {
@@ -17,28 +20,27 @@ public class L3PlayerController : MonoBehaviour
 
     void Update()
     {
+        // 移动
         float inputX = Input.GetAxis("Horizontal");
         float inputZ = Input.GetAxis("Vertical");
 
-        // 获取摄像机朝向的 forward 和 right，但去掉垂直分量
-        Vector3 camForward = cameraTransform.forward;
-        camForward.y = 0;
-        camForward.Normalize();
-
-        Vector3 camRight = cameraTransform.right;
-        camRight.y = 0;
-        camRight.Normalize();
-
-        // 基于摄像机的方向来移动
-        Vector3 moveDir = camRight * inputX + camForward * inputZ;
-
+        Vector3 moveDir = transform.right * inputX + transform.forward * inputZ;
         charCon.Move(moveDir * moveSpeed * Time.deltaTime);
 
-        //camera rotation control look left&right
-        Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
+        // 处理鼠标输入
+        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
 
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
+        // 左右旋转（控制 Player）
+        transform.Rotate(Vector3.up * mouseX);
 
-        cameraTransform.rotation = Quaternion.Euler(cameraTransform.rotation.eulerAngles.x - mouseInput.y, cameraTransform.rotation.eulerAngles.y, cameraTransform.rotation.eulerAngles.z);
+        // 垂直视角（控制虚拟相机的 LookAt 目标）
+        verticalLookRotation -= mouseY;
+        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -80f, 80f); // 限制角度
+
+        // 调整 CameraTarget 的角度
+        // 你的 CameraTarget 需要拖到 inspector
+        CameraTarget.localRotation = Quaternion.Euler(verticalLookRotation, 0f, 0f);
     }
+
 }
