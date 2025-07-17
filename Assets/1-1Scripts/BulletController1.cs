@@ -46,7 +46,6 @@ public class BulletController : MonoBehaviour
             other.gameObject.GetComponent<Boss1HealthController>().DamageEnemy(damage);
         }
 
-        
 
         if (other.gameObject.tag == "headShot" && damageEnemy)
         {
