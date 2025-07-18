@@ -141,6 +141,7 @@ public class UIManager : MonoBehaviour
         UpdatePropsUI();
     }
 
+    [System.Obsolete]
     public bool UseProp(string type)
     {
         bool success = false;

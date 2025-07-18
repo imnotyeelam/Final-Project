@@ -120,11 +120,15 @@ public class WeaponManager : MonoBehaviour
             UIManager.Instance.ShowOutOfAmmo(true);
         }
     }
+
+    [System.Obsolete]
     public void AddAmmo(int amount)
     {
+        FindObjectOfType<GunShooter>()?.AddAmmo(10); // or however much 1 ammo prop gives
         currentAmmo = Mathf.Min(currentAmmo + amount, maxAmmo);
         UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
         Debug.Log("Ammo reloaded: " + currentAmmo);
+        
 
 
         //if ammo > 0, hide warning

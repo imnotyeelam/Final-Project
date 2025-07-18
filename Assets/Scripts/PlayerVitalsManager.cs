@@ -10,10 +10,20 @@ public class PlayerVitalsManager : MonoBehaviour
     public int totalPieces = 3;
     public int collectedPieces = 0;
 
+    [Header("Use Prop Audio Clips")]
+    public AudioClip useAmmoClip;
+    public AudioClip useHPClip;
+    public AudioClip useEnergyClip;
+
+    private AudioSource audioSource;
+
     void Start()
     {
-        currentHP = maxHP;
-        currentEnergy = maxEnergy;
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
 
         // Init UI
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
@@ -51,6 +61,47 @@ public class PlayerVitalsManager : MonoBehaviour
         {
             collectedPieces++;
             UIManager.Instance.UpdatePieces(collectedPieces, totalPieces);
+        }
+    }
+
+    [System.Obsolete]
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (UIManager.Instance.UseProp("Ammo"))
+            {
+                Debug.Log("Used Ammo Prop");
+                FindObjectOfType<GunShooter>()?.AddAmmo(5);  // Add 5 ammo each time
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            if (UIManager.Instance.UseProp("HP"))
+            {
+                Debug.Log("Used HP Prop");
+                AddHP(30);
+                PlayClip(useHPClip);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (UIManager.Instance.UseProp("Energy"))
+            {
+                Debug.Log("Used Energy Prop");
+                AddEnergy(30);
+                PlayClip(useEnergyClip);
+            }
+        }
+    }
+
+    void PlayClip(AudioClip clip)
+    {
+        if (clip && audioSource)
+        {
+            audioSource.PlayOneShot(clip);
         }
     }
 }

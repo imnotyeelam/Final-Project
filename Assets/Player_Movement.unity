@@ -1360,6 +1360,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4160987687563991729, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6339432720297612649, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1452,7 +1456,8 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8297600469559825386, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7350661280237927702, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
@@ -7280,8 +7285,8 @@ GameObject:
   - component: {fileID: 748513554}
   - component: {fileID: 748513556}
   - component: {fileID: 748513557}
-  - component: {fileID: 748513558}
   - component: {fileID: 748513559}
+  - component: {fileID: 748513558}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7494,6 +7499,9 @@ MonoBehaviour:
   currentEnergy: 80
   totalPieces: 3
   collectedPieces: 0
+  useAmmoClip: {fileID: 8300000, guid: 08fc9bb51a176cb4a95ba7c88045f72b, type: 3}
+  useHPClip: {fileID: 8300000, guid: 08fc9bb51a176cb4a95ba7c88045f72b, type: 3}
+  useEnergyClip: {fileID: 8300000, guid: 08fc9bb51a176cb4a95ba7c88045f72b, type: 3}
 --- !u!114 &748513557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7618,6 +7626,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3865dc531a2aa41a623d836cc12e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpClip: {fileID: 8300000, guid: 9b4b5bb5d250af04abb531cc278a2185, type: 3}
+  energyClip: {fileID: 8300000, guid: 9b4b5bb5d250af04abb531cc278a2185, type: 3}
+  ammoClip: {fileID: 8300000, guid: 9b4b5bb5d250af04abb531cc278a2185, type: 3}
+  pieceClip: {fileID: 8300000, guid: 9b4b5bb5d250af04abb531cc278a2185, type: 3}
 --- !u!4 &837422028 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000012861862618, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
@@ -10696,9 +10708,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -369.93982, y: -206.4375}
-  m_SizeDelta: {x: 1920, y: 1080}
-  m_Pivot: {x: -0.0040039723, y: 0}
+  m_AnchoredPosition: {x: -914.2568, y: -422.05}
+  m_SizeDelta: {x: 5133.073, y: 2825.1}
+  m_Pivot: {x: 0.04488621, y: 0.10920784}
 --- !u!114 &1463351032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11280,7 +11292,6 @@ GameObject:
   - component: {fileID: 1665185289}
   - component: {fileID: 1665185288}
   - component: {fileID: 1665185287}
-  - component: {fileID: 1665185293}
   - component: {fileID: 1665185292}
   m_Layer: 0
   m_Name: Enemy
@@ -11419,18 +11430,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 2
---- !u!114 &1665185293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1665185286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 892f9346684ac364c8f2f21ab1896179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1696582745
 GameObject:
   m_ObjectHideFlags: 0
@@ -11732,6 +11731,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4754782290425702832, guid: 10a08a899d715304fa2a7581d8752d0c, type: 3}
   bulletSpeed: 50
   fireRate: 0.1
+  maxAmmo: 30
   lightningPrefab: {fileID: 4666016928129409062, guid: da22f0a50b8d94b4782f84f5f3c21647, type: 3}
   muzzleFlashPrefab: {fileID: 453128823}
   muzzleFlashDuration: 0.1
@@ -17174,6 +17174,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4754782290425702832, guid: 10a08a899d715304fa2a7581d8752d0c, type: 3}
   bulletSpeed: 50
   fireRate: 0.1
+  maxAmmo: 30
   lightningPrefab: {fileID: 4666016928129409062, guid: da22f0a50b8d94b4782f84f5f3c21647, type: 3}
   muzzleFlashPrefab: {fileID: 1896416882}
   muzzleFlashDuration: 0.1
