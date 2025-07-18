@@ -19,9 +19,6 @@ public class PlayerController1 : MonoBehaviour
     private int Jumpcount = 2;
     private int maxJump = 2;
 
-    private Animator anim;
-
-
     public GameObject bullet;
     public Transform firePoint;//spawn point of the bullet
 
@@ -42,8 +39,6 @@ public class PlayerController1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-        //moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
         float yStore = moveInput.y;//Store the first position moveInput y of the player
 
         //to prevent falling error movement when the player satrt from higher ground
@@ -111,8 +106,6 @@ public class PlayerController1 : MonoBehaviour
             //spawn the bullet on the fire pointposition and rotation
             //FireShot();
         }
-
-
         
     }
 }

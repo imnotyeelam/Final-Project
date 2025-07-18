@@ -7,7 +7,7 @@ public class Boss1HealthController : MonoBehaviour
     public BossType bossType = BossType.MainBoss;
 
     public int currentHealth = 20;
-    private Vector3 spawnPosition;
+    public Vector3 spawnPosition;
 
     public GameObject portalPrefab;         // 添加这行
     public Transform portalSpawnPoint;      // 添加这行
@@ -43,10 +43,13 @@ public class Boss1HealthController : MonoBehaviour
             else
             {
                 if (!BossManager.instance.IsMainBossDead())
-                    StartCoroutine(ReviveAfterSeconds(5f));
+                {
+                    BossManager.instance.StartReviveClone(this, 5f);
+                }
 
                 gameObject.SetActive(false);
             }
+
         }
     }
 
