@@ -1,180 +1,105 @@
-using NUnit.Framework;
-using System.Collections.Generic;
 using UnityEngine;
-
-
 
 public class PlayerController1 : MonoBehaviour
 {
     public static PlayerController1 instance;
-    public float moveSpeed, gravityModifier, jumpPower, runSpeed = 12f;
+
+    public float moveSpeed = 8f;
+    public float gravityModifier = 2f;
+    public float jumpPower = 8f;
+    public float runSpeed = 12f;
     public CharacterController charCon;
 
     private Vector3 moveInput;
-
     public Transform camTrans;
-
-    public float mouseSensitivity;
+    public float mouseSensitivity = 3f;
 
     private int Jumpcount = 2;
     private int maxJump = 2;
 
-    private Animator anim;
+    private bool nearPlane = false;
+    private L3PlaneController planeController;
+    private bool isFlying = false;
 
-
-    public GameObject bullet;
-    public Transform firePoint;//spawn point of the bullet
-
-    //public Gun activeGun;
-    //public List<Gun> allGuns = new List<Gun>();//比起array，list更灵活，根据存储的variable留出对应的memory
-    public int currentGun;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Awake()
+    void Awake()
     {
         instance = this;
     }
-    void Start()
-    {
-        //activeGun = allGuns[currentGun];
-        //activeGun.gameObject.SetActive(true);
 
-        //UIController.instance.AmmoText.text = "Ammo: " + activeGun.currentAmmo;
-        //anim = GetComponent<Animator>();
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        //moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-        //moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
-        float yStore = moveInput.y;//Store the first position moveInput y of the player
+        // 如果正在飞行，跳过正常控制
+        if (isFlying) return;
 
-        //to prevent falling error movement when the player satrt from higher ground
+        // 玩家地面移动
+        float yStore = moveInput.y;
+        Vector3 vertMove = transform.forward * Input.GetAxis("Vertical");
+        Vector3 horMove = transform.right * Input.GetAxis("Horizontal");
 
-        Vector3 vertMove = transform.forward * Input.GetAxis("Vertical");//forward means z axis
-        Vector3 horMove = transform.right * Input.GetAxis("Horizontal");//right means x axis
-
-        moveInput = horMove + vertMove;
-        moveInput.Normalize();
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            moveInput = moveInput * runSpeed;
-
-        }
-        else
-        {
-            moveInput = moveInput * moveSpeed;
-        }
-        moveInput.y = yStore;//continue the moveInput y;
-
+        moveInput = (horMove + vertMove).normalized;
+        moveInput *= Input.GetKey(KeyCode.LeftShift) ? runSpeed : moveSpeed;
+        moveInput.y = yStore;
 
         moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
-        if (charCon.isGrounded)//To detect the ground
+
+        if (charCon.isGrounded)
         {
             Jumpcount = maxJump;
-            moveInput.y = 0;//normalize our y input
-            moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;//Apply gravity
-
+            moveInput.y = Physics.gravity.y * gravityModifier * Time.deltaTime;
         }
-        if (Input.GetKeyDown(KeyCode.Space) && Jumpcount > 0) //if the player press space bar
+
+        if (Input.GetKeyDown(KeyCode.Space) && Jumpcount > 0)
         {
-            moveInput.y = jumpPower;//will make jumping movement
+            moveInput.y = jumpPower;
             Jumpcount--;
         }
 
         charCon.Move(moveInput * Time.deltaTime);
 
-        //rotation controll
+        // 摄像机旋转
         Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + mouseInput.x, 0);
+        camTrans.localRotation = Quaternion.Euler(camTrans.localRotation.eulerAngles.x - mouseInput.y, 0, 0);
 
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
-        //+ mouse input x will influence the y rotation
-
-        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles.x - mouseInput.y, camTrans.rotation.eulerAngles.y, camTrans.rotation.eulerAngles.z);
-        //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles+ new Vector3(-moveInput.y, 0f, 0f));这个目前没法用
-
-        //Debug.Log("Speed = " + moveInput.magnitude);
-
-        //Handle the shooting
-        
-        if(Input.GetMouseButtonDown(0) )//left click mouse button
+        // 上飞机逻辑
+        if (nearPlane && Input.GetKeyDown(KeyCode.E))
         {
-            
-            RaycastHit hit;//invisible stick
-            if (Physics.Raycast(camTrans.position, camTrans.forward, out hit, 500f))
-            {
-                firePoint.LookAt(hit.point);
-            }
-            else
-            {
-                firePoint.LookAt(camTrans.position + (camTrans.forward * 30f));
-            }
-            
-            Instantiate(bullet, firePoint.position, firePoint.rotation);
-            //spawn the bullet on the fire pointposition and rotation
-            //FireShot();
+            EnterPlane();
         }
-
-
-        //repeating shots
-        /*
-        if(Input.GetMouseButton(0) && activeGun.canAutoFire)//left click mouse buttom and canAutoFire is true
-        {
-            if(activeGun.fireCounter<=0)
-            {
-                FireShot();//can do fire shot
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            SwitchGun();
-        }
-
-        anim.SetFloat("moveSpeed", moveInput.magnitude);
-        */
     }
-}
 
-    /*
-    public void FireShot()
+    void EnterPlane()
     {
-        if (activeGun.currentAmmo > 0)
-        {
-            activeGun.currentAmmo--;
-
-            Instantiate(activeGun.bullet, firePoint.position, firePoint.rotation);
-
-            activeGun.fireCounter = activeGun.fireRate;//reset the fireCounter to fireRate then counting down again
-            //UIController.instance.AmmoText.text = "Ammo: " + activeGun.currentAmmo;
-        }
-
-
-        
+        Debug.Log("切换到飞机模式");
+        isFlying = true;
+        charCon.enabled = false; // 禁用角色物理控制
+        planeController.ActivatePlane(transform); // 飞机接管玩家位置
     }
 
-    public void SwitchGun()
+    public void ExitPlane()
     {
-        activeGun.gameObject.SetActive(false);
-
-        currentGun++;
-
-        if (currentGun > allGuns.Count)
-        {
-            currentGun = 0;
-        }
-
-        activeGun = allGuns[currentGun];
-        activeGun.gameObject.SetActive(true);
-
-       // UIController.instance.AmmoText.text = "AMMO:" + activeGun.currentAmmo;
+        Debug.Log("回到地面模式");
+        isFlying = false;
+        charCon.enabled = true;
     }
 
-}
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Plane"))
+        {
+            nearPlane = true;
+            planeController = other.GetComponent<L3PlaneController>();
+            Debug.Log("靠近飞机，可以按E进入");
+        }
+    }
 
-/*if (other.gameObject.tag == "Enemy" && damageEnemy)
-{
-    //Destroy(other.gameObject);
-    other.gameObject.GetComponent<EnemyHealthController>().DamageEnemy(damage);
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Plane"))
+        {
+            nearPlane = false;
+            planeController = null;
+            Debug.Log("离开飞机");
+        }
+    }
 }
-*/
