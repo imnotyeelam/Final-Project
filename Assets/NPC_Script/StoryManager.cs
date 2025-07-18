@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 
 [System.Serializable]
@@ -16,26 +15,28 @@ public class StoryManager : MonoBehaviour
     public Image storyImage;
     public Text dialogueText;
     public GameObject nextIcon;
+    public GameObject dialoguePanel; // drag your existing dialogue panel here
 
     [Header("Typewriter Effect")]
     public float typeSpeed = 0.03f;
 
-    private StoryFrame[] storyFrames;
+    [Header("Story Frames")]
+    public StoryFrame[] frames;
+
     private int currentIndex = 0;
     private bool isTyping = false;
     private string fullText = "";
 
-    public void StartStory(StoryFrame[] frames)
+    void Start()
     {
-        storyFrames = frames;
-        currentIndex = 0;
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(true);
+
         ShowFrame(currentIndex);
     }
 
     void Update()
     {
-        if (storyFrames == null) return;
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isTyping)
@@ -54,17 +55,18 @@ public class StoryManager : MonoBehaviour
 
     void ShowFrame(int index)
     {
-        if (index >= storyFrames.Length)
+        if (index >= frames.Length)
         {
             EndStory();
             return;
         }
 
-        storyImage.sprite = storyFrames[index].image;
+        storyImage.sprite = frames[index].image;
 
-        fullText = storyFrames[index].text;
+        fullText = frames[index].text;
         dialogueText.text = "";
         nextIcon.SetActive(false);
+
         StartCoroutine(TypeText(fullText));
     }
 
@@ -88,6 +90,15 @@ public class StoryManager : MonoBehaviour
 
     void EndStory()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene("NPC_UI");
+    }
+
+    public void SkipAll()
+    {
+        StopAllCoroutines();
+        EndStory();
     }
 }
