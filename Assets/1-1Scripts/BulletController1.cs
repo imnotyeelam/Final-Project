@@ -57,7 +57,7 @@ public class BulletController : MonoBehaviour
             //Debug.Log("Hit the player");
             PlayerHealthController1.instance.DamagePlayer(damage);
         }
-
+        
         if (other.CompareTag("Target"))
         {
             L2TargetReaction reaction = other.GetComponent<L2TargetReaction>();
@@ -66,7 +66,7 @@ public class BulletController : MonoBehaviour
                 reaction.TriggerAction();
             }
         }
-
+        
         Destroy(gameObject);
 
         float offset = 0.7f;

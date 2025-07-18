@@ -17,7 +17,9 @@ public class L2TargetReaction : MonoBehaviour
 
     private bool movedOut = false; // 当前状态：是否在偏移状态
 
-    void Start()
+    public Animator anim2;
+
+    private void Start()
     {
         if (objectToMove != null)
         {
@@ -26,8 +28,25 @@ public class L2TargetReaction : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+
+    {
+        /*
+        if (other.CompareTag("Bullet"))
+        {
+            Debug.Log("打到靶子");
+            if (anim2 != null)
+            {
+                Debug.Log("dadaole");
+                 // 播放打中动画
+            }
+            TriggerAction(); // 自己触发移动和缩放
+        }*/
+    }
+
     public void TriggerAction()
     {
+        anim2.SetBool("Hit", true);
         if (objectToMove == null) return;
 
         if (!movedOut)
@@ -45,7 +64,7 @@ public class L2TargetReaction : MonoBehaviour
         shouldAnimate = true;
     }
 
-    void Update()
+    private void Update()
     {
         if (shouldAnimate && objectToMove != null)
         {
