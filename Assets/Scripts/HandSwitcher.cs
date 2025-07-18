@@ -37,6 +37,12 @@ public class HandSwitcher : MonoBehaviour
     private Vector3 initialCameraPosition;
     private Vector3 targetCameraPosition;
 
+    [Header("Gun Shoot Points")]
+    public Transform gunHandShootPoint;
+    public Transform gunAimHandShootPoint;
+    public GunShooter gunShooter;  // Assign this via Inspector
+
+
     [Header("Audio")]
     public AudioClip deathImpactClip;
 
@@ -194,9 +200,17 @@ public class HandSwitcher : MonoBehaviour
                 break;
             case Mode.Gun:
                 if (IsAiming)
+                {
                     gunAimHandPrefab?.SetActive(true);
+                    if (gunShooter != null)
+                        gunShooter.firePoint = gunAimHandShootPoint;
+                }
                 else
+                {
                     gunHandPrefab?.SetActive(true);
+                    if (gunShooter != null)
+                        gunShooter.firePoint = gunHandShootPoint;
+                }
                 break;
         }
 

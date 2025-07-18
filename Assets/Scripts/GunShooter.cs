@@ -52,29 +52,18 @@ public class GunShooter : MonoBehaviour
 
 
     [System.Obsolete]
-    void Update()
+    public void TryShoot()
     {
-        if (HandSwitcher.CurrentMode == HandSwitcher.Mode.Gun && HandSwitcher.IsAiming)
+        if (currentAmmo <= 0)
         {
-            if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
-            {
-                if (currentAmmo > 0)
-                {
-                    Shoot();
-                    currentAmmo--;
-                    UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
-
-                    if (currentAmmo == 0)
-                        ShowOutOfAmmoUI();
-                }
-                else
-                {
-                    ShowOutOfAmmoUI();
-                }
-
-                nextFireTime = Time.time + fireRate;
-            }
+            ShowOutOfAmmoUI(); // Only show when truly no ammo
+            return;
         }
+
+        // Only shoot if ammo > 0
+        currentAmmo--;
+        UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
+        Shoot(); // Your shooting logic
     }
 
     [System.Obsolete]
@@ -106,7 +95,10 @@ public class GunShooter : MonoBehaviour
         {
             audioSource.PlayOneShot(shootClip);
         }
-    }
+
+        if (bulletPrefab && firePoint)
+            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        }
 
     public void AddAmmo(int amount)
     {
