@@ -152,7 +152,6 @@ public class UIManager : MonoBehaviour
                 {
                     ammoProps--;
                     success = true;
-                    WeaponManager.Instance.AddAmmo(0);
                 }
                 break;
 

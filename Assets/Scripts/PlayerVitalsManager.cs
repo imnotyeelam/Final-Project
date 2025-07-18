@@ -72,7 +72,8 @@ public class PlayerVitalsManager : MonoBehaviour
             if (UIManager.Instance.UseProp("Ammo"))
             {
                 Debug.Log("Used Ammo Prop");
-                FindObjectOfType<GunShooter>()?.AddAmmo(5);  // Add 5 ammo each time
+                FindObjectOfType<GunShooter>()?.AddAmmo(10);  
+                PlayClip(useAmmoClip);
             }
         }
 
@@ -81,7 +82,7 @@ public class PlayerVitalsManager : MonoBehaviour
             if (UIManager.Instance.UseProp("HP"))
             {
                 Debug.Log("Used HP Prop");
-                AddHP(30);
+                AddHP(10);
                 PlayClip(useHPClip);
             }
         }
@@ -91,7 +92,7 @@ public class PlayerVitalsManager : MonoBehaviour
             if (UIManager.Instance.UseProp("Energy"))
             {
                 Debug.Log("Used Energy Prop");
-                AddEnergy(30);
+                AddEnergy(10);
                 PlayClip(useEnergyClip);
             }
         }

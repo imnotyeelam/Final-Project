@@ -27,21 +27,29 @@ public class GunShooter : MonoBehaviour
 
     private Coroutine hideOutOfAmmoCoroutine;
 
+    private static bool isAmmoInitialized = false;
+
     void Start()
     {
         mainCamera = Camera.main;
-        if (currentAmmo == 0) currentAmmo = maxAmmo;  // Initialize ammo only once
+
+        if (!isAmmoInitialized)
+        {
+            currentAmmo = maxAmmo;
+            isAmmoInitialized = true;
+        }
 
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
 
-        audioSource.spatialBlend = 0f;  // 2D sound
+        audioSource.spatialBlend = 0f;
         audioSource.playOnAwake = false;
         audioSource.volume = volume;
 
         UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
     }
+
 
     [System.Obsolete]
     void Update()
@@ -119,11 +127,11 @@ public class GunShooter : MonoBehaviour
 
     private void ShowOutOfAmmoUI()
     {
-        UIManager.Instance.ShowOutOfAmmo(true);
-
+        // Always restart the coroutine to ensure UI shows again
         if (hideOutOfAmmoCoroutine != null)
             StopCoroutine(hideOutOfAmmoCoroutine);
 
+        UIManager.Instance.ShowOutOfAmmo(true);
         hideOutOfAmmoCoroutine = StartCoroutine(HideOutOfAmmoAfterDelay());
     }
 
