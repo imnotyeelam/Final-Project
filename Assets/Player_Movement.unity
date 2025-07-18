@@ -6988,6 +6988,11 @@ MonoBehaviour:
   strafeTiltAngle: 5
   tiltSpeed: 5
   playerMovement: {fileID: 748513553}
+--- !u!4 &528478249 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 121786565563067106, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
+  m_PrefabInstance: {fileID: 940051152}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &586904725
 GameObject:
   m_ObjectHideFlags: 0
@@ -7649,6 +7654,7 @@ GameObject:
   - component: {fileID: 748513557}
   - component: {fileID: 748513559}
   - component: {fileID: 748513558}
+  - component: {fileID: 748513560}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7843,6 +7849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handAnimator: {fileID: 2129596786}
+  attackMultiplier: 1
 --- !u!114 &748513556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7992,6 +7999,27 @@ MonoBehaviour:
   energyClip: {fileID: 8300000, guid: 9b4b5bb5d250af04abb531cc278a2185, type: 3}
   ammoClip: {fileID: 8300000, guid: 9b4b5bb5d250af04abb531cc278a2185, type: 3}
   pieceClip: {fileID: 8300000, guid: 9b4b5bb5d250af04abb531cc278a2185, type: 3}
+--- !u!114 &748513560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748513545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3062ab765b679414eaac64dd66b6e3b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAttack: {fileID: 748513554}
+  playerVitalsManager: {fileID: 748513556}
+  dadCooldownText: {fileID: 1779765088}
+  momCooldownText: {fileID: 1175818664}
+  dadBuffDuration: 30
+  dadCooldown: 120
+  momBuffDuration: 5
+  momCooldown: 180
+  someVariable: {fileID: 748513552}
 --- !u!4 &837422028 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000012861862618, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
@@ -8123,6 +8151,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2098581806}
     - target: {fileID: 7693293783550901359, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693293783550901359, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
+      propertyPath: playerAttack
+      value: 
+      objectReference: {fileID: 748513554}
+    - target: {fileID: 7693293783550901359, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
+      propertyPath: someVariable
+      value: 
+      objectReference: {fileID: 528478249}
+    - target: {fileID: 7693293783550901359, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
       propertyPath: dadActiveText
       value: 
       objectReference: {fileID: 1518081776}
@@ -8154,7 +8194,12 @@ PrefabInstance:
       propertyPath: momCooldownOverlay
       value: 
       objectReference: {fileID: 735885345}
-    m_RemovedComponents: []
+    - target: {fileID: 7693293783550901359, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
+      propertyPath: playerVitalsManager
+      value: 
+      objectReference: {fileID: 748513556}
+    m_RemovedComponents:
+    - {fileID: 7693293783550901359, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -7,30 +7,21 @@ public class PlayerBullet : MonoBehaviour
     public int damage = 1;
 
     public GameObject hitEffectPrefab;
-    public AudioClip hitSound; // Assign this in Inspector
+    public AudioClip hitSound;
     public float hitVolume = 1f;
 
-    private void Start()
-    {
-        Destroy(gameObject, lifetime);
-    }
+    void Start() => Destroy(gameObject, lifetime);
 
-    private void Update()
-    {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
-    }
+    void Update() => transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        // Spawn hit VFX
         if (hitEffectPrefab != null)
             Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
 
-        // Debug: Force sound to play at camera to confirm it works
         if (hitSound != null)
             AudioSource.PlayClipAtPoint(hitSound, Camera.main.transform.position, hitVolume);
 
-        // Damage logic
         if (other.CompareTag("Enemy") || other.CompareTag("Shootable"))
         {
             SimpleEnemy enemy = other.GetComponent<SimpleEnemy>();

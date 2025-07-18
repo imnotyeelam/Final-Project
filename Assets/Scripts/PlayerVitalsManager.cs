@@ -16,16 +16,12 @@ public class PlayerVitalsManager : MonoBehaviour
     public AudioClip useEnergyClip;
 
     private AudioSource audioSource;
+    private bool isInvincible = false; // For mom's buff
 
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
+        audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
 
-        // Init UI
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
         UIManager.Instance.UpdatePieces(collectedPieces, totalPieces);
@@ -45,6 +41,7 @@ public class PlayerVitalsManager : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        if (isInvincible) return; // Prevent damage if invincible (mom buff)
         currentHP = Mathf.Max(0, currentHP - amount);
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
     }
@@ -64,45 +61,34 @@ public class PlayerVitalsManager : MonoBehaviour
         }
     }
 
+    public void SetInvincible(bool value)
+    {
+        isInvincible = value;
+    }
+
     [System.Obsolete]
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && UIManager.Instance.UseProp("Ammo"))
         {
-            if (UIManager.Instance.UseProp("Ammo"))
-            {
-                Debug.Log("Used Ammo Prop");
-                FindObjectOfType<GunShooter>()?.AddAmmo(10);  
-                PlayClip(useAmmoClip);
-            }
+            FindObjectOfType<GunShooter>()?.AddAmmo(10);
+            PlayClip(useAmmoClip);
         }
-
-        if (Input.GetKeyDown(KeyCode.O))
+        if (Input.GetKeyDown(KeyCode.O) && UIManager.Instance.UseProp("HP"))
         {
-            if (UIManager.Instance.UseProp("HP"))
-            {
-                Debug.Log("Used HP Prop");
-                AddHP(10);
-                PlayClip(useHPClip);
-            }
+            AddHP(10);
+            PlayClip(useHPClip);
         }
-
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P) && UIManager.Instance.UseProp("Energy"))
         {
-            if (UIManager.Instance.UseProp("Energy"))
-            {
-                Debug.Log("Used Energy Prop");
-                AddEnergy(10);
-                PlayClip(useEnergyClip);
-            }
+            AddEnergy(10);
+            PlayClip(useEnergyClip);
         }
     }
 
     void PlayClip(AudioClip clip)
     {
         if (clip && audioSource)
-        {
             audioSource.PlayOneShot(clip);
-        }
     }
 }
