@@ -7,17 +7,18 @@ public class TargetManager1 : MonoBehaviour
     public Animator platformAnimator;//移动肥皂动画
 
     [Header("变色门相关")]
-    public Renderer colorChangingDoorRenderer;
-    public Color targetColor;
+    public GameObject originalDoor; // 原门
+    public GameObject newDoor;      // 新门（变色或其他样式）
 
     [Header("计数系统")]
     public int totalTargets = 3;
     private int currentHitCount = 0;
-    private bool colorChanged = false;
+    private bool doorChanged = false;
+
 
     public void OnTargetHit(int targetID)
     {
-        currentHitCount++;
+       
 
         // 如果打中第一个靶子，触发门动画
         if (targetID == 1)
@@ -35,18 +36,30 @@ public class TargetManager1 : MonoBehaviour
         }
 
         // 第三个靶子或满足3次命中，改变门颜色
-        if (currentHitCount >= totalTargets && !colorChanged)
+        if(targetID == 3)
         {
-            ChangeDoorColor();
+            currentHitCount++;
+            if (currentHitCount >= totalTargets && !doorChanged)
+            {
+                ChangeDoor();
+            }
         }
+        
     }
 
-    private void ChangeDoorColor()
+    private void ChangeDoor()
     {
-        if (colorChangingDoorRenderer != null)
+        if (originalDoor != null)
         {
-            colorChangingDoorRenderer.material.color = targetColor;
-            colorChanged = true;
+            Destroy(originalDoor);
+            if (newDoor != null)
+            {
+                newDoor.SetActive(true);
+                Debug.Log("换门成功！");
+
+            }
         }
+
+        doorChanged = true;//先放外面防止重复
     }
 }
