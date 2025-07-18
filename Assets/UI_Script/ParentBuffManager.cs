@@ -4,146 +4,140 @@ using UnityEngine.UI;
 
 public class ParentBuffManager : MonoBehaviour
 {
-    [Header("Player Scripts")]
     public PlayerAttack playerAttack;
     public PlayerVitalsManager playerVitalsManager;
 
-    [Header("Cooldown Texts")]
-    public Text dadCooldownText;
-    public Text momCooldownText;
-
-    [Header("Buff Settings")]
+    [Header("Dad Buff Settings")]
     public float dadBuffDuration = 30f;
     public float dadCooldown = 120f;
+    public Image dadBuffIcon;
+    public Text dadCooldownText;
+    public Text dadDurationText;
+
+    [Header("Mom Buff Settings")]
     public float momBuffDuration = 5f;
     public float momCooldown = 180f;
+    public Image momBuffIcon;
+    public Text momCooldownText;
+    public Text momDurationText;
 
-    private bool dadBuffAvailable = true;
-    private bool momBuffAvailable = true;
-    public Transform someVariable;
+    private bool isDadBuffActive = false;
+    private bool isMomBuffActive = false;
 
-    void Start()
-    {
-        if(someVariable == null)
-            Debug.LogError("SomeVariable has not been assigned.", this)	;
-        // Notice, that we pass 'this' as a context object so that Unity will highlight this object when clicked.
-    }
+    private Outline dadOutline;
+    private Outline momOutline;
 
     void Awake()
     {
         if (playerAttack == null)
-        {
-            Debug.LogError("PlayerAttack is not assigned in the Inspector.");
-        }
-
+            playerAttack = GetComponent<PlayerAttack>();
         if (playerVitalsManager == null)
-        {
-            Debug.LogError("PlayerVitalsManager is not assigned in the Inspector.");
-        }
+            playerVitalsManager = GetComponent<PlayerVitalsManager>();
+
+        dadOutline = dadBuffIcon.GetComponent<Outline>();
+        momOutline = momBuffIcon.GetComponent<Outline>();
+
+        if (dadCooldownText) dadCooldownText.text = "";
+        if (momCooldownText) momCooldownText.text = "";
+        if (dadDurationText) dadDurationText.text = "";
+        if (momDurationText) momDurationText.text = "";
     }
 
     void Update()
     {
-        // Press Z to activate Dad Buff (double attack)
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            ActivateDadBuff();
-        }
+        if (Input.GetKeyDown(KeyCode.X) && !isDadBuffActive)
+            StartCoroutine(DadBuffRoutine());
 
-        // Press X to activate Mom Buff (invincibility)
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            ActivateMomBuff();
-        }
+        if (Input.GetKeyDown(KeyCode.Z) && !isMomBuffActive)
+            StartCoroutine(MomBuffRoutine());
     }
 
-    public void ActivateDadBuff()
+    IEnumerator DadBuffRoutine()
     {
-        if (!dadBuffAvailable) return;
-        StartCoroutine(DadBuffRoutine());
-    }
+        isDadBuffActive = true;
 
-    private IEnumerator DadBuffRoutine()
-    {
-        dadBuffAvailable = false;
+        // Activate buff
+        playerAttack.attackMultiplier = 2f;
+        dadBuffIcon.color = Color.white;
+        dadOutline.enabled = true;
 
-        if (playerAttack != null)
+        // Buff duration countdown
+        float durationRemaining = dadBuffDuration;
+        while (durationRemaining > 0)
         {
-            playerAttack.attackMultiplier = 2f;
-            Debug.Log("Dad Buff Activated: Attack multiplier set to 2x.");
-        }
-
-        yield return new WaitForSeconds(dadBuffDuration);
-
-        if (playerAttack != null)
-        {
-            playerAttack.attackMultiplier = 1f;
-            Debug.Log("Dad Buff Ended: Attack multiplier reset to 1x.");
-        }
-
-        StartCoroutine(DadCooldownRoutine());
-    }
-
-    private IEnumerator DadCooldownRoutine()
-    {
-        float remaining = dadCooldown;
-        while (remaining > 0)
-        {
-            if (dadCooldownText != null)
-                dadCooldownText.text = $"{Mathf.CeilToInt(remaining)}s";
-
-            remaining -= Time.deltaTime;
+            if (dadDurationText)
+                dadDurationText.text = Mathf.Ceil(durationRemaining).ToString();
+            durationRemaining -= Time.deltaTime;
             yield return null;
         }
 
-        if (dadCooldownText != null)
-            dadCooldownText.text = "";
+        // End buff
+        playerAttack.attackMultiplier = 1f;
+        dadOutline.enabled = false;
+        dadBuffIcon.color = Color.grey;
+        if (dadDurationText) dadDurationText.text = "";
 
-        dadBuffAvailable = true;
-    }
-
-    public void ActivateMomBuff()
-    {
-        if (!momBuffAvailable) return;
-        StartCoroutine(MomBuffRoutine());
-    }
-
-    private IEnumerator MomBuffRoutine()
-    {
-        momBuffAvailable = false;
-
-        if (playerVitalsManager != null)
+        // Cooldown countdown
+        float cooldownRemaining = dadCooldown;
+        while (cooldownRemaining > 0)
         {
-            playerVitalsManager.SetInvincible(true);
-            Debug.Log("Mom Buff Activated: Player is now invincible.");
-        }
-
-        yield return new WaitForSeconds(momBuffDuration);
-
-        if (playerVitalsManager != null)
-        {
-            playerVitalsManager.SetInvincible(false);
-            Debug.Log("Mom Buff Ended: Player is no longer invincible.");
-        }
-
-        StartCoroutine(MomCooldownRoutine());
-    }
-
-    private IEnumerator MomCooldownRoutine()
-    {
-        float remaining = momCooldown;
-        while (remaining > 0)
-        {
-            if (momCooldownText != null)
-                momCooldownText.text = $"{Mathf.CeilToInt(remaining)}s";
-
-            remaining -= Time.deltaTime;
+            if (dadCooldownText)
+                dadCooldownText.text = Mathf.Ceil(cooldownRemaining).ToString();
+            cooldownRemaining -= Time.deltaTime;
             yield return null;
         }
 
-        if (momCooldownText != null)
-            momCooldownText.text = "";
+        dadCooldownText.text = "";
+        dadBuffIcon.color = Color.white;
+        isDadBuffActive = false;
+    }
 
-        momBuffAvailable = true;
+    IEnumerator MomBuffRoutine()
+    {
+        isMomBuffActive = true;
+
+        // Activate buff
+        playerVitalsManager.SetInvincible(true);
+        momBuffIcon.color = Color.white;
+        momOutline.enabled = true;
+
+        // Buff duration countdown
+        float durationRemaining = momBuffDuration;
+        while (durationRemaining > 0)
+        {
+            if (momDurationText)
+                momDurationText.text = Mathf.Ceil(durationRemaining).ToString();
+            durationRemaining -= Time.deltaTime;
+            yield return null;
+        }
+
+        // End buff
+        playerVitalsManager.SetInvincible(false);
+        momOutline.enabled = false;
+        momBuffIcon.color = Color.grey;
+        if (momDurationText) momDurationText.text = "";
+
+        // Cooldown countdown
+        float cooldownRemaining = momCooldown;
+        while (cooldownRemaining > 0)
+        {
+            if (momCooldownText)
+            {
+                Debug.Log("momCooldownText is " + momCooldownText);
+                momCooldownText.text = Mathf.Ceil(cooldownRemaining).ToString();
+            }
+            else
+            {
+                Debug.LogWarning("momCooldownText is NULL!");
+            }
+
+            cooldownRemaining -= Time.deltaTime;
+            yield return null;
+        }
+
+
+        momCooldownText.text = "";
+        momBuffIcon.color = Color.white;
+        isMomBuffActive = false;
     }
 }
