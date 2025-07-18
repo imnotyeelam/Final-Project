@@ -4,15 +4,27 @@ public class PlayerBullet : MonoBehaviour
 {
     public float speed = 50f;
     public float lifetime = 2f;
-    public int damage = 1;
+    public int baseDamage = 1;
 
     public GameObject hitEffectPrefab;
     public AudioClip hitSound;
     public float hitVolume = 1f;
 
-    void Start() => Destroy(gameObject, lifetime);
+    private PlayerAttack playerAttack;
 
-    void Update() => transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    void Start()
+    {
+        Destroy(gameObject, lifetime);
+        playerAttack = GameObject.FindWithTag("Player")?.GetComponent<PlayerAttack>();
+
+        if (playerAttack == null)
+            Debug.LogWarning("PlayerAttack not found on tagged Player!");
+    }
+
+    void Update()
+    {
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -24,10 +36,15 @@ public class PlayerBullet : MonoBehaviour
 
         if (other.CompareTag("Enemy") || other.CompareTag("Shootable"))
         {
+            int finalDamage = baseDamage;
+
+            if (playerAttack != null)
+                finalDamage = Mathf.RoundToInt(baseDamage * playerAttack.attackMultiplier);
+
             SimpleEnemy enemy = other.GetComponent<SimpleEnemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(finalDamage);
                 if (enemy.health <= 0)
                     Destroy(other.gameObject);
             }

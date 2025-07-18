@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -21,16 +22,17 @@ public class UIManager : MonoBehaviour
     public Text energyPropText;
 
     [Header("Weapon UI")]
-    public GameObject outOfAmmoWarning;  // Drag your No Ammo panel here
+    public GameObject outOfAmmoWarning;
 
     [Header("Ammo UI")]
-    public GameObject ammoPanel;   // Only visible when gun is equipped
-    public Text ammoText;          // Displays ammo count
-
+    public GameObject ammoPanel;
+    public Text ammoText;
 
     private int ammoProps = 0;
     private int hpProps = 0;
     private int energyProps = 0;
+
+    private List<GameObject> taskList = new List<GameObject>();
 
     private void Awake()
     {
@@ -113,12 +115,27 @@ public class UIManager : MonoBehaviour
 
         if (txt) txt.text = taskName;
 
+        taskList.Add(newTask);
         return newTask;
     }
 
     public void RemoveTask(GameObject taskItem)
     {
+        if (taskList.Contains(taskItem))
+            taskList.Remove(taskItem);
+
         Destroy(taskItem);
+    }
+
+    public void CompleteTask(string taskName)
+    {
+        GameObject taskToRemove = taskList.Find(task =>
+            task.GetComponentInChildren<Text>().text == taskName);
+
+        if (taskToRemove != null)
+        {
+            RemoveTask(taskToRemove);
+        }
     }
 
     public void ClearAllTasks()
@@ -127,6 +144,7 @@ public class UIManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        taskList.Clear();
     }
 
     // ---------------- Props ----------------
@@ -175,7 +193,6 @@ public class UIManager : MonoBehaviour
         if (success) UpdatePropsUI();
         return success;
     }
-
 
     private void UpdatePropsUI()
     {

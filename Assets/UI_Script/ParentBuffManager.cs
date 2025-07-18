@@ -29,12 +29,17 @@ public class ParentBuffManager : MonoBehaviour
     public GameObject momActiveOverlay;
     public GameObject momCooldownOverlay;
 
-
     private bool isDadBuffActive = false;
     private bool isMomBuffActive = false;
 
     private Outline dadOutline;
     private Outline momOutline;
+
+    [Header("Audio")]
+    public AudioClip dadBuffSound;
+    public AudioClip momBuffSound;
+    public AudioSource audioSource;
+
 
     void Awake()
     {
@@ -53,6 +58,18 @@ public class ParentBuffManager : MonoBehaviour
         else
             Debug.LogWarning("MomBuffIcon not assigned!");
 
+        if (dadOutline != null)
+        {
+            dadOutline.enabled = false;
+            dadOutline.effectColor = Color.green;
+        }
+
+        if (momOutline != null)
+        {
+            momOutline.enabled = false;
+            momOutline.effectColor = Color.green;
+        }
+
         if (dadCooldownText) dadCooldownText.text = "";
         if (momCooldownText) momCooldownText.text = "";
         if (dadDurationText) dadDurationText.text = "";
@@ -62,7 +79,6 @@ public class ParentBuffManager : MonoBehaviour
         if (dadCooldownOverlay) dadCooldownOverlay.SetActive(false);
         if (momActiveOverlay) momActiveOverlay.SetActive(false);
         if (momCooldownOverlay) momCooldownOverlay.SetActive(false);
-
     }
 
     void Update()
@@ -81,10 +97,15 @@ public class ParentBuffManager : MonoBehaviour
         // Activate buff
         if (playerAttack != null)
             playerAttack.attackMultiplier = 2f;
+        if (audioSource && dadBuffSound)
+            audioSource.PlayOneShot(dadBuffSound);
         if (dadBuffIcon != null)
             dadBuffIcon.color = Color.white;
         if (dadOutline != null)
+        {
+            dadOutline.effectColor = Color.green;
             dadOutline.enabled = true;
+        }
         if (dadActiveOverlay) dadActiveOverlay.SetActive(true);
 
         // Buff duration countdown
@@ -133,10 +154,15 @@ public class ParentBuffManager : MonoBehaviour
         // Activate buff
         if (playerVitalsManager != null)
             playerVitalsManager.SetInvincible(true);
+        if (audioSource && momBuffSound)
+            audioSource.PlayOneShot(momBuffSound);
         if (momBuffIcon != null)
             momBuffIcon.color = Color.white;
         if (momOutline != null)
+        {
+            momOutline.effectColor = Color.green;
             momOutline.enabled = true;
+        }
         if (momActiveOverlay) momActiveOverlay.SetActive(true);
 
         // Buff duration countdown
