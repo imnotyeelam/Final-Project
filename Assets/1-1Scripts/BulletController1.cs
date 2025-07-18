@@ -75,6 +75,5 @@ public class BulletController : MonoBehaviour
 
         Instantiate(impactEffect, transform.position, transform.rotation);
 
-
     }
 }
