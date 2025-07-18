@@ -95,10 +95,7 @@ public class GunShooter : MonoBehaviour
         {
             audioSource.PlayOneShot(shootClip);
         }
-
-        if (bulletPrefab && firePoint)
-            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        }
+    }
 
     public void AddAmmo(int amount)
     {

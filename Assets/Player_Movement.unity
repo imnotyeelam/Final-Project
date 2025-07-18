@@ -11386,10 +11386,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4000012179961668, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2018303276}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1000011621229442, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2129596788}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
 --- !u!1 &1463351030
 GameObject:
@@ -11946,10 +11943,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4000012179961668, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1810158838}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1000011621229442, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1578104752}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
 --- !u!4 &1578104748 stripped
 Transform:
@@ -11966,19 +11960,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1000011621229442, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
   m_PrefabInstance: {fileID: 1578104747}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1578104752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578104750}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fdec04e0ba6a5c4ba84a5c2a2bf8db2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunShooter: {fileID: 668393631}
 --- !u!1 &1588181916 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100002, guid: eb98e367d4f51524a9a2f18e6b393a8c, type: 3}
@@ -18481,19 +18462,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000011195282122, guid: 51d72afa40582f04aaf6195a86fa4d8e, type: 3}
   m_PrefabInstance: {fileID: 1435797944}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2129596788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608603594}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fdec04e0ba6a5c4ba84a5c2a2bf8db2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunShooter: {fileID: 668393631}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
