@@ -21,6 +21,15 @@ public class ParentBuffManager : MonoBehaviour
     public Text momCooldownText;
     public Text momDurationText;
 
+    [Header("Dad UI Overlays")]
+    public GameObject dadActiveOverlay;
+    public GameObject dadCooldownOverlay;
+
+    [Header("Mom UI Overlays")]
+    public GameObject momActiveOverlay;
+    public GameObject momCooldownOverlay;
+
+
     private bool isDadBuffActive = false;
     private bool isMomBuffActive = false;
 
@@ -34,13 +43,26 @@ public class ParentBuffManager : MonoBehaviour
         if (playerVitalsManager == null)
             playerVitalsManager = GetComponent<PlayerVitalsManager>();
 
-        dadOutline = dadBuffIcon.GetComponent<Outline>();
-        momOutline = momBuffIcon.GetComponent<Outline>();
+        if (dadBuffIcon != null)
+            dadOutline = dadBuffIcon.GetComponent<Outline>();
+        else
+            Debug.LogWarning("DadBuffIcon not assigned!");
+
+        if (momBuffIcon != null)
+            momOutline = momBuffIcon.GetComponent<Outline>();
+        else
+            Debug.LogWarning("MomBuffIcon not assigned!");
 
         if (dadCooldownText) dadCooldownText.text = "";
         if (momCooldownText) momCooldownText.text = "";
         if (dadDurationText) dadDurationText.text = "";
         if (momDurationText) momDurationText.text = "";
+
+        if (dadActiveOverlay) dadActiveOverlay.SetActive(false);
+        if (dadCooldownOverlay) dadCooldownOverlay.SetActive(false);
+        if (momActiveOverlay) momActiveOverlay.SetActive(false);
+        if (momCooldownOverlay) momCooldownOverlay.SetActive(false);
+
     }
 
     void Update()
@@ -57,9 +79,13 @@ public class ParentBuffManager : MonoBehaviour
         isDadBuffActive = true;
 
         // Activate buff
-        playerAttack.attackMultiplier = 2f;
-        dadBuffIcon.color = Color.white;
-        dadOutline.enabled = true;
+        if (playerAttack != null)
+            playerAttack.attackMultiplier = 2f;
+        if (dadBuffIcon != null)
+            dadBuffIcon.color = Color.white;
+        if (dadOutline != null)
+            dadOutline.enabled = true;
+        if (dadActiveOverlay) dadActiveOverlay.SetActive(true);
 
         // Buff duration countdown
         float durationRemaining = dadBuffDuration;
@@ -72,10 +98,15 @@ public class ParentBuffManager : MonoBehaviour
         }
 
         // End buff
-        playerAttack.attackMultiplier = 1f;
-        dadOutline.enabled = false;
-        dadBuffIcon.color = Color.grey;
+        if (playerAttack != null)
+            playerAttack.attackMultiplier = 1f;
+        if (dadOutline != null)
+            dadOutline.enabled = false;
+        if (dadBuffIcon != null)
+            dadBuffIcon.color = Color.grey;
         if (dadDurationText) dadDurationText.text = "";
+        if (dadActiveOverlay) dadActiveOverlay.SetActive(false);
+        if (dadCooldownOverlay) dadCooldownOverlay.SetActive(true);
 
         // Cooldown countdown
         float cooldownRemaining = dadCooldown;
@@ -87,8 +118,11 @@ public class ParentBuffManager : MonoBehaviour
             yield return null;
         }
 
-        dadCooldownText.text = "";
-        dadBuffIcon.color = Color.white;
+        if (dadCooldownText) dadCooldownText.text = "";
+        if (dadCooldownOverlay) dadCooldownOverlay.SetActive(false);
+        if (dadBuffIcon != null)
+            dadBuffIcon.color = Color.white;
+
         isDadBuffActive = false;
     }
 
@@ -97,9 +131,13 @@ public class ParentBuffManager : MonoBehaviour
         isMomBuffActive = true;
 
         // Activate buff
-        playerVitalsManager.SetInvincible(true);
-        momBuffIcon.color = Color.white;
-        momOutline.enabled = true;
+        if (playerVitalsManager != null)
+            playerVitalsManager.SetInvincible(true);
+        if (momBuffIcon != null)
+            momBuffIcon.color = Color.white;
+        if (momOutline != null)
+            momOutline.enabled = true;
+        if (momActiveOverlay) momActiveOverlay.SetActive(true);
 
         // Buff duration countdown
         float durationRemaining = momBuffDuration;
@@ -112,32 +150,31 @@ public class ParentBuffManager : MonoBehaviour
         }
 
         // End buff
-        playerVitalsManager.SetInvincible(false);
-        momOutline.enabled = false;
-        momBuffIcon.color = Color.grey;
+        if (playerVitalsManager != null)
+            playerVitalsManager.SetInvincible(false);
+        if (momOutline != null)
+            momOutline.enabled = false;
+        if (momBuffIcon != null)
+            momBuffIcon.color = Color.grey;
         if (momDurationText) momDurationText.text = "";
+        if (momActiveOverlay) momActiveOverlay.SetActive(false);
+        if (momCooldownOverlay) momCooldownOverlay.SetActive(true);
 
         // Cooldown countdown
         float cooldownRemaining = momCooldown;
         while (cooldownRemaining > 0)
         {
             if (momCooldownText)
-            {
-                Debug.Log("momCooldownText is " + momCooldownText);
                 momCooldownText.text = Mathf.Ceil(cooldownRemaining).ToString();
-            }
-            else
-            {
-                Debug.LogWarning("momCooldownText is NULL!");
-            }
-
             cooldownRemaining -= Time.deltaTime;
             yield return null;
         }
 
+        if (momCooldownText) momCooldownText.text = "";
+        if (momCooldownOverlay) momCooldownOverlay.SetActive(false);
+        if (momBuffIcon != null)
+            momBuffIcon.color = Color.white;
 
-        momCooldownText.text = "";
-        momBuffIcon.color = Color.white;
         isMomBuffActive = false;
     }
 }
