@@ -20,9 +20,9 @@ public class Turret : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.position, L3PlayerController.instance.transform.position) < rangeToTargetPlayer)
+        if (Vector3.Distance(transform.position, PlayerController1.instance.transform.position) < rangeToTargetPlayer)
         {
-            gun.LookAt(L3PlayerController.instance.transform.position + new Vector3(0f, 0.2f, 0f));
+            gun.LookAt(PlayerController1.instance.transform.position + new Vector3(0f, 0.2f, 0f));
 
             shotCounter -= Time.deltaTime;
 

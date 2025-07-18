@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+  - headShot
+  - PlayerBullet
+  - Target
   layers:
   - Default
   - TransparentFX

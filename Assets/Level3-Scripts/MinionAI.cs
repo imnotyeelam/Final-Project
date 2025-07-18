@@ -27,6 +27,16 @@ public class MinionAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+
+        if (target == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                target = playerObj.transform;
+            }
+        }
+
         agent.stoppingDistance = 15f;
     }
 
@@ -37,7 +47,7 @@ public class MinionAI : MonoBehaviour
 
     void Update()
     {
-        if (target == null) return;
+        //if (target == null) return;
 
         agent.SetDestination(target.position);
 
@@ -74,7 +84,7 @@ public class MinionAI : MonoBehaviour
         if (stateInfo.IsName("ShootSingleshot_RF01"))
         {
             //朝向玩家
-            Vector3 lookPos = target.position + new Vector3(0f, 0f, -0.8f);
+            Vector3 lookPos = target.position + new Vector3(0f, 0.6f, -1.8f);
             lookPos.y = transform.position.y; // 保持水平旋转
             transform.LookAt(lookPos);
 
