@@ -18,14 +18,13 @@ public class TaskTester : MonoBehaviour
             taskManager.AddGameTask("Kill 5 enemies");
             taskManager.AddGameTask("Talk to the NPC");
 
-            // Simulate collecting HP props every 0.5 seconds
             InvokeRepeating(nameof(SimulateCollectHPProp), 1f, 0.5f);
-
-            // Simulate killing enemies every 0.75 seconds
             InvokeRepeating(nameof(SimulateKillEnemy), 1f, 0.75f);
-
-            // Simulate talking to NPC after 6 seconds
             Invoke(nameof(CompleteTalkToNPC), 6f);
+        }
+        else
+        {
+            Debug.LogError("❌ GameTaskManager not found in scene!");
         }
     }
 

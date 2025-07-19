@@ -44,16 +44,19 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         Debug.Log("UIManager Start called");
-
-        AddTask("Test task from Start");
     }
 
-    private void Awake()
+    void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
-
     private void Update()
     {
         if (Input.GetKeyDown(toggleKey) && taskPanel != null)
