@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class GameTaskManager : MonoBehaviour
 {
+    void Start()
+    {
+        // Add all tasks at the beginning
+        AddGameTask("Collect HP Prop");
+        AddGameTask("Kill Enemy");
+        AddGameTask("Talk to NPC");
+    }
+
     public void AddGameTask(string taskDescription)
     {
         Debug.Log("Creating task: " + taskDescription + " ✅ from GameTaskManager");

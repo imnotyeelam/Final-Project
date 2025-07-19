@@ -16,15 +16,79 @@ public class PlayerVitalsManager : MonoBehaviour
     public AudioClip useEnergyClip;
 
     private AudioSource audioSource;
-    private bool isInvincible = false; // For mom's buff
+    private bool isInvincible = false;
+
+    // For energy deduction timer
+    private float energyTimer = 0f;
+    private float energyInterval = 120f; // 2 minutes
+    private float energyLoss = 5f;
+
+    // For fall damage
+    private float lastY;
+    private float fallThreshold = 2.0f; // to detect actual fall
+    private CharacterController controller;
 
     void Start()
     {
         audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
+        controller = GetComponent<CharacterController>();
 
+        lastY = transform.position.y;
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
         UIManager.Instance.UpdatePieces(collectedPieces, totalPieces);
+    }
+
+    [System.Obsolete]
+    void Update()
+    {
+        // ENERGY DEDUCTION
+        energyTimer += Time.deltaTime;
+        if (energyTimer >= energyInterval)
+        {
+            energyTimer = 0f;
+            ConsumeEnergy(energyLoss);
+            Debug.Log($"[Energy Timer] -{energyLoss} energy. Current energy: {currentEnergy}");
+        }
+
+        // FALL DAMAGE DETECTION
+        if (controller.isGrounded)
+        {
+            float fallDistance = lastY - transform.position.y;
+            if (fallDistance > fallThreshold)
+            {
+                float damage = Mathf.Floor(fallDistance / 25f) * 10f;
+                if (damage > 0)
+                {
+                    TakeDamage(damage);
+                    Debug.Log($"[Fall Damage] Fall from {fallDistance:F1} units. Took {damage} damage. Current HP: {currentHP}");
+                }
+            }
+            lastY = transform.position.y;
+        }
+        else
+        {
+            // While falling, always update highest Y to detect fall distance
+            if (transform.position.y > lastY)
+                lastY = transform.position.y;
+        }
+
+        // Prop debug keys (optional)
+        if (Input.GetKeyDown(KeyCode.I) && UIManager.Instance.UseProp("Ammo"))
+        {
+            FindObjectOfType<GunShooter>()?.AddAmmo(10);
+            PlayClip(useAmmoClip);
+        }
+        if (Input.GetKeyDown(KeyCode.O) && UIManager.Instance.UseProp("HP"))
+        {
+            AddHP(10);
+            PlayClip(useHPClip);
+        }
+        if (Input.GetKeyDown(KeyCode.P) && UIManager.Instance.UseProp("Energy"))
+        {
+            AddEnergy(10);
+            PlayClip(useEnergyClip);
+        }
     }
 
     public void AddHP(float amount)
@@ -41,7 +105,7 @@ public class PlayerVitalsManager : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        if (isInvincible) return; // Prevent damage if invincible (mom buff)
+        if (isInvincible) return;
         currentHP = Mathf.Max(0, currentHP - amount);
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
     }
@@ -64,26 +128,6 @@ public class PlayerVitalsManager : MonoBehaviour
     public void SetInvincible(bool value)
     {
         isInvincible = value;
-    }
-
-    [System.Obsolete]
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I) && UIManager.Instance.UseProp("Ammo"))
-        {
-            FindObjectOfType<GunShooter>()?.AddAmmo(10);
-            PlayClip(useAmmoClip);
-        }
-        if (Input.GetKeyDown(KeyCode.O) && UIManager.Instance.UseProp("HP"))
-        {
-            AddHP(10);
-            PlayClip(useHPClip);
-        }
-        if (Input.GetKeyDown(KeyCode.P) && UIManager.Instance.UseProp("Energy"))
-        {
-            AddEnergy(10);
-            PlayClip(useEnergyClip);
-        }
     }
 
     void PlayClip(AudioClip clip)
