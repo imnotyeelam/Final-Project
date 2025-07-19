@@ -136,7 +136,7 @@ public class PlayerController1 : MonoBehaviour
         L3MovingPlane plane = currentPlatform.GetComponent<L3MovingPlane>();
         if (plane != null)
         {
-            plane.TemporarilyDisableAttach(2f); // 禁用0.5秒
+            plane.TemporarilyDisableAttach(3f); // 禁用2秒
         }
 
         Debug.Log("玩家已下平台");

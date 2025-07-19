@@ -38,6 +38,8 @@ public class PlayerHealthController1 : MonoBehaviour//, IDamageable
         if (currentHealth <= 0)
         {
             gameObject.SetActive(false);
+
+            FindFirstObjectByType<L3RespawnManager>().RespawnPlayer(); //respawn!!!
         }
 
 
