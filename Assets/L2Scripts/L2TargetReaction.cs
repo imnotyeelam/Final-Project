@@ -19,6 +19,10 @@ public class L2TargetReaction : MonoBehaviour
 
     public Animator anim2;
 
+    public AudioClip triggerSound;       // 拖入音效
+    private AudioSource audioSource;     // 用于播放音效
+
+
     private void Start()
     {
         if (objectToMove != null)
@@ -26,6 +30,14 @@ public class L2TargetReaction : MonoBehaviour
             originPos = objectToMove.transform.position;
             originScale = objectToMove.transform.localScale;
         }
+
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>(); // 如果没有，就添加一个
+        }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -47,6 +59,12 @@ public class L2TargetReaction : MonoBehaviour
     public void TriggerAction()
     {
         anim2.SetBool("Hit", true);
+
+        if (triggerSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(triggerSound);
+        }
+
         if (objectToMove == null) return;
 
         if (!movedOut)
