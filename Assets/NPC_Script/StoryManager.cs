@@ -25,7 +25,7 @@ public class StoryManager : MonoBehaviour
     [Header("Transition")]
     public Image blackScreen;         // full-screen black image
     public float fadeDuration = 1f;   // fade in/out time
-    public string nextSceneName = "NPC_UI";
+    public string nextSceneName = "Scene 1";
 
     private int currentIndex = 0;
     private bool isTyping = false;

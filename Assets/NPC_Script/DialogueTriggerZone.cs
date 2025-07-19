@@ -15,8 +15,15 @@ public class DialogueTriggerZone : MonoBehaviour
     {
         if (!hasTriggered && other.CompareTag("Player"))
         {
-            DialogueUI.Instance.StartDialogue(dialogueLines, dialoguePortraits);
-            hasTriggered = true;
+            if (DialogueUI.Instance != null)
+            {
+                DialogueUI.Instance.StartDialogue(dialogueLines, dialoguePortraits);
+                hasTriggered = true;
+            }
+            else
+            {
+                Debug.LogError("DialogueUI.Instance is null! Is DialogueUI in the scene?");
+            }
         }
     }
 }

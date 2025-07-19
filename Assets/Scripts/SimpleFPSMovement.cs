@@ -41,7 +41,6 @@ public class SimpleFPSMovement : MonoBehaviour
     private float stepTimer;
     private PlayerVitalsManager vitalsManager;
 
-
     [HideInInspector] public Vector3 currentMoveVelocity;
     [HideInInspector] public bool isGrounded;
 
@@ -52,12 +51,13 @@ public class SimpleFPSMovement : MonoBehaviour
     private float sprintTimer = 0f;
     private int currentEnergy;
     private bool wasGroundedLastFrame;
+    public bool canMove = true; 
 
     [System.Obsolete]
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        audioSource = GetComponent<AudioSource>(); // You must add an AudioSource in Unity
+        audioSource = GetComponent<AudioSource>();
         currentEnergy = maxEnergy;
 
         vitalsManager = FindObjectOfType<PlayerVitalsManager>();
@@ -66,8 +66,6 @@ public class SimpleFPSMovement : MonoBehaviour
             Debug.LogError("❌ PlayerVitalsManager not found!");
         }
 
-
-        // 🔒 Lock and hide the mouse cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -75,8 +73,9 @@ public class SimpleFPSMovement : MonoBehaviour
     [System.Obsolete]
     void Update()
     {
-        // Ground check
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundMask);
+        if (!canMove) return;
+        // Use CharacterController's built-in ground check
+        isGrounded = controller.isGrounded;
 
         // Landing sound
         if (!wasGroundedLastFrame && isGrounded && landClip != null)
@@ -85,7 +84,7 @@ public class SimpleFPSMovement : MonoBehaviour
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
-            jumpCount = 0;
+            jumpCount = 0; // ✅ Reset jump count when grounded on ANY surface
         }
 
         float x = Input.GetAxisRaw("Horizontal");
@@ -100,10 +99,9 @@ public class SimpleFPSMovement : MonoBehaviour
 
         if (tryToSprint && !isSprinting)
         {
-            // Ask vitals manager for energy
             if (vitalsManager != null && vitalsManager.currentEnergy >= 5)
             {
-                vitalsManager.ConsumeEnergy(5f); // Deduct once per sprint
+                vitalsManager.ConsumeEnergy(5f);
                 Debug.Log("[Sprint] Used 5 energy. Remaining: " + vitalsManager.currentEnergy);
 
                 isSprinting = true;
@@ -138,7 +136,7 @@ public class SimpleFPSMovement : MonoBehaviour
         currentMoveVelocity = horizontalMove;
         controller.Move(horizontalMove * Time.deltaTime);
 
-        // 🔊 Footsteps (simple timer-based system)
+        // Footsteps
         if (move.magnitude > 0.1f && isGrounded)
         {
             stepTimer -= Time.deltaTime;
@@ -163,10 +161,8 @@ public class SimpleFPSMovement : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             jumpCount++;
 
-            // 🔊 Jump sound
             if (jumpClip != null)
                 audioSource.PlayOneShot(jumpClip);
-
         }
 
         // Gravity

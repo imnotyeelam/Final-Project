@@ -1,91 +1,106 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 public class DialogueUI : MonoBehaviour
 {
     public static DialogueUI Instance;
 
-    [Header("UI Elements")]
     public GameObject dialoguePanel;
-    public Text nameText;
     public Text dialogueText;
-    public Image portraitImage;
+    public GameObject nextIcon;
+    public GameObject[] uiElementsToHide;  // Assign health/ammo icons here
 
-    [Header("Speaker Database")]
-    public SpeakerData[] speakerDatabase;
-
+    private int currentLineIndex = 0;
     private string[] lines;
     private Sprite[] portraits;
-    private int currentIndex = 0;
-    private bool isActive = false;
 
-    private void Awake()
+    private bool isTyping = false;
+    private string fullText = "";
+
+    private SimpleFPSMovement player;
+    public bool IsDialogueActive => dialoguePanel.activeSelf;
+
+    void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        Instance = this;
+    }
 
-        dialoguePanel.SetActive(false);
+    [System.Obsolete]
+    void Start()
+    {
+        player = FindObjectOfType<SimpleFPSMovement>();
+    }
+
+    public void StartDialogue(string[] dialogueLines, Sprite[] dialoguePortraits)
+    {
+        lines = dialogueLines;
+        portraits = dialoguePortraits;
+        currentLineIndex = 0;
+
+        dialoguePanel.SetActive(true);
+        DisablePlayerControl(true);
+        ShowLine();
     }
 
     void Update()
     {
-        if (isActive && Input.GetKeyDown(KeyCode.Space))
+        if (!dialoguePanel.activeSelf) return;
+
+        if (Input.GetKeyDown(KeyCode.Return)) // Enter key
         {
-            ShowNextLine();
+            if (isTyping)
+            {
+                StopAllCoroutines();
+                dialogueText.text = fullText;
+                isTyping = false;
+                nextIcon.SetActive(true);
+            }
+            else
+            {
+                currentLineIndex++;
+                if (currentLineIndex >= lines.Length)
+                    EndDialogue();
+                else
+                    ShowLine();
+            }
         }
     }
 
-    /// <summary>
-    /// Start dialogue with lines + portraits
-    /// </summary>
-    public void StartDialogue(string[] dialogueLines, Sprite[] dialoguePortraits)
+    void ShowLine()
     {
-        if (dialogueLines.Length != dialoguePortraits.Length)
-        {
-            Debug.LogWarning("Lines count and portraits count mismatch!");
-        }
-
-        lines = dialogueLines;
-        portraits = dialoguePortraits;
-        currentIndex = 0;
-        isActive = true;
-
-        dialoguePanel.SetActive(true);
-        ShowLine(currentIndex);
+        fullText = lines[currentLineIndex];
+        dialogueText.text = "";
+        nextIcon.SetActive(false);
+        StartCoroutine(TypeText(fullText));
     }
 
-    void ShowNextLine()
+    System.Collections.IEnumerator TypeText(string text)
     {
-        currentIndex++;
-        if (currentIndex < lines.Length)
+        isTyping = true;
+        foreach (char c in text.ToCharArray())
         {
-            ShowLine(currentIndex);
+            dialogueText.text += c;
+            yield return new WaitForSeconds(0.03f);
         }
-        else
-        {
-            EndDialogue();
-        }
-    }
-
-    void ShowLine(int index)
-    {
-        dialogueText.text = lines[index];
-        portraitImage.sprite = portraits[index];
-
-        string foundName = GetNameByPortrait(portraits[index]);
-        nameText.text = foundName;
-    }
-
-    string GetNameByPortrait(Sprite portrait)
-    {
-        var speaker = speakerDatabase.FirstOrDefault(s => s.portrait == portrait);
-        return speaker != null ? speaker.speakerName : "???";
+        isTyping = false;
+        nextIcon.SetActive(true);
     }
 
     void EndDialogue()
     {
-        isActive = false;
         dialoguePanel.SetActive(false);
+        DisablePlayerControl(false);
+    }
+
+    void DisablePlayerControl(bool disable)
+    {
+        if (player != null)
+            player.canMove = !disable;
+
+        foreach (var ui in uiElementsToHide)
+        {
+            if (ui != null)
+                ui.SetActive(!disable);
+        }
     }
 }
