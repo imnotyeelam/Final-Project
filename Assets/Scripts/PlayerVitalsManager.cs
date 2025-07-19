@@ -124,6 +124,13 @@ public class PlayerVitalsManager : MonoBehaviour
             AddEnergy(10);
             PlayClip(useEnergyClip);
         }
+
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RespawnPlayer();
+        }
+
     }
 
     public void AddHP(float amount)
@@ -163,6 +170,35 @@ public class PlayerVitalsManager : MonoBehaviour
     public void SetInvincible(bool value)
     {
         isInvincible = value;
+    }
+
+    [System.Obsolete]
+    public void RespawnPlayer()
+    {
+        // 1. Restore HP to 50
+        currentHP = 50f;
+        UIManager.Instance.UpdateHealth(currentHP, maxHP);
+
+        // 2. Keep current energy unchanged (no action needed)
+        UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
+
+        // 3. Refill gun ammo
+        GunShooter gunShooter = FindObjectOfType<GunShooter>();
+        if (gunShooter != null)
+        {
+            GunShooter.ResetAmmo();  // Custom method we'll define next
+        }
+
+        // 4. Clear all prop items from UI
+        ResetProps();
+
+        Debug.Log("Player respawned.");
+    }
+
+    void ResetProps()
+    {
+        // Internally zeroing them out via UIManager
+        UIManager.Instance.ClearAllProps();
     }
 
     void PlayClip(AudioClip clip)

@@ -28,9 +28,11 @@ public class GunShooter : MonoBehaviour
     private Coroutine hideOutOfAmmoCoroutine;
 
     private static bool isAmmoInitialized = false;
+    public static GunShooter Instance;
 
     void Start()
     {
+        Instance = this;
         mainCamera = Camera.main;
 
         if (!isAmmoInitialized)
@@ -128,5 +130,11 @@ public class GunShooter : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         UIManager.Instance.ShowOutOfAmmo(false);
+    }
+
+    public static void ResetAmmo()
+    {
+        currentAmmo = Instance.maxAmmo;
+        UIManager.Instance.UpdateAmmoUI(currentAmmo, Instance.maxAmmo);
     }
 }

@@ -244,6 +244,14 @@ public class UIManager : MonoBehaviour
         if (energyPropText) energyPropText.text = $"{energyProps}";
     }
 
+    public void ClearAllProps()
+    {
+        ammoProps = 0;
+        hpProps = 0;
+        energyProps = 0;
+        UpdatePropsUI();
+    }
+
     // ---------------- Weapon & Ammo ----------------
     public void ShowOutOfAmmo(bool show)
     {

@@ -8441,7 +8441,7 @@ MonoBehaviour:
   sprintEnergyCost: 5
   walkClip: {fileID: 8300000, guid: b01bb88aa2d343048b479485f9b6bb82, type: 3}
   sprintClip: {fileID: 8300000, guid: 183a385b3eddf3e4688c3866b4e1045c, type: 3}
-  jumpClip: {fileID: 8300000, guid: dbc3b0cfea268c54eba6d454b83d7a8b, type: 3}
+  jumpClip: {fileID: 8300000, guid: 198242ea156433b45a596a744d96c83c, type: 3}
   landClip: {fileID: 0}
   stepRate: 0.5
   currentMoveVelocity: {x: 0, y: 0, z: 0}
