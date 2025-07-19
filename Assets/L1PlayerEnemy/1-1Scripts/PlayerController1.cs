@@ -2,7 +2,6 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerController1 : MonoBehaviour
 {
     public static PlayerController1 instance;
@@ -20,19 +19,22 @@ public class PlayerController1 : MonoBehaviour
 
     private Animator anim;
 
-
     public GameObject bullet;
-    public Transform firePoint;//spawn point of the bullet
+    public Transform firePoint; //spawn point of the bullet
 
+    //Plane controller
+    private bool isOnPlatform = false; // 是否在平台上
+    private Transform currentPlatform; // 当前绑定的平台
 
     //public Gun activeGun;
     //public List<Gun> allGuns = new List<Gun>();//比起array，list更灵活，根据存储的variable留出对应的memory
     public int currentGun;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     private void Awake()
     {
         instance = this;
     }
+
     void Start()
     {
         //activeGun = allGuns[currentGun];
@@ -42,14 +44,25 @@ public class PlayerController1 : MonoBehaviour
         //anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-        //moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
-        float yStore = moveInput.y;//Store the first position moveInput y of the player
+        // 摄像机旋转逻辑（即使在平台上也能看周围）
+        Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
+        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles.x - mouseInput.y, camTrans.rotation.eulerAngles.y, camTrans.rotation.eulerAngles.z);
 
-        //to prevent falling error movement when the player satrt from higher ground
+        // 如果在平台上，只能按 E 下飞机
+        if (isOnPlatform)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                ExitPlatform();
+            }
+            return; // 禁用WASD
+        }
+
+        // 玩家普通移动逻辑
+        float yStore = moveInput.y; //Store the first position moveInput y of the player
 
         Vector3 vertMove = transform.forward * Input.GetAxis("Vertical");//forward means z axis
         Vector3 horMove = transform.right * Input.GetAxis("Horizontal");//right means x axis
@@ -59,14 +72,12 @@ public class PlayerController1 : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveInput = moveInput * runSpeed;
-
         }
         else
         {
             moveInput = moveInput * moveSpeed;
         }
-        moveInput.y = yStore;//continue the moveInput y;
-
+        moveInput.y = yStore; //continue the moveInput y;
 
         moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
         if (charCon.isGrounded)//To detect the ground
@@ -74,7 +85,6 @@ public class PlayerController1 : MonoBehaviour
             Jumpcount = maxJump;
             moveInput.y = 0;//normalize our y input
             moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;//Apply gravity
-
         }
         if (Input.GetKeyDown(KeyCode.Space) && Jumpcount > 0) //if the player press space bar
         {
@@ -84,22 +94,9 @@ public class PlayerController1 : MonoBehaviour
 
         charCon.Move(moveInput * Time.deltaTime);
 
-        //rotation controll
-        Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
-
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
-        //+ mouse input x will influence the y rotation
-
-        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles.x - mouseInput.y, camTrans.rotation.eulerAngles.y, camTrans.rotation.eulerAngles.z);
-        //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles+ new Vector3(-moveInput.y, 0f, 0f));这个目前没法用
-
-        //Debug.Log("Speed = " + moveInput.magnitude);
-
-        //Handle the shooting
-
+        // 射击逻辑
         if (Input.GetMouseButtonDown(0))//left click mouse button
         {
-
             RaycastHit hit;//invisible stick
             if (Physics.Raycast(camTrans.position, camTrans.forward, out hit, 500f))
             {
@@ -114,26 +111,38 @@ public class PlayerController1 : MonoBehaviour
             //spawn the bullet on the fire pointposition and rotation
             //FireShot();
         }
+    }
 
-        //repeating shots
-        /*
-        if(Input.GetMouseButton(0) && activeGun.canAutoFire)//left click mouse buttom and canAutoFire is true
+    // 上平台
+    public void EnterPlatform(Transform platform)
+    {
+        isOnPlatform = true;
+        currentPlatform = platform;
+        transform.SetParent(platform); // 绑定到平台
+        charCon.enabled = false; // 停止 CharacterController
+        Debug.Log("玩家已上平台");
+    }
+
+    // 下平台
+    public void ExitPlatform()
+    {
+        isOnPlatform = false;
+        transform.SetParent(null); // 解除绑定
+        charCon.enabled = true; // 恢复 CharacterController
+
+        Vector3 exitOffset = currentPlatform.right * 2f; // 右移2米，下移1米
+        transform.position = currentPlatform.position + exitOffset;
+
+        L3MovingPlane plane = currentPlatform.GetComponent<L3MovingPlane>();
+        if (plane != null)
         {
-            if(activeGun.fireCounter<=0)
-            {
-                FireShot();//can do fire shot
-            }
+            plane.TemporarilyDisableAttach(2f); // 禁用0.5秒
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            SwitchGun();
-        }
-
-        anim.SetFloat("moveSpeed", moveInput.magnitude);
-        */
+        Debug.Log("玩家已下平台");
     }
 }
+
 
 /*
 public void FireShot()
