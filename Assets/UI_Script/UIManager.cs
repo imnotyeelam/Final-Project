@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
+using System;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,9 +15,13 @@ public class UIManager : MonoBehaviour
     public Slider energyBar;
     public Text piecesText;
 
-    [Header("TaskPanel UI")]
-    public Transform taskContent;
-    public GameObject taskPrefab;
+    [Header("Task UI Components")]
+    public Transform taskListParent;
+    public GameObject taskItemPrefab;
+
+    [Header("Toggle")]
+    public GameObject taskPanel;
+    public KeyCode toggleKey = KeyCode.T;
 
     [Header("Props UI")]
     public Text ammoPropText;
@@ -32,12 +39,20 @@ public class UIManager : MonoBehaviour
     private int hpProps = 0;
     private int energyProps = 0;
 
-    private List<GameObject> taskList = new List<GameObject>();
+    public static List<TaskItem> taskList = new List<TaskItem>();
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(toggleKey) && taskPanel != null)
+        {
+            taskPanel.SetActive(!taskPanel.activeSelf);
+        }
     }
 
     // ---------------- Player HP / Energy ----------------
@@ -103,44 +118,62 @@ public class UIManager : MonoBehaviour
     }
 
     // ---------------- Tasks ----------------
-    public GameObject AddTask(string taskName)
+    
+    public TaskItem AddTask(string description)
     {
-        if (!taskPrefab) Debug.LogError("taskPrefab not assigned!");
-        if (!taskContent) Debug.LogError("taskContent not assigned!");
+        Debug.Log("Creating task: " + description); // Debug log
 
-        GameObject newTask = Instantiate(taskPrefab, taskContent);
+        if (!taskItemPrefab || !taskListParent)
+        {
+            Debug.LogError("Task prefab or parent not assigned!");
+            return null;
+        }
 
-        Text txt = newTask.GetComponentInChildren<Text>();
-        if (!txt) Debug.LogError("taskPrefab has no text component!");
+        GameObject newTaskGO = Instantiate(taskItemPrefab, taskListParent);
+        TaskItem taskItem = newTaskGO.GetComponent<TaskItem>();
 
-        if (txt) txt.text = taskName;
+        if (taskItem == null)
+        {
+            Debug.LogError("Task prefab missing TaskItem script.");
+            return null;
+        }
 
-        taskList.Add(newTask);
-        return newTask;
+        taskItem.Setup(description);
+        taskList.Add(taskItem);
+        return taskItem;
     }
 
-    public void RemoveTask(GameObject taskItem)
+    public void RemoveTask(TaskItem taskToRemove)
     {
-        if (taskList.Contains(taskItem))
-            taskList.Remove(taskItem);
-
-        Destroy(taskItem);
-    }
-
-    public void CompleteTask(string taskName)
-    {
-        GameObject taskToRemove = taskList.Find(task =>
-            task.GetComponentInChildren<Text>().text == taskName);
-
         if (taskToRemove != null)
         {
-            RemoveTask(taskToRemove);
+            if (taskList.Contains(taskToRemove))
+                taskList.Remove(taskToRemove);
+
+            Destroy(taskToRemove.gameObject);
+        }
+    }
+
+    private IEnumerator CheckTaskCompletion(TaskItem taskItem, Func<bool> condition)
+    {
+        while (taskItem != null && !taskItem.IsCompleted)
+        {
+            if (condition())
+            {
+                taskItem.MarkCompleted();
+                taskList.Remove(taskItem);
+                yield break;
+            }
+
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
     public void ClearAllTasks()
     {
-        foreach (Transform child in taskContent)
+        if (taskListParent == null) return;
+
+        foreach (Transform child in taskListParent)
         {
             Destroy(child.gameObject);
         }
@@ -159,7 +192,7 @@ public class UIManager : MonoBehaviour
         UpdatePropsUI();
     }
 
-    [System.Obsolete]
+    [Obsolete]
     public bool UseProp(string type)
     {
         bool success = false;
