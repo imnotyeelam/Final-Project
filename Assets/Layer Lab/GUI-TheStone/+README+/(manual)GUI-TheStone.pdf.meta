@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Layer Lab/GUI-TheStone/+README+/(manual)GUI-TheStone.pdf.meta
 guid: fe4e72e0ef3654183a78e63a89433af4
+========
+guid: a33801ed2ffac42afab14471143b40fb
+>>>>>>>> NPC_UI:Assets/Layer Lab/GUI-TheStone/Scene/DemoScene_TheStone.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
