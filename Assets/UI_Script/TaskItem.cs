@@ -1,35 +1,35 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
 public class TaskItem : MonoBehaviour
 {
-    public TextMeshProUGUI descriptionText;
-    public Image checkbox;
+    public Text descriptionText;
+    public Toggle checkbox;
 
-    public bool IsCompleted { get; private set; }
+    public bool isCompleted = false;
 
-    public void Setup(string taskName)
+    public void Setup(string description)
     {
-        if (descriptionText != null)
-        {
-            descriptionText.text = taskName;
-            Debug.Log("Set task text: " + taskName); // Debug log
-        }
-        else
-        {
-            Debug.LogError("descriptionText is not assigned in TaskItem.");
-        }
+        Debug.Log("Set task text: " + description);
+        descriptionText.text = description;
+        checkbox.isOn = false;
+        isCompleted = false;
     }
-
 
     public void MarkCompleted()
     {
-        IsCompleted = true;
+        isCompleted = true;
+        checkbox.isOn = true;
+        descriptionText.color = Color.gray; // You can change this to Color.green if you prefer
+    }
 
-        if (checkbox)
-            checkbox.enabled = true;
+    public string GetDescription()
+    {
+        return descriptionText.text;
+    }
 
-        Destroy(gameObject, 1f); // Optional delay before removal
+    public bool IsCompleted()
+    {
+        return isCompleted;
     }
 }

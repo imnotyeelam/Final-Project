@@ -9,6 +9,8 @@ public class GameTaskManager : MonoBehaviour
     // Add a task with the given description
     public void AddGameTask(string description)
     {
+        Debug.Log("Creating task: " + description);
+
         if (UIManager.Instance == null) return;
 
         TaskItem task = UIManager.Instance.AddTask(description);

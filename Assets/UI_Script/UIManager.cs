@@ -40,6 +40,13 @@ public class UIManager : MonoBehaviour
     private int energyProps = 0;
 
     public static List<TaskItem> taskList = new List<TaskItem>();
+    
+    void Start()
+    {
+        Debug.Log("UIManager Start called");
+
+        AddTask("Test task from Start");
+    }
 
     private void Awake()
     {
@@ -121,7 +128,7 @@ public class UIManager : MonoBehaviour
     
     public TaskItem AddTask(string description)
     {
-        Debug.Log("Creating task: " + description); // Debug log
+        Debug.Log("Trying to add task: " + description);
 
         if (!taskItemPrefab || !taskListParent)
         {
@@ -156,7 +163,7 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator CheckTaskCompletion(TaskItem taskItem, Func<bool> condition)
     {
-        while (taskItem != null && !taskItem.IsCompleted)
+        while (taskItem != null && !taskItem.isCompleted)
         {
             if (condition())
             {
