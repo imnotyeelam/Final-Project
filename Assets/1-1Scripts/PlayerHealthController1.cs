@@ -101,11 +101,16 @@ public class PlayerHealthController1 : MonoBehaviour, Boss1IDamageable
         if (PlayerPrefs.HasKey(cpKey))
         {
             string checkpointName = PlayerPrefs.GetString(cpKey);
-            GameObject checkpointObj = GameObject.Find(checkpointName);
-            if (checkpointObj != null)
+            if (L2CheckpointManager.checkpointDict.TryGetValue(checkpointName, out Transform checkpointTransform))
             {
-                PlayerController1.instance.transform.position = checkpointObj.transform.position;
+                transform.position = checkpointTransform.position;
+                Debug.Log("复活成功！");
             }
+            else
+            {
+                Debug.LogWarning("找不到 checkpoint: " + checkpointName);
+            }
+
         }
 
         // 显示视觉

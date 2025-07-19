@@ -21,8 +21,6 @@ public class PlayerController1 : MonoBehaviour
     public GameObject bullet;
     public Transform firePoint;//spawn point of the bullet
 
-    //public Gun activeGun;
-    //public List<Gun> allGuns = new List<Gun>();//比起array，list更灵活，根据存储的variable留出对应的memory
     public int currentGun;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
