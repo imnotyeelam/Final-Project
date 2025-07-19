@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerVitalsManager : MonoBehaviour
 {
@@ -28,6 +30,26 @@ public class PlayerVitalsManager : MonoBehaviour
     private float fallThreshold = 2.0f; // to detect actual fall
     private CharacterController controller;
 
+    public Image hurtFlash;
+    public float flashDuration = 0.5f;
+    public AudioClip fallSound;
+
+
+    IEnumerator FlashRed()
+    {
+        if (hurtFlash != null)
+        {
+            hurtFlash.enabled = true; // show the image
+            hurtFlash.color = new Color(1, 0, 0, 0.5f); // semi-transparent red
+
+            yield return new WaitForSeconds(flashDuration);
+
+            hurtFlash.color = new Color(1, 0, 0, 0); // clear color
+            hurtFlash.enabled = false; // hide again
+        }
+    }
+
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
@@ -37,7 +59,14 @@ public class PlayerVitalsManager : MonoBehaviour
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
         UIManager.Instance.UpdatePieces(collectedPieces, totalPieces);
+
+        if (hurtFlash != null)
+        {
+            hurtFlash.enabled = false; // keep it hidden but enabled in hierarchy
+            hurtFlash.color = new Color(1, 0, 0, 0);
+        }
     }
+
 
     [System.Obsolete]
     void Update()
@@ -55,6 +84,7 @@ public class PlayerVitalsManager : MonoBehaviour
         if (controller.isGrounded)
         {
             float fallDistance = lastY - transform.position.y;
+
             if (fallDistance > fallThreshold)
             {
                 float damage = Mathf.Floor(fallDistance / 25f) * 10f;
@@ -62,13 +92,18 @@ public class PlayerVitalsManager : MonoBehaviour
                 {
                     TakeDamage(damage);
                     Debug.Log($"[Fall Damage] Fall from {fallDistance:F1} units. Took {damage} damage. Current HP: {currentHP}");
+
+                    if (fallSound != null && audioSource != null)
+                        audioSource.PlayOneShot(fallSound); // immediate sound
+
+                    StartCoroutine(FlashRed()); // red flash UI
                 }
             }
+
             lastY = transform.position.y;
         }
         else
         {
-            // While falling, always update highest Y to detect fall distance
             if (transform.position.y > lastY)
                 lastY = transform.position.y;
         }

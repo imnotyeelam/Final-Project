@@ -39,6 +39,8 @@ public class SimpleFPSMovement : MonoBehaviour
 
     private AudioSource audioSource;
     private float stepTimer;
+    private PlayerVitalsManager vitalsManager;
+
 
     [HideInInspector] public Vector3 currentMoveVelocity;
     [HideInInspector] public bool isGrounded;
@@ -51,11 +53,19 @@ public class SimpleFPSMovement : MonoBehaviour
     private int currentEnergy;
     private bool wasGroundedLastFrame;
 
+    [System.Obsolete]
     void Start()
     {
         controller = GetComponent<CharacterController>();
         audioSource = GetComponent<AudioSource>(); // You must add an AudioSource in Unity
         currentEnergy = maxEnergy;
+
+        vitalsManager = FindObjectOfType<PlayerVitalsManager>();
+        if (vitalsManager == null)
+        {
+            Debug.LogError("❌ PlayerVitalsManager not found!");
+        }
+
 
         // 🔒 Lock and hide the mouse cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -86,13 +96,23 @@ public class SimpleFPSMovement : MonoBehaviour
 
         // Sprinting
         bool sprintKey = Input.GetKey(KeyCode.LeftShift);
-        bool canSprint = isGrounded && sprintKey && z > 0 && currentEnergy >= sprintEnergyCost;
+        bool tryToSprint = isGrounded && sprintKey && z > 0;
 
-        if (canSprint && !isSprinting)
+        if (tryToSprint && !isSprinting)
         {
-            isSprinting = true;
-            sprintTimer = maxSprintTime;
-            currentEnergy -= sprintEnergyCost;
+            // Ask vitals manager for energy
+            if (vitalsManager != null && vitalsManager.currentEnergy >= 5)
+            {
+                vitalsManager.ConsumeEnergy(5f); // Deduct once per sprint
+                Debug.Log("[Sprint] Used 5 energy. Remaining: " + vitalsManager.currentEnergy);
+
+                isSprinting = true;
+                sprintTimer = maxSprintTime;
+            }
+            else
+            {
+                Debug.Log("[Sprint] Not enough energy to sprint!");
+            }
         }
 
         if (isSprinting)
@@ -106,7 +126,6 @@ public class SimpleFPSMovement : MonoBehaviour
             else
             {
                 isSprinting = false;
-                HandSwitcher.CurrentMode = 0;
 
                 HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
                 if (handSwitcher != null)
