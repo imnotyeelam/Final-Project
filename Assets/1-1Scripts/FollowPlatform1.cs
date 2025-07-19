@@ -10,7 +10,7 @@ public class FollowPlatform1 : MonoBehaviour
     // 添加平滑过渡参数
     [SerializeField] private float rotationTransitionSpeed = 5f;
     private bool isTransitioning = false;
-    private Quaternion targetRotation;//无语有点
+    private Quaternion targetRotation;
 
 
     void Start()
