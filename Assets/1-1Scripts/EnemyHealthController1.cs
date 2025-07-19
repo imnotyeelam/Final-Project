@@ -6,6 +6,7 @@ public class EnemyHealthController : MonoBehaviour
 
     public int currentHealth = 5;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+   
     void Start()
     {
         

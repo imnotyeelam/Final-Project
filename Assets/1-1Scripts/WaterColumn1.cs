@@ -9,6 +9,8 @@ public class WaterColumn1 : MonoBehaviour
     private bool isInWaterColumn = false;
     private CharacterController characterController;
     private PlayerController1 playerMovement; // 你的人物移动脚本
+    public float mouseSensitivity;
+    public Transform camTrans;
 
     void Start()
     {
@@ -67,6 +69,11 @@ public class WaterColumn1 : MonoBehaviour
             {
                 move += Vector3.right * swimUpSpeed;
             }
+            Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
+
+            playerMovement.transform.Rotate(Vector3.up * mouseInput.x);
+
+            camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles.x - mouseInput.y, camTrans.rotation.eulerAngles.y, camTrans.rotation.eulerAngles.z);
 
             // 应用移动
             characterController.Move(move * Time.deltaTime);
