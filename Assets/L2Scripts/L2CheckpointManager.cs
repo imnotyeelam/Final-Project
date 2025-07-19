@@ -1,51 +1,31 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class L2CheckpointManager : MonoBehaviour
 {
-    public static Vector3 lastCheckpointPos = Vector3.zero; // 当前激活的 checkpoint
-    public Transform player;  // 只有一个脚本需要指定 player，其它 checkpoint 不需要
+    public string cpName;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    private void Start()
+    void Start()
     {
-        // 游戏开始时尝试从 PlayerPrefs 读取存档位置
-        if (lastCheckpointPos == Vector3.zero)
+        if (PlayerPrefs.HasKey(SceneManager.GetActiveScene().name + "_cp"))
         {
-            float x = PlayerPrefs.GetFloat("CheckpointX", float.NaN);
-            float y = PlayerPrefs.GetFloat("CheckpointY", float.NaN);
-            float z = PlayerPrefs.GetFloat("CheckpointZ", float.NaN);
-
-            if (!float.IsNaN(x))
-                lastCheckpointPos = new Vector3(x, y, z);
-        }
-
-        // 第一次启动时把玩家送到存档点
-        if (player != null && lastCheckpointPos != Vector3.zero)
-        {
-            player.position = lastCheckpointPos;
+            if (PlayerPrefs.GetString(SceneManager.GetActiveScene().name + "_cp") == cpName)
+            {
+                PlayerController1.instance.GetComponent<CharacterController>().enabled = false;
+                PlayerController1.instance.transform.position = transform.position;
+                PlayerController1.instance.GetComponent<CharacterController>().enabled = true;
+            }
         }
     }
 
+    // Update is called once per frame
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            // 保存该 checkpoint 位置
-            lastCheckpointPos = transform.position;
-            PlayerPrefs.SetFloat("CheckpointX", transform.position.x);
-            PlayerPrefs.SetFloat("CheckpointY", transform.position.y);
-            PlayerPrefs.SetFloat("CheckpointZ", transform.position.z);
-            PlayerPrefs.Save();
-
-            Debug.Log("Checkpoint saved at: " + transform.position);
-        }
-    }
-
-    // 可以在其他脚本中调用此函数进行复活
-    public static void RespawnPlayer(Transform player)
-    {
-        if (lastCheckpointPos != Vector3.zero)
-        {
-            player.position = lastCheckpointPos;
+            PlayerPrefs.SetString(SceneManager.GetActiveScene().name + "_cp", cpName);
+            //Debug.Log("Touching" + cpName);
         }
     }
 }
