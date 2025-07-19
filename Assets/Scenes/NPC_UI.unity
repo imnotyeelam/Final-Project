@@ -1092,8 +1092,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 561.89, y: -404.16}
-  m_SizeDelta: {x: 310.7523, y: 58.266}
+  m_AnchoredPosition: {x: 512, y: -404}
+  m_SizeDelta: {x: 450, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &1042072151700323294
 RectTransform:
@@ -1147,7 +1147,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Press [E] continue
+  m_Text: Press [Space] to continue
 --- !u!1 &1501359892598921511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1266,7 +1266,7 @@ GameObject:
   - component: {fileID: 4285041697865794536}
   - component: {fileID: 1133097799993288422}
   m_Layer: 5
-  m_Name: press e
+  m_Name: Space
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
