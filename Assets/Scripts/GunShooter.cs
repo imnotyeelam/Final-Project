@@ -29,6 +29,7 @@ public class GunShooter : MonoBehaviour
 
     private static bool isAmmoInitialized = false;
     public static GunShooter Instance;
+    public bool isActiveShooter = false; 
 
     void Start()
     {
@@ -56,16 +57,17 @@ public class GunShooter : MonoBehaviour
     [System.Obsolete]
     public void TryShoot()
     {
+        if (!isActiveShooter) return; // <--- Prevent shooting if not active
+
         if (currentAmmo <= 0)
         {
-            ShowOutOfAmmoUI(); // Only show when truly no ammo
+            ShowOutOfAmmoUI();
             return;
         }
 
-        // Only shoot if ammo > 0
         currentAmmo--;
         UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
-        Shoot(); // Your shooting logic
+        Shoot();
     }
 
     [System.Obsolete]

@@ -3,18 +3,39 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     public Animator handAnimator;
-    private bool isShooting = false;
     public float attackMultiplier = 1f; // <-- added multiplier field
+    public HandSwitcher handSwitcher;
+    public GunShooter gunShooter;
 
+    public int GetCurrentAmmo()
+    {
+        return gunShooter.GetCurrentAmmo();
+    }
+
+
+    void Start()
+    {
+        gunShooter = GunShooter.Instance;  
+    }
+
+    [System.Obsolete]
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        // Only allow shooting when in gun-hand mode
+    if (HandSwitcher.CurrentMode == HandSwitcher.Mode.Gun && Input.GetMouseButtonDown(0))
         {
-            isShooting = !isShooting;
-            if (handAnimator != null)
-                handAnimator.SetBool("IsHooking", isShooting);
+            gunShooter.TryShoot();
         }
+    }
 
-        // Example: actual shooting with damage = baseDamage * attackMultiplier
+    // Call this from HandSwitcher when switching to Gun Hand
+    public void SyncAmmoUI()
+    {
+        if (gunShooter != null)
+        {
+            int currentAmmo = gunShooter.GetCurrentAmmo();
+            int maxAmmo = gunShooter.maxAmmo;
+            UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
+        }
     }
 }

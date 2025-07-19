@@ -8460,6 +8460,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handAnimator: {fileID: 2129596786}
   attackMultiplier: 1
+  handSwitcher: {fileID: 1717605857}
+  gunShooter: {fileID: 668393631}
 --- !u!114 &748513556
 MonoBehaviour:
   m_ObjectHideFlags: 0

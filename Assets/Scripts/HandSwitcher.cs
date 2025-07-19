@@ -198,20 +198,27 @@ public class HandSwitcher : MonoBehaviour
                 else
                     hookHandPrefab?.SetActive(true);
                 break;
-            case Mode.Gun:
-                if (IsAiming)
-                {
-                    gunAimHandPrefab?.SetActive(true);
-                    if (gunShooter != null)
-                        gunShooter.firePoint = gunAimHandShootPoint;
-                }
-                else
-                {
-                    gunHandPrefab?.SetActive(true);
-                    if (gunShooter != null)
-                        gunShooter.firePoint = gunHandShootPoint;
-                }
-                break;
+                case Mode.Gun:
+                    if (IsAiming)
+                    {
+                        gunAimHandPrefab?.SetActive(true);
+                        if (gunShooter != null)
+                        {
+                            gunShooter.firePoint = gunAimHandShootPoint;
+                            gunShooter.isActiveShooter = gunAimHandPrefab.activeSelf; // Activate only this shooter
+                        }
+                    }
+                    else
+                    {
+                        gunHandPrefab?.SetActive(true);
+                        if (gunShooter != null)
+                        {
+                            gunShooter.firePoint = gunHandShootPoint;
+                            gunShooter.isActiveShooter = gunHandPrefab.activeSelf; // Activate only this shooter
+                        }
+                    }
+                    break;
+
         }
 
                 // Tell WeaponManager to sync icon based on mode
@@ -241,5 +248,10 @@ public class HandSwitcher : MonoBehaviour
         gunAimHandPrefab?.SetActive(false);
         runHandPrefab?.SetActive(false);
         deadCameraHandPrefab?.SetActive(false);
+
+        if (gunShooter != null)
+        {
+            gunShooter.isActiveShooter = false; // Disable any shooting during switching
+        }
     }
 }
