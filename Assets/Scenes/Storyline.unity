@@ -733,7 +733,7 @@ MonoBehaviour:
     text: "\u201CYou\u2019ve been cruel to us for too long,\u201D the toys whisper.
       \u201CIt\u2019s your turn to feel small.\u201D"
   blackScreen: {fileID: 1712920359}
-  fadeDuration: 5
+  fadeDuration: 3
   nextSceneName: NPC_UI
 --- !u!4 &1773466216
 Transform:
