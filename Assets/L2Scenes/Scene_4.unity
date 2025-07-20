@@ -163320,7 +163320,7 @@ Transform:
   m_GameObject: {fileID: 1008412439}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 165.53, y: 154.2, z: -123.06}
+  m_LocalPosition: {x: 30.1, y: 0.3, z: -95.25}
   m_LocalScale: {x: 20, y: 2, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -184994,7 +184994,7 @@ MonoBehaviour:
   moveSpeed: 2
   scaleSpeed: 10
   anim2: {fileID: 2067689115}
-  triggerSound: {fileID: 8300000, guid: ef95399f03be45647a8b101a9fcc4757, type: 3}
+  triggerSound: {fileID: 8300000, guid: 6531ed5110e385d459030053b42ab726, type: 3}
 --- !u!64 &1069106166
 MeshCollider:
   m_ObjectHideFlags: 0
