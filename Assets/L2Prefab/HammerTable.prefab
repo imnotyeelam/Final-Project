@@ -95,7 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 191713311425622684}
-  - component: {fileID: 8446436022283799703}
+  - component: {fileID: -8474138545977419583}
   m_Layer: 0
   m_Name: HammerTable
   m_TagString: Untagged
@@ -125,8 +125,8 @@ Transform:
   - {fileID: 6666544510102522407}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 29.175, z: 0}
---- !u!64 &8446436022283799703
-MeshCollider:
+--- !u!65 &-8474138545977419583
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -143,10 +143,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.80011564, y: 0.37238434, z: 1.1348708}
+  m_Center: {x: -0.22651592, y: 0.0059734723, z: -0.15194231}
 --- !u!1 &4155301210156158283
 GameObject:
   m_ObjectHideFlags: 0

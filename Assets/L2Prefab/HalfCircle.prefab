@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1198680965916002038}
   - component: {fileID: 1366910149119961839}
   - component: {fileID: 5909475496839824807}
-  - component: {fileID: 4991174327667900494}
+  - component: {fileID: -2752169517425290882}
   m_Layer: 0
   m_Name: HalfCircle
   m_TagString: Untagged
@@ -87,8 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4991174327667900494
-MeshCollider:
+--- !u!65 &-2752169517425290882
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,7 +105,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: ca79ff5eeb4dc5a40b7c2f0303716043, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.09999266, y: 0.050493386, z: 0.10144299}
+  m_Center: {x: 0, y: 0.025260562, z: 0.0000000018626451}

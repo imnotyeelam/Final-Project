@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8617604888098386941}
   - component: {fileID: 3635695186798622156}
   - component: {fileID: 3524668305968969501}
-  - component: {fileID: 5626650774272227786}
+  - component: {fileID: 8182712835846319830}
   m_Layer: 0
   m_Name: LargeTriangle
   m_TagString: Untagged
@@ -87,8 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5626650774272227786
-MeshCollider:
+--- !u!65 &8182712835846319830
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,7 +105,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: d7033beace962d54bbbd3c23912913ce, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.19771865, y: 0.097827286, z: 0.10043595}
+  m_Center: {x: -0.0015849099, y: -0.0011089649, z: 0}
