@@ -25,7 +25,11 @@ public class EnemyController1 : MonoBehaviour
         private float fireCount, shotWaitCounter, shootTimeCounter;
 
         public Animator anim;
-        
+
+    public AudioClip fireSfx; // ◊”µØ∑¢…‰“Ù–ß
+    private AudioSource audioSource;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,7 +39,9 @@ public class EnemyController1 : MonoBehaviour
 
         shootTimeCounter = timeToShoot;
         shotWaitCounter = waitBetweenShots;
-        
+        audioSource = GetComponent<AudioSource>();
+
+
     }
 
     // Update is called once per frame
@@ -136,9 +142,13 @@ public class EnemyController1 : MonoBehaviour
                             {
                                 Instantiate(bullet, firePoint.position, firePoint.rotation);
                                 anim.SetTrigger("fireShot");
-
+                            if (fireSfx != null && audioSource != null)
+                            {
+                                audioSource.PlayOneShot(fireSfx);
                             }
-                            else
+
+                        }
+                        else
                             {
                                 shotWaitCounter = waitBetweenShots;
                             }
