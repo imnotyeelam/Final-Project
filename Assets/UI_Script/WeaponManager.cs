@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class WeaponManager : MonoBehaviour
 {
     public static WeaponManager Instance;
+
     void Awake()
     {
         if (Instance == null)
@@ -19,32 +19,24 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-
     public enum WeaponType { Unarmed, Hook, Gun }
     public WeaponType currentWeapon = WeaponType.Unarmed;
 
-
     [Header("Weapon UI")]
-    public Image weaponIcon;       // Current weapon icon (will change sprite)
-    public Sprite unarmedSprite;   // Unarmed icon
-    public Sprite hookSprite;      // Hook icon
-    public Sprite gunSprite;       // Gun icon
-
-
-
+    public Image weaponIcon;
+    public Sprite unarmedSprite;
+    public Sprite hookSprite;
+    public Sprite gunSprite;
 
     [Header("Gun Settings")]
-    public int currentAmmo = 10;
+    public int currentAmmo;
     public int maxAmmo = 30;
-
-
-    [Tooltip("How many bullets to decrease per shot")]
     public int ammoPerShot = 1;
+
     void Start()
     {
-        UpdateWeaponUI(); // Initialize UI
+        UpdateWeaponUI();
     }
-
 
     void Update()
     {
@@ -57,16 +49,13 @@ public class WeaponManager : MonoBehaviour
     public void SetWeapon(WeaponType newWeapon)
     {
         if (currentWeapon == newWeapon) return;
-
         currentWeapon = newWeapon;
-        Debug.Log("Switched to: " + currentWeapon);
         UpdateWeaponUI();
     }
 
     void UpdateWeaponUI()
     {
         if (!weaponIcon) return;
-
 
         switch (currentWeapon)
         {
@@ -75,12 +64,10 @@ public class WeaponManager : MonoBehaviour
                 UIManager.Instance.ammoPanel.SetActive(false);
                 break;
 
-
             case WeaponType.Hook:
                 weaponIcon.sprite = hookSprite;
                 UIManager.Instance.ammoPanel.SetActive(false);
                 break;
-
 
             case WeaponType.Gun:
                 weaponIcon.sprite = gunSprite;
@@ -89,24 +76,15 @@ public class WeaponManager : MonoBehaviour
                 break;
         }
     }
+
     public void Shoot()
     {
-        Debug.Log($"[Shoot] called at frame: {Time.frameCount}, from: {gameObject.name}");
-
-
-        if (currentWeapon != WeaponType.Gun)
-        {
-            Debug.LogWarning("Tried to shoot, but weapon is not Gun.");
-            return;
-        }
-
+        if (currentWeapon != WeaponType.Gun) return;
 
         if (currentAmmo >= ammoPerShot)
         {
             currentAmmo -= ammoPerShot;
             UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
-            Debug.Log("Bang! Ammo left: " + currentAmmo);
-
 
             if (currentAmmo <= 0)
             {
@@ -116,7 +94,6 @@ public class WeaponManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not enough ammo to fire!");
             UIManager.Instance.ShowOutOfAmmo(true);
         }
     }
@@ -124,17 +101,16 @@ public class WeaponManager : MonoBehaviour
     [System.Obsolete]
     public void AddAmmo(int amount)
     {
-        FindObjectOfType<GunShooter>()?.AddAmmo(10); // or however much 1 ammo prop gives
+        if (currentAmmo >= maxAmmo)
+        {
+            UIManager.Instance.ShowPrompt("Ammo is already full!");
+            return;
+        }
+
         currentAmmo = Mathf.Min(currentAmmo + amount, maxAmmo);
         UIManager.Instance.UpdateAmmoUI(currentAmmo, maxAmmo);
-        Debug.Log("Ammo reloaded: " + currentAmmo);
-        
 
-
-        //if ammo > 0, hide warning
         if (currentAmmo > 0)
-        {
             UIManager.Instance.ShowOutOfAmmo(false);
-        }
     }
 }

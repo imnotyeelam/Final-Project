@@ -14,8 +14,8 @@ public class UIManager : MonoBehaviour
     public Text piecesText;
 
     [Header("Task UI Components")]
-    public Transform taskListParent;      // Where task items will appear
-    public GameObject taskItemPrefab;     // Prefab with TaskItem script
+    public Transform taskListParent;
+    public GameObject taskItemPrefab;
 
     [Header("Toggle Panel")]
     public GameObject taskPanel;
@@ -33,11 +33,15 @@ public class UIManager : MonoBehaviour
     public GameObject ammoPanel;
     public Text ammoText;
 
+    [Header("Prompt Popup")]
+    public GameObject promptPopup;     // UI panel for showing prompts
+    public Text promptText;            // Text component for messages
+    private Coroutine promptCoroutine;
+
     private int ammoProps = 0;
     private int hpProps = 0;
     private int energyProps = 0;
 
-    // This will just store all task UI items
     public static List<TaskItem> taskList = new List<TaskItem>();
 
     void Awake()
@@ -55,15 +59,33 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         Debug.Log("UIManager initialized");
+        if (promptPopup) promptPopup.SetActive(false);
     }
 
     void Update()
     {
-        // Toggle Task Panel visibility
         if (Input.GetKeyDown(toggleKey) && taskPanel != null)
         {
             taskPanel.SetActive(!taskPanel.activeSelf);
         }
+    }
+
+    // Show a popup prompt
+    public void ShowPrompt(string message, float duration = 2f)
+    {
+        if (!promptPopup || !promptText) return;
+
+        promptText.text = message;
+        promptPopup.SetActive(true);
+
+        if (promptCoroutine != null) StopCoroutine(promptCoroutine);
+        promptCoroutine = StartCoroutine(HidePromptAfterDelay(duration));
+    }
+
+    private System.Collections.IEnumerator HidePromptAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (promptPopup) promptPopup.SetActive(false);
     }
 
     // ---------------- Player HP / Energy ----------------
@@ -133,15 +155,12 @@ public class UIManager : MonoBehaviour
     // ---------------- Tasks ----------------
     public TaskItem AddTask(string description)
     {
-        Debug.Log("Adding task: " + description);
-
         if (!taskItemPrefab || !taskListParent)
         {
             Debug.LogError("Task prefab or parent not assigned!");
             return null;
         }
 
-        // Create new Task UI
         GameObject newTaskGO = Instantiate(taskItemPrefab, taskListParent);
         TaskItem taskItem = newTaskGO.GetComponent<TaskItem>();
 
@@ -152,8 +171,6 @@ public class UIManager : MonoBehaviour
         }
 
         taskItem.Setup(description);
-
-        // Add to list for reference
         taskList.Add(taskItem);
         return taskItem;
     }
@@ -181,21 +198,25 @@ public class UIManager : MonoBehaviour
         UpdatePropsUI();
     }
 
+    public bool HasProp(string type)
+    {
+        return type switch
+        {
+            "Ammo" => ammoProps > 0,
+            "HP" => hpProps > 0,
+            "Energy" => energyProps > 0,
+            _ => false
+        };
+    }
+
     public bool UseProp(string type)
     {
         bool success = false;
-
         switch (type)
         {
-            case "Ammo":
-                if (ammoProps > 0) { ammoProps--; success = true; }
-                break;
-            case "HP":
-                if (hpProps > 0) { hpProps--; success = true; }
-                break;
-            case "Energy":
-                if (energyProps > 0) { energyProps--; success = true; }
-                break;
+            case "Ammo": if (ammoProps > 0) { ammoProps--; success = true; } break;
+            case "HP": if (hpProps > 0) { hpProps--; success = true; } break;
+            case "Energy": if (energyProps > 0) { energyProps--; success = true; } break;
         }
 
         if (success) UpdatePropsUI();
@@ -227,7 +248,7 @@ public class UIManager : MonoBehaviour
     public void UpdateAmmoUI(int current, int max)
     {
         if (ammoText)
-            ammoText.text = $"{current}/{max}";
+            ammoText.text = $"{current}";
 
         if (current > 0 && outOfAmmoWarning)
             outOfAmmoWarning.SetActive(false);

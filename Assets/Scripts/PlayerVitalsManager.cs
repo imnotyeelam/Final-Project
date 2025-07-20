@@ -20,14 +20,12 @@ public class PlayerVitalsManager : MonoBehaviour
     private AudioSource audioSource;
     private bool isInvincible = false;
 
-    // For energy deduction timer
     private float energyTimer = 0f;
-    private float energyInterval = 120f; // 2 minutes
+    private float energyInterval = 120f;
     private float energyLoss = 5f;
 
-    // For fall damage
     private float lastY;
-    private float fallThreshold = 2.0f; // to detect actual fall
+    private float fallThreshold = 2.0f;
     private CharacterController controller;
 
     public Image hurtFlash;
@@ -35,104 +33,139 @@ public class PlayerVitalsManager : MonoBehaviour
     public AudioClip fallSound;
 
     [Header("Respawn Settings")]
-    public Transform respawnPoint;  // 指定复活位置
-
-    IEnumerator FlashRed()
-    {
-        if (hurtFlash != null)
-        {
-            hurtFlash.enabled = true; // show the image
-            hurtFlash.color = new Color(1, 0, 0, 0.5f); // semi-transparent red
-
-            yield return new WaitForSeconds(flashDuration);
-
-            hurtFlash.color = new Color(1, 0, 0, 0); // clear color
-            hurtFlash.enabled = false; // hide again
-        }
-    }
-
+    public Transform respawnPoint;
 
     void Start()
     {
         audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
         controller = GetComponent<CharacterController>();
-
         lastY = transform.position.y;
+
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
         UIManager.Instance.UpdatePieces(collectedPieces, totalPieces);
 
         if (hurtFlash != null)
         {
-            hurtFlash.enabled = false; // keep it hidden but enabled in hierarchy
+            hurtFlash.enabled = false;
             hurtFlash.color = new Color(1, 0, 0, 0);
         }
     }
 
-
     [System.Obsolete]
     void Update()
     {
-        // ENERGY DEDUCTION
+        // Energy drain over time
         energyTimer += Time.deltaTime;
         if (energyTimer >= energyInterval)
         {
             energyTimer = 0f;
             ConsumeEnergy(energyLoss);
-            Debug.Log($"[Energy Timer] -{energyLoss} energy. Current energy: {currentEnergy}");
         }
 
-        // FALL DAMAGE DETECTION
+        // Fall damage
         if (controller.isGrounded)
         {
             float fallDistance = lastY - transform.position.y;
-
             if (fallDistance > fallThreshold)
             {
                 float damage = Mathf.Floor(fallDistance / 25f) * 10f;
                 if (damage > 0)
                 {
                     TakeDamage(damage);
-                    Debug.Log($"[Fall Damage] Fall from {fallDistance:F1} units. Took {damage} damage. Current HP: {currentHP}");
-
-                    if (fallSound != null && audioSource != null)
-                        audioSource.PlayOneShot(fallSound); // immediate sound
-
-                    StartCoroutine(FlashRed()); // red flash UI
+                    if (fallSound) audioSource.PlayOneShot(fallSound);
+                    StartCoroutine(FlashRed());
                 }
             }
-
             lastY = transform.position.y;
         }
-        else
+        else if (transform.position.y > lastY)
         {
-            if (transform.position.y > lastY)
-                lastY = transform.position.y;
+            lastY = transform.position.y;
         }
 
-        // Prop debug keys (optional)
-        if (Input.GetKeyDown(KeyCode.I) && UIManager.Instance.UseProp("Ammo"))
+        // Debug keys for props
+        if (Input.GetKeyDown(KeyCode.I)) TryUseAmmoProp();
+        if (Input.GetKeyDown(KeyCode.O)) TryUseHPProp();
+        if (Input.GetKeyDown(KeyCode.P)) TryUseEnergyProp();
+
+        if (Input.GetKeyDown(KeyCode.R)) RespawnPlayer();
+    }
+
+    IEnumerator FlashRed()
+    {
+        if (hurtFlash)
         {
-            FindObjectOfType<GunShooter>()?.AddAmmo(10);
-            PlayClip(useAmmoClip);
+            hurtFlash.enabled = true;
+            hurtFlash.color = new Color(1, 0, 0, 0.5f);
+            yield return new WaitForSeconds(flashDuration);
+            hurtFlash.color = new Color(1, 0, 0, 0);
+            hurtFlash.enabled = false;
         }
-        if (Input.GetKeyDown(KeyCode.O) && UIManager.Instance.UseProp("HP"))
+    }
+
+    void TryUseHPProp()
+    {
+        if (!UIManager.Instance.HasProp("HP"))
+        {
+            UIManager.Instance.ShowPrompt("No HP props available!");
+            return;
+        }
+
+        if (currentHP >= maxHP)
+        {
+            UIManager.Instance.ShowPrompt("HP is already full!");
+            return;
+        }
+
+        if (UIManager.Instance.UseProp("HP"))
         {
             AddHP(10);
             PlayClip(useHPClip);
         }
-        if (Input.GetKeyDown(KeyCode.P) && UIManager.Instance.UseProp("Energy"))
+    }
+
+    void TryUseEnergyProp()
+    {
+        if (!UIManager.Instance.HasProp("Energy"))
+        {
+            UIManager.Instance.ShowPrompt("No Energy props available!");
+            return;
+        }
+
+        if (currentEnergy >= maxEnergy)
+        {
+            UIManager.Instance.ShowPrompt("Energy is already full!");
+            return;
+        }
+
+        if (UIManager.Instance.UseProp("Energy"))
         {
             AddEnergy(10);
             PlayClip(useEnergyClip);
         }
+    }
 
-
-        if (Input.GetKeyDown(KeyCode.R))
+    void TryUseAmmoProp()
+    {
+        if (!UIManager.Instance.HasProp("Ammo"))
         {
-            RespawnPlayer();
+            UIManager.Instance.ShowPrompt("No Ammo props available!");
+            return;
         }
 
+        WeaponManager weapon = WeaponManager.Instance;
+        if (weapon != null && weapon.currentAmmo >= weapon.maxAmmo)
+        {
+            UIManager.Instance.ShowPrompt("Ammo is already full!");
+            return;
+        }
+
+        if (UIManager.Instance.UseProp("Ammo"))
+        {
+            WeaponManager.Instance.AddAmmo(10);
+            PlayClip(useAmmoClip);
+        }
     }
 
     public void AddHP(float amount)
@@ -154,24 +187,19 @@ public class PlayerVitalsManager : MonoBehaviour
         currentHP = Mathf.Max(0, currentHP - amount);
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
 
-        if (currentHP <= 0)
-        {
-            Debug.Log("[Player] HP reached 0 → trigger death sequence");
-            TriggerDeath();
-        }
+        if (currentHP <= 0) TriggerDeath();
     }
 
     void TriggerDeath()
     {
         HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
-        float delay = 3f; // respawn after 3 seconds
+        float delay = 3f;
 
         if (handSwitcher != null)
         {
             handSwitcher.SwitchToDeadState();
-            delay = handSwitcher.fadeDuration + 1f; // black screen + 1 second
+            delay = handSwitcher.fadeDuration + 1f;
         }
-
         StartCoroutine(RespawnAfterDelay(delay));
     }
 
@@ -180,7 +208,6 @@ public class PlayerVitalsManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
         RespawnPlayer();
     }
-
 
     public void ConsumeEnergy(float amount)
     {
@@ -197,90 +224,52 @@ public class PlayerVitalsManager : MonoBehaviour
         }
     }
 
-    public void SetInvincible(bool value)
-    {
-        isInvincible = value;
-    }
+    public void SetInvincible(bool value) => isInvincible = value;
 
     [System.Obsolete]
     public void RespawnPlayer()
     {
-        Debug.Log("[Player] Respawn started...");
+        if (respawnPoint != null) StartCoroutine(RespawnMoveCoroutine());
 
-        // ✅ 1. Move the player safely to the respawn location
-        if (respawnPoint != null)
-        {
-            // Use a coroutine so CharacterController can be disabled one frame
-            StartCoroutine(RespawnMoveCoroutine());
-        }
-
-        // ✅ 2. Restore HP & Energy after respawn
-        currentHP = 50f;  // Respawn with half HP
+        currentHP = 50f;
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
-
-        // Energy stays the same (if you want to reset too, set it manually)
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
 
-        // ✅ 3. Reset gun ammo and props
         GunShooter gunShooter = FindObjectOfType<GunShooter>();
-        if (gunShooter != null)
-        {
-            GunShooter.ResetAmmo();  // Reset ammo count
-        }
-        ResetProps();  // Clear all temporary props (HP/Ammo/Energy items)
+        if (gunShooter) GunShooter.ResetAmmo();
 
-        // ✅ 4. Reset HandSwitcher (exit death mode, remove black screen)
+        ResetProps();
+
         HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
         if (handSwitcher != null)
         {
             handSwitcher.SetHandMode(HandSwitcher.Mode.Idle);
-
-            // ✅ IMPORTANT: reset death fade & flag
             handSwitcher.ResetDeathState();
         }
-
-        Debug.Log("[Player] Respawn finished!");
     }
 
-    // ✅ This coroutine safely moves the player without falling through the floor
     IEnumerator RespawnMoveCoroutine()
     {
-        // 1. Temporarily disable movement
         SimpleFPSMovement movement = GetComponent<SimpleFPSMovement>();
         if (movement) movement.enabled = false;
 
-        // 2. Temporarily disable CharacterController for teleport
         CharacterController cc = GetComponent<CharacterController>();
         if (cc) cc.enabled = false;
 
-        // 3. Teleport player slightly above respawnPoint
         transform.position = respawnPoint.position + Vector3.up * 0.3f;
         transform.rotation = respawnPoint.rotation;
-
-        // Sync transforms so physics updates correctly
         Physics.SyncTransforms();
 
-        // Wait 1 frame so Unity can refresh position
         yield return null;
-
-        // 4. Re-enable CharacterController
         if (cc) cc.enabled = true;
-
-        // 5. Re-enable movement after another frame (extra safety)
         yield return null;
         if (movement) movement.enabled = true;
+    }
 
-        Debug.Log("[Player] Teleport complete, controller & movement restored");
-    }
-    void ResetProps()
-    {
-        // Internally zeroing them out via UIManager
-        UIManager.Instance.ClearAllProps();
-    }
+    void ResetProps() => UIManager.Instance.ClearAllProps();
 
     void PlayClip(AudioClip clip)
     {
-        if (clip && audioSource)
-            audioSource.PlayOneShot(clip);
+        if (clip && audioSource) audioSource.PlayOneShot(clip);
     }
 }
