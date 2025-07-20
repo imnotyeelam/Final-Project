@@ -95,7 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4885440665237972994}
-  - component: {fileID: 604551209714698452}
+  - component: {fileID: 7486907799541323267}
   m_Layer: 0
   m_Name: CircularStacker
   m_TagString: Untagged
@@ -125,7 +125,7 @@ Transform:
   - {fileID: 6918727701134702402}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &604551209714698452
+--- !u!65 &7486907799541323267
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
