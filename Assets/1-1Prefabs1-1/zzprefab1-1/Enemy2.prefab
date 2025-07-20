@@ -249,7 +249,7 @@ GameObject:
   - component: {fileID: 2013566576136175875}
   - component: {fileID: 14048615653942458}
   - component: {fileID: 3406404701919092149}
-  - component: {fileID: 4154978842879566275}
+  - component: {fileID: 8170625158347477119}
   m_Layer: 0
   m_Name: Capsule (1)
   m_TagString: Enemy
@@ -386,7 +386,7 @@ MonoBehaviour:
   waitBetweenShots: 3
   timeToShoot: 1
   anim: {fileID: 1199761383167938554}
-  fireSfx: {fileID: 8300000, guid: 6e24bb48cd74a864c805c0a3f9f2f280, type: 3}
+  fireSfx: {fileID: 8300000, guid: 69cde1546fd9b554583d4532886dc489, type: 3}
 --- !u!195 &3406404701919092149
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -409,7 +409,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!82 &4154978842879566275
+--- !u!82 &8170625158347477119
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -422,13 +422,13 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.705
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 116
+  Priority: 216
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
