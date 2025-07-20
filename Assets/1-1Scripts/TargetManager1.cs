@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class TargetManager1 : MonoBehaviour
 {
@@ -14,8 +15,13 @@ public class TargetManager1 : MonoBehaviour
     public int totalTargets = 3;
     private int currentHitCount = 0;
     private bool doorChanged = false;
+    public AudioClip Door; 
+    private AudioSource audio;
 
-
+    private void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
     public void OnTargetHit(int targetID)
     {
        
@@ -54,6 +60,10 @@ public class TargetManager1 : MonoBehaviour
             Destroy(originalDoor);
             if (newDoor != null)
             {
+                if (Door != null && audio != null)
+                {
+                    audio.PlayOneShot(Door);
+                }
                 newDoor.SetActive(true);
                 Debug.Log("ªª√≈≥…π¶£°");
 
