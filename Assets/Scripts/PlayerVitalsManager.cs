@@ -145,6 +145,7 @@ public class PlayerVitalsManager : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     void TryUseAmmoProp()
     {
         if (!UIManager.Instance.HasProp("Ammo"))
@@ -179,6 +180,7 @@ public class PlayerVitalsManager : MonoBehaviour
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
     }
 
+    [System.Obsolete]
     public void TakeDamage(float amount)
     {
         if (isInvincible) return;
@@ -189,6 +191,7 @@ public class PlayerVitalsManager : MonoBehaviour
         if (currentHP <= 0) TriggerDeath();
     }
 
+    [System.Obsolete]
     void TriggerDeath()
     {
         HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
@@ -202,6 +205,7 @@ public class PlayerVitalsManager : MonoBehaviour
         StartCoroutine(RespawnAfterDelay(delay));
     }
 
+    [System.Obsolete]
     IEnumerator RespawnAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);

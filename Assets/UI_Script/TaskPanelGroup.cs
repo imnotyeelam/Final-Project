@@ -14,6 +14,11 @@ public class TaskPanelToggle : MonoBehaviour
     public Scrollbar verticalScrollbar;
     public Scrollbar horizontalScrollbar;
 
+    [Header("Audio Settings")]
+    public AudioSource audioSource;
+    public AudioClip toggleClip;
+
+
     private bool isShown = true;
 
     void Start()
@@ -31,10 +36,17 @@ public class TaskPanelToggle : MonoBehaviour
         {
             isShown = !isShown;
 
+            // Play sound
+            if (audioSource != null && toggleClip != null)
+            {
+                audioSource.PlayOneShot(toggleClip);
+            }
+
             taskPanel.DOAnchorPos(isShown ? shownPos : hiddenPos, 0.3f)
-                     .SetEase(Ease.OutCubic);
+                    .SetEase(Ease.OutCubic);
         }
     }
+
 
     public void ScrollToLatestTask()
     {
