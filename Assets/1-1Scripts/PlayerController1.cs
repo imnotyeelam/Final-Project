@@ -36,7 +36,7 @@ public class PlayerController1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!charCon.enabled) return; // ✅ 加这一句避免报错
+        if (!charCon.enabled) return; // 加这一句避免报错
 
         float yStore = moveInput.y;
 

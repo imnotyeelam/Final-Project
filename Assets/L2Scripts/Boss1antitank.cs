@@ -8,6 +8,8 @@ public class Boss1antitank : MonoBehaviour, Boss1IDamageable
     public int damage = 2;
 
     public GameObject LaserImpact;
+    public AudioClip explosionSound; // 添加音效字段
+    public float explosionVolume = 1f; // 可调节音量
 
     private Rigidbody rb;
     public bool attackPlayer;
@@ -28,22 +30,26 @@ public class Boss1antitank : MonoBehaviour, Boss1IDamageable
         }
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
-        // 只要触碰到任何物体就爆炸
         Explode();
     }
 
     private void Explode()
     {
-        // 1. 爆炸特效
+        // 1. 播放爆炸音效 
+        if (explosionSound != null)
+        {
+            AudioSource.PlayClipAtPoint(explosionSound, transform.position, explosionVolume);
+        }
+
+        // 2. 爆炸特效
         if (LaserImpact != null)
         {
             Instantiate(LaserImpact, transform.position, Quaternion.identity);
         }
 
-        // 2. 范围伤害
+        // 3. 范围伤害
         Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (var hit in hits)
         {
@@ -54,7 +60,7 @@ public class Boss1antitank : MonoBehaviour, Boss1IDamageable
             }
         }
 
-        // 3. 自毁
+        // 4. 自毁
         Destroy(gameObject);
     }
 
@@ -63,7 +69,6 @@ public class Boss1antitank : MonoBehaviour, Boss1IDamageable
         // 手雷不响应伤害
     }
 
-    // 可视化爆炸半径（仅编辑器中看到）
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
