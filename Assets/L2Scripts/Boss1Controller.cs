@@ -24,6 +24,10 @@ public class Boss1Controller : MonoBehaviour
 
     public Animator anim;
 
+    [Header("Audio")]
+    public AudioSource footstepAudioSource;
+
+
     public void ThrowGrenade()
     {
         Vector3 targetPos = PlayerController1.instance.transform.position + new Vector3(0f, 0.4f, 0f);
@@ -39,7 +43,16 @@ public class Boss1Controller : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         shootTimeCounter = timeToShoot;
         shootWaitCounter = waitBetweenShots;
+
+        // 初始化 AudioSource 设置
+        if (footstepAudioSource != null)
+        {
+            footstepAudioSource.loop = true;
+            footstepAudioSource.playOnAwake = false;
+        }
     }
+
+
 
     void Update()
     {
@@ -51,6 +64,11 @@ public class Boss1Controller : MonoBehaviour
         switch (currentState)
         {
             case BossState.Idle:
+
+                if (footstepAudioSource != null && footstepAudioSource.isPlaying)
+                {
+                    footstepAudioSource.Stop();
+                }
                 agent.isStopped = true;
                 anim.SetBool("isMoving", false);
 
@@ -65,13 +83,25 @@ public class Boss1Controller : MonoBehaviour
                 agent.SetDestination(targetPoint);
                 anim.SetBool("isMoving", true);
 
-                // Changed to agentDistanceToStop
+                // 播放跑步音效
+                if (footstepAudioSource != null && !footstepAudioSource.isPlaying)
+                {
+                    footstepAudioSource.Play();
+                }
+
                 if (distanceToPlayer <= agentDistanceToStop)
                 {
                     currentState = BossState.Attacking;
                     agent.isStopped = true;
                     agent.ResetPath();
                     anim.SetBool("isMoving", false);
+
+                    // 停止跑步音效
+                    if (footstepAudioSource != null && footstepAudioSource.isPlaying)
+                    {
+                        footstepAudioSource.Stop();
+                    }
+
                     shootWaitCounter = waitBetweenShots;
                 }
                 else if (distanceToPlayer > distanceToLose)
@@ -79,12 +109,23 @@ public class Boss1Controller : MonoBehaviour
                     currentState = BossState.Idle;
                     agent.ResetPath();
                     anim.SetBool("isMoving", false);
+
+                    // 停止跑步音效
+                    if (footstepAudioSource != null && footstepAudioSource.isPlaying)
+                    {
+                        footstepAudioSource.Stop();
+                    }
                 }
                 break;
 
             case BossState.Attacking:
                 transform.LookAt(new Vector3(PlayerController1.instance.transform.position.x, transform.position.y, PlayerController1.instance.transform.position.z));
                 agent.isStopped = true;
+
+                if (footstepAudioSource != null && footstepAudioSource.isPlaying)
+                {
+                    footstepAudioSource.Stop();
+                }
 
                 // Changed to agentDistanceToStop
                 if (distanceToPlayer > agentDistanceToStop && distanceToPlayer <= distanceToLose)
