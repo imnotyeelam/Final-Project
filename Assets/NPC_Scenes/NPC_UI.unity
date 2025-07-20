@@ -933,6 +933,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 285062179502531141, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+      propertyPath: m_Name
+      value: Tab
+      objectReference: {fileID: 0}
     - target: {fileID: 978725678214328691, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
       propertyPath: m_Name
       value: NPC_Canvas
@@ -1016,6 +1020,10 @@ PrefabInstance:
     - target: {fileID: 2252717196215878220, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629731948322118683, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+      propertyPath: m_Text
+      value: Press [Tab] to continue
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

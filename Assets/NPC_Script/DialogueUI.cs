@@ -53,7 +53,7 @@ public class DialogueUI : MonoBehaviour
     {
         if (!dialoguePanel.activeSelf) return;
 
-        if (Input.GetKeyDown(KeyCode.Return)) // Enter key
+        if (Input.GetKeyDown(KeyCode.Tab)) // Enter key
         {
             if (isTyping)
             {
