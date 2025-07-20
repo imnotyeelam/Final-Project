@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossManager : MonoBehaviour
+public class Boss1Manager : MonoBehaviour
 {
-    public static BossManager instance;
+    public static Boss1Manager instance;
 
     private bool mainBossDead = false;
     private List<Boss1HealthController> clones = new List<Boss1HealthController>();
 
     void Awake()
-    {
+    { 
         instance = this;
     }
 

@@ -18,7 +18,7 @@ public class Boss1HealthController : MonoBehaviour
 
         if (bossType == BossType.Clone)
         {
-            BossManager.instance.RegisterClone(this);
+            Boss1Manager.instance.RegisterClone(this);
         }
     }
 
@@ -37,14 +37,14 @@ public class Boss1HealthController : MonoBehaviour
                     Instantiate(portalPrefab, spawnPos, Quaternion.identity);
                 }
 
-                BossManager.instance.MainBossDied();
+                Boss1Manager.instance.MainBossDied();
                 Destroy(gameObject);
             }
             else
             {
-                if (!BossManager.instance.IsMainBossDead())
+                if (!Boss1Manager.instance.IsMainBossDead())
                 {
-                    BossManager.instance.StartReviveClone(this, 5f);
+                    Boss1Manager.instance.StartReviveClone(this, 5f);
                 }
 
                 gameObject.SetActive(false);
