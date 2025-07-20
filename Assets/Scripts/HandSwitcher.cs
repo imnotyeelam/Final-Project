@@ -42,9 +42,19 @@ public class HandSwitcher : MonoBehaviour
     public Transform gunAimHandShootPoint;
     public GunShooter gunShooter;  // Assign this via Inspector
 
-
     [Header("Audio")]
     public AudioClip deathImpactClip;
+
+    [Header("Switch Sound")]
+    public AudioClip switchHandClip;
+    private AudioSource audioSource;
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+    }
 
     void Update()
     {
@@ -65,6 +75,10 @@ public class HandSwitcher : MonoBehaviour
         {
             CurrentMode = (Mode)(((int)CurrentMode + 1) % 3);
             SetHandMode(CurrentMode);
+
+            // Play switch sound
+            if (switchHandClip && audioSource)
+                audioSource.PlayOneShot(switchHandClip);
         }
     }
 
