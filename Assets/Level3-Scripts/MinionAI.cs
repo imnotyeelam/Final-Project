@@ -13,15 +13,22 @@ public class MinionAI : MonoBehaviour
 
     [Header("Attack Settings")]
     public float attackRange = 18f;
-    public float minAttackDistance = 3f;     // 最小攻击距离，避免出生直接攻击
+    public float minAttackDistance = 3f;
     public float attackCooldown = 0.5f;
     private float lastAttackTime;
 
     [Header("Spawn Settings")]
-    public float spawnAttackDelay = 1.5f;    // 刚生成后等待多久才允许攻击
+    public float spawnAttackDelay = 1.5f;
     private float spawnTime;
 
-    private bool hasShotInThisAttack = false; // 防止一段动画射多次子弹
+    private bool hasShotInThisAttack = false;
+
+    [Header("Audio Clips")]
+    public AudioClip runClip;       // 跑步音效（循环）
+    public AudioClip attackClip;    //攻击音效
+
+    private AudioSource audioSource; // 通用AudioSource
+    private bool isRunningSoundPlaying = false;
 
     void Start()
     {
@@ -38,6 +45,12 @@ public class MinionAI : MonoBehaviour
         }
 
         agent.stoppingDistance = 15f;
+        spawnTime = Time.time;
+
+        // 初始化AudioSource
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 1f; // 3D音效
+        audioSource.playOnAwake = false;
     }
 
     public void SetTarget(Transform t)
@@ -47,7 +60,7 @@ public class MinionAI : MonoBehaviour
 
     void Update()
     {
-        //if (target == null) return;
+        if (target == null) return;
 
         agent.SetDestination(target.position);
 
@@ -55,13 +68,14 @@ public class MinionAI : MonoBehaviour
         {
             animator.SetBool("isRunning", true);
             agent.isStopped = false;
+            PlayRunSound();
         }
         else
         {
             animator.SetBool("isRunning", false);
             agent.isStopped = true;
+            StopRunSound();
 
-            //攻击条件：1. 冷却结束  2. 出生后延迟结束  3. 在攻击距离内  4. 大于最小攻击距离
             if (Time.time - spawnTime >= spawnAttackDelay &&
                 Time.time - lastAttackTime >= attackCooldown &&
                 agent.remainingDistance <= attackRange &&
@@ -69,7 +83,9 @@ public class MinionAI : MonoBehaviour
             {
                 animator.SetTrigger("isAttacking");
                 lastAttackTime = Time.time;
-                hasShotInThisAttack = false; // 重置射击标记
+                hasShotInThisAttack = false;
+
+                PlayOneShot(attackClip);
             }
         }
 
@@ -80,15 +96,13 @@ public class MinionAI : MonoBehaviour
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        // 检查当前是不是攻击动画
         if (stateInfo.IsName("ShootSingleshot_RF01"))
         {
-            //朝向玩家
             Vector3 lookPos = target.position + new Vector3(0f, 0.6f, -1.8f);
-            lookPos.y = transform.position.y; // 保持水平旋转
+            lookPos.y = transform.position.y;
             transform.LookAt(lookPos);
 
-            float normalizedTime = stateInfo.normalizedTime % 1; //normalise the time of the animation
+            float normalizedTime = stateInfo.normalizedTime % 1;
 
             if (normalizedTime > 0.3f && !hasShotInThisAttack)
             {
@@ -107,6 +121,36 @@ public class MinionAI : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = firePoint.forward * 25f;
+        }
+    }
+
+    // 播放跑步音效（循环）
+    void PlayRunSound()
+    {
+        if (!isRunningSoundPlaying && runClip != null)
+        {
+            audioSource.clip = runClip;
+            audioSource.loop = true;
+            audioSource.Play();
+            isRunningSoundPlaying = true;
+        }
+    }
+
+    void StopRunSound()
+    {
+        if (isRunningSoundPlaying)
+        {
+            audioSource.Stop();
+            isRunningSoundPlaying = false;
+        }
+    }
+
+    // 播放一次性音效（死亡）
+    void PlayOneShot(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
         }
     }
 }

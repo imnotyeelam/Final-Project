@@ -11,7 +11,12 @@ public class L3TargetTrigger : MonoBehaviour
     public Animator targetAnimator; // 靶子 Animator
     public string hitTriggerName = "Hit"; // Animator 的 Trigger 名称（默认 Hit）
 
+    [Header("Audio Settings")]
+    public AudioClip stairsAppearClip; // 楼梯出现音效
+    private AudioSource audioSource;
+
     private bool shouldAnimate = false;
+    private bool audioPlayed = false;
 
     void Start()
     {
@@ -20,6 +25,10 @@ public class L3TargetTrigger : MonoBehaviour
         {
             stairs.transform.localScale = Vector3.zero;
         }
+
+        // 添加AudioSource组件
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
     }
 
     void OnTriggerEnter(Collider other)
@@ -37,7 +46,14 @@ public class L3TargetTrigger : MonoBehaviour
             // 2. 开始动画（楼梯缩放）
             shouldAnimate = true;
 
-            // 3. 销毁子弹
+            // 3. 播放音效（只在第一次触发）
+            if (!audioPlayed && stairsAppearClip != null)
+            {
+                audioSource.PlayOneShot(stairsAppearClip);
+                audioPlayed = true;
+            }
+
+            // 4. 销毁子弹
             Destroy(other.gameObject);
         }
     }

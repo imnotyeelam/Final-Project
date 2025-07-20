@@ -11,30 +11,37 @@ public class Turret : MonoBehaviour
 
     public float rotateSpeed = 45f;
 
-    public LayerMask obstacleMask; // 设置障碍层（比如 Bookcase）
+    public LayerMask obstacleMask;
+
+    [Header("Audio Clips")]
+    public AudioClip attackClip; // 攻击音效
+
+    private AudioSource audioSource;
+
     bool CanSeePlayer()
     {
         Vector3 direction = (PlayerController1.instance.transform.position - firePoint.position).normalized;
         float distance = Vector3.Distance(firePoint.position, PlayerController1.instance.transform.position);
 
-        // 射线检测
         if (Physics.Raycast(firePoint.position, direction, out RaycastHit hit, distance, ~0))
         {
             if (hit.collider.CompareTag("Player"))
             {
-                return true; // 中间没有障碍物，可以攻击
+                return true;
             }
         }
-        return false; // 有障碍挡住
+        return false;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         shotCounter = timeBetweenShots;
+
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 1f; // 3D音效
+        audioSource.playOnAwake = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Vector3.Distance(transform.position, PlayerController1.instance.transform.position) < rangeToTargetPlayer && CanSeePlayer())
@@ -46,14 +53,24 @@ public class Turret : MonoBehaviour
             if (shotCounter <= 0)
             {
                 Instantiate(bullet, firePoint.position, firePoint.rotation);
+
+                //播放音效
+                if (attackClip != null)
+                {
+                    audioSource.PlayOneShot(attackClip);
+                }
+
                 shotCounter = timeBetweenShots;
             }
         }
-
         else
         {
             shotCounter = timeBetweenShots;
-            gun.rotation = Quaternion.Lerp(gun.rotation, Quaternion.Euler(0f, gun.rotation.eulerAngles.y + 10f, 0f), rotateSpeed * Time.deltaTime);
+            gun.rotation = Quaternion.Lerp(
+                gun.rotation,
+                Quaternion.Euler(0f, gun.rotation.eulerAngles.y + 10f, 0f),
+                rotateSpeed * Time.deltaTime
+            );
         }
     }
 }
