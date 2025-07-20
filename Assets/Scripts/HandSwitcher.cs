@@ -48,9 +48,6 @@ public class HandSwitcher : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) // Test: press K to die
-            SwitchToDeadState();
-
         if (isDead)
         {
             HandleDeathEffects();
@@ -230,6 +227,31 @@ public class HandSwitcher : MonoBehaviour
                     break;
             }
         }
+    }
+    public void ResetDeathEffects()
+    {
+        isDead = false;  
+
+        if (fadeToBlackImage != null)
+        {
+            fadeToBlackImage.color = new Color(0, 0, 0, 0); // 变透明
+            fadeToBlackImage.gameObject.SetActive(false);
+        }
+
+        if (playerCameraTransform != null)
+        {
+            playerCameraTransform.localRotation = Quaternion.identity;
+            playerCameraTransform.localPosition = Vector3.zero;
+        }
+
+        SetHandMode(CurrentMode);
+    }
+
+    public void ResetDeathState()
+    {
+        isDead = false;
+        if (fadeToBlackImage != null)
+            fadeToBlackImage.color = new Color(0, 0, 0, 0);
     }
 
     void DisableAllHands()

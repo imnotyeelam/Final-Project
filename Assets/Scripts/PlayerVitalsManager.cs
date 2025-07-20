@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +34,8 @@ public class PlayerVitalsManager : MonoBehaviour
     public float flashDuration = 0.5f;
     public AudioClip fallSound;
 
+    [Header("Respawn Settings")]
+    public Transform respawnPoint;  // 指定复活位置
 
     IEnumerator FlashRed()
     {
@@ -148,9 +150,37 @@ public class PlayerVitalsManager : MonoBehaviour
     public void TakeDamage(float amount)
     {
         if (isInvincible) return;
+
         currentHP = Mathf.Max(0, currentHP - amount);
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
+
+        if (currentHP <= 0)
+        {
+            Debug.Log("[Player] HP reached 0 → trigger death sequence");
+            TriggerDeath();
+        }
     }
+
+    void TriggerDeath()
+    {
+        HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
+        float delay = 3f; // respawn after 3 seconds
+
+        if (handSwitcher != null)
+        {
+            handSwitcher.SwitchToDeadState();
+            delay = handSwitcher.fadeDuration + 1f; // black screen + 1 second
+        }
+
+        StartCoroutine(RespawnAfterDelay(delay));
+    }
+
+    IEnumerator RespawnAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        RespawnPlayer();
+    }
+
 
     public void ConsumeEnergy(float amount)
     {
@@ -175,26 +205,73 @@ public class PlayerVitalsManager : MonoBehaviour
     [System.Obsolete]
     public void RespawnPlayer()
     {
-        // 1. Restore HP to 50
-        currentHP = 50f;
+        Debug.Log("[Player] Respawn started...");
+
+        // ✅ 1. Move the player safely to the respawn location
+        if (respawnPoint != null)
+        {
+            // Use a coroutine so CharacterController can be disabled one frame
+            StartCoroutine(RespawnMoveCoroutine());
+        }
+
+        // ✅ 2. Restore HP & Energy after respawn
+        currentHP = 50f;  // Respawn with half HP
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
 
-        // 2. Keep current energy unchanged (no action needed)
+        // Energy stays the same (if you want to reset too, set it manually)
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
 
-        // 3. Refill gun ammo
+        // ✅ 3. Reset gun ammo and props
         GunShooter gunShooter = FindObjectOfType<GunShooter>();
         if (gunShooter != null)
         {
-            GunShooter.ResetAmmo();  // Custom method we'll define next
+            GunShooter.ResetAmmo();  // Reset ammo count
+        }
+        ResetProps();  // Clear all temporary props (HP/Ammo/Energy items)
+
+        // ✅ 4. Reset HandSwitcher (exit death mode, remove black screen)
+        HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
+        if (handSwitcher != null)
+        {
+            handSwitcher.SetHandMode(HandSwitcher.Mode.Idle);
+
+            // ✅ IMPORTANT: reset death fade & flag
+            handSwitcher.ResetDeathState();
         }
 
-        // 4. Clear all prop items from UI
-        ResetProps();
-
-        Debug.Log("Player respawned.");
+        Debug.Log("[Player] Respawn finished!");
     }
 
+    // ✅ This coroutine safely moves the player without falling through the floor
+    IEnumerator RespawnMoveCoroutine()
+    {
+        // 1. Temporarily disable movement
+        SimpleFPSMovement movement = GetComponent<SimpleFPSMovement>();
+        if (movement) movement.enabled = false;
+
+        // 2. Temporarily disable CharacterController for teleport
+        CharacterController cc = GetComponent<CharacterController>();
+        if (cc) cc.enabled = false;
+
+        // 3. Teleport player slightly above respawnPoint
+        transform.position = respawnPoint.position + Vector3.up * 0.3f;
+        transform.rotation = respawnPoint.rotation;
+
+        // Sync transforms so physics updates correctly
+        Physics.SyncTransforms();
+
+        // Wait 1 frame so Unity can refresh position
+        yield return null;
+
+        // 4. Re-enable CharacterController
+        if (cc) cc.enabled = true;
+
+        // 5. Re-enable movement after another frame (extra safety)
+        yield return null;
+        if (movement) movement.enabled = true;
+
+        Debug.Log("[Player] Teleport complete, controller & movement restored");
+    }
     void ResetProps()
     {
         // Internally zeroing them out via UIManager

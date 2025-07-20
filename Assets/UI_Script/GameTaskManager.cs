@@ -4,7 +4,7 @@ public class GameTaskManager : MonoBehaviour
 {
     void Start()
     {
-        // Add all tasks at the beginning
+        // Just show tasks as instructions
         AddGameTask("Collect HP Prop");
         AddGameTask("Kill Enemy");
         AddGameTask("Talk to NPC");
@@ -12,36 +12,23 @@ public class GameTaskManager : MonoBehaviour
 
     public void AddGameTask(string taskDescription)
     {
-        Debug.Log("Creating task: " + taskDescription + " ✅ from GameTaskManager");
+        Debug.Log("Adding task: " + taskDescription);
 
         if (UIManager.Instance != null)
         {
             var item = UIManager.Instance.AddTask(taskDescription);
             if (item != null)
             {
-                Debug.Log("✅ Task created: " + taskDescription);
+                Debug.Log("✅ Task displayed: " + taskDescription);
             }
             else
             {
-                Debug.LogError("❌ Task creation failed in UIManager.");
+                Debug.LogError("❌ Failed to create task UI!");
             }
         }
         else
         {
             Debug.LogError("❌ UIManager.Instance is null!");
         }
-    }
-
-    public void CompleteTask(string taskDescription)
-    {
-        foreach (var task in UIManager.taskList)
-        {
-            if (task.GetDescription() == taskDescription && !task.IsCompleted())
-            {
-                task.MarkCompleted();
-                return;
-            }
-        }
-        Debug.LogWarning("⚠️ Task not found or already completed: " + taskDescription);
     }
 }

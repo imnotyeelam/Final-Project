@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Collections.Generic;
 using System;
-using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,10 +14,10 @@ public class UIManager : MonoBehaviour
     public Text piecesText;
 
     [Header("Task UI Components")]
-    public Transform taskListParent;
-    public GameObject taskItemPrefab;
+    public Transform taskListParent;      // Where task items will appear
+    public GameObject taskItemPrefab;     // Prefab with TaskItem script
 
-    [Header("Toggle")]
+    [Header("Toggle Panel")]
     public GameObject taskPanel;
     public KeyCode toggleKey = KeyCode.T;
 
@@ -39,12 +37,8 @@ public class UIManager : MonoBehaviour
     private int hpProps = 0;
     private int energyProps = 0;
 
+    // This will just store all task UI items
     public static List<TaskItem> taskList = new List<TaskItem>();
-    
-    void Start()
-    {
-        Debug.Log("UIManager Start called");
-    }
 
     void Awake()
     {
@@ -57,8 +51,15 @@ public class UIManager : MonoBehaviour
             Instance = this;
         }
     }
-    private void Update()
+
+    void Start()
     {
+        Debug.Log("UIManager initialized");
+    }
+
+    void Update()
+    {
+        // Toggle Task Panel visibility
         if (Input.GetKeyDown(toggleKey) && taskPanel != null)
         {
             taskPanel.SetActive(!taskPanel.activeSelf);
@@ -92,7 +93,8 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if (healthText) healthText.text = $"{current}/{max}";
+        if (healthText)
+            healthText.text = $"{Mathf.Ceil(current)}/{Mathf.Ceil(max)}";
     }
 
     public void UpdateEnergy(float current, float max)
@@ -124,14 +126,14 @@ public class UIManager : MonoBehaviour
 
     public void UpdatePieces(int collected, int total)
     {
-        if (piecesText) piecesText.text = $"Pieces: {collected}/{total}";
+        if (piecesText)
+            piecesText.text = $"Pieces: {collected}/{total}";
     }
 
     // ---------------- Tasks ----------------
-    
     public TaskItem AddTask(string description)
     {
-        Debug.Log("Trying to add task: " + description);
+        Debug.Log("Adding task: " + description);
 
         if (!taskItemPrefab || !taskListParent)
         {
@@ -139,6 +141,7 @@ public class UIManager : MonoBehaviour
             return null;
         }
 
+        // Create new Task UI
         GameObject newTaskGO = Instantiate(taskItemPrefab, taskListParent);
         TaskItem taskItem = newTaskGO.GetComponent<TaskItem>();
 
@@ -149,34 +152,10 @@ public class UIManager : MonoBehaviour
         }
 
         taskItem.Setup(description);
+
+        // Add to list for reference
         taskList.Add(taskItem);
         return taskItem;
-    }
-
-    public void RemoveTask(TaskItem taskToRemove)
-    {
-        if (taskToRemove != null)
-        {
-            if (taskList.Contains(taskToRemove))
-                taskList.Remove(taskToRemove);
-
-            Destroy(taskToRemove.gameObject);
-        }
-    }
-
-    private IEnumerator CheckTaskCompletion(TaskItem taskItem, Func<bool> condition)
-    {
-        while (taskItem != null && !taskItem.isCompleted)
-        {
-            if (condition())
-            {
-                taskItem.MarkCompleted();
-                taskList.Remove(taskItem);
-                yield break;
-            }
-
-            yield return new WaitForSeconds(0.3f);
-        }
     }
 
     public void ClearAllTasks()
@@ -202,34 +181,20 @@ public class UIManager : MonoBehaviour
         UpdatePropsUI();
     }
 
-    [Obsolete]
     public bool UseProp(string type)
     {
         bool success = false;
+
         switch (type)
         {
             case "Ammo":
-                if (ammoProps > 0)
-                {
-                    ammoProps--;
-                    success = true;
-                }
+                if (ammoProps > 0) { ammoProps--; success = true; }
                 break;
-
             case "HP":
-                if (hpProps > 0)
-                {
-                    hpProps--;
-                    success = true;
-                }
+                if (hpProps > 0) { hpProps--; success = true; }
                 break;
-
             case "Energy":
-                if (energyProps > 0)
-                {
-                    energyProps--;
-                    success = true;
-                }
+                if (energyProps > 0) { energyProps--; success = true; }
                 break;
         }
 
@@ -261,7 +226,8 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmoUI(int current, int max)
     {
-        if (ammoText) ammoText.text = $"{current}";
+        if (ammoText)
+            ammoText.text = $"{current}/{max}";
 
         if (current > 0 && outOfAmmoWarning)
             outOfAmmoWarning.SetActive(false);
