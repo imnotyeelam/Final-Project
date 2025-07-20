@@ -20,6 +20,8 @@ public class ParentBuffManager : MonoBehaviour
     public Image momBuffIcon;
     public Text momCooldownText;
     public Text momDurationText;
+    public GameObject shieldEffectPrefab;
+    private GameObject activeShieldEffect;
 
     [Header("Dad UI Overlays")]
     public GameObject dadActiveOverlay;
@@ -202,5 +204,18 @@ public class ParentBuffManager : MonoBehaviour
             momBuffIcon.color = Color.white;
 
         isMomBuffActive = false;
+
+        private void ActivateMomBuff()
+        {
+            if (canUseMomBuff)
+            {
+                // Visual FX
+                activeShieldEffect = Instantiate(shieldEffectPrefab, player.transform);
+                Destroy(activeShieldEffect, momBuffDuration); // Auto remove
+
+                // Logic
+                StartCoroutine(MomBuffRoutine());
+            }
+        }
     }
 }
