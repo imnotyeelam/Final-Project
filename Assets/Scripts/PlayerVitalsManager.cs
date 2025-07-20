@@ -89,7 +89,6 @@ public class PlayerVitalsManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O)) TryUseHPProp();
         if (Input.GetKeyDown(KeyCode.P)) TryUseEnergyProp();
 
-        if (Input.GetKeyDown(KeyCode.R)) RespawnPlayer();
     }
 
     IEnumerator FlashRed()
