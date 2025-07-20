@@ -24,6 +24,20 @@ public class Boss2Controller : MonoBehaviour
 
     [Header("ChainSaw")]
     public Animator chainsawAnimator; // 拖入电锯 Animator
+    private AudioSource chainsawAudio;
+
+    [Header("Audio Clips")]
+    public AudioClip getUpSound;
+    public AudioClip summonSound;
+
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        chainsawAudio = chainsawAnimator.GetComponent<AudioSource>();
+
+        audioSource = GetComponent<AudioSource>();
+    }
 
     void Update()
     {
@@ -47,6 +61,8 @@ public class Boss2Controller : MonoBehaviour
     public void OnLyingDownStart()
     {
         chainsawAnimator.SetBool("isActive", false);
+
+        if (chainsawAudio.isPlaying) chainsawAudio.Stop();
     }
 
     public void StartGetUpAnimation()
@@ -54,17 +70,29 @@ public class Boss2Controller : MonoBehaviour
         Debug.Log("Boss 开始起身！");
         animator.SetTrigger("GetUp");
     }
+    public void PlayGetUpSound()
+    {
+        if (getUpSound != null)
+            audioSource.PlayOneShot(getUpSound);
+    }
 
     public void OnGetUpFinished()
     {
         Invoke(nameof(StartSummon), 1.5f);
         chainsawAnimator.SetBool("isActive", true);
+
+        if (!chainsawAudio.isPlaying) chainsawAudio.Play();
     }
 
     void StartSummon()
     {
         isSummoning = true;
         animator.SetTrigger("Summon");
+    }
+    public void PlaySummonSound()
+    {
+        if (summonSound != null)
+            audioSource.PlayOneShot(summonSound);
     }
 
     public void StartBossTalk()

@@ -457,7 +457,7 @@ MonoBehaviour:
   moveSpeed: 35
   LifeTime: 5
   impactEffect: {fileID: 6989397821223441727, guid: 51c87dfd467151241827a121d10720d4, type: 3}
-  damage: 2
+  damage: 1
   damageEnemy: 0
   damagePlayer: 1
 --- !u!54 &6457254513205426949

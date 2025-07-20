@@ -105,7 +105,10 @@ public class PlayerController1 : MonoBehaviour
             Jumpcount--;
         }
 
-        charCon.Move(moveInput * Time.deltaTime);
+        if (charCon.enabled)
+        {
+            charCon.Move(moveInput * Time.deltaTime);
+        }
 
         // Éä»÷Âß¼­
         if (Input.GetMouseButtonDown(0))//left click mouse button
