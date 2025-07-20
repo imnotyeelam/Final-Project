@@ -10,7 +10,8 @@ public class PlayerController1 : MonoBehaviour
 
     private Vector3 moveInput;
 
-    public Transform camTrans;
+    public Transform cameraPoint; // 改为引用Main Camera上的Camera Point
+    private Camera mainCamera; // 添加主摄像机引用
 
     public float mouseSensitivity;
 
@@ -33,6 +34,7 @@ public class PlayerController1 : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        mainCamera = Camera.main; // 获取主摄像机
     }
 
     void Start()
@@ -49,7 +51,18 @@ public class PlayerController1 : MonoBehaviour
         // 摄像机旋转逻辑（即使在平台上也能看周围）
         Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
-        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles.x - mouseInput.y, camTrans.rotation.eulerAngles.y, camTrans.rotation.eulerAngles.z);
+
+        // 使用Camera Point控制摄像机旋转
+        if (cameraPoint != null)
+        {
+            cameraPoint.rotation = Quaternion.Euler(cameraPoint.rotation.eulerAngles.x - mouseInput.y,
+                                                  cameraPoint.rotation.eulerAngles.y,
+                                                  cameraPoint.rotation.eulerAngles.z);
+
+            // 同步主摄像机位置和旋转到Camera Point
+            mainCamera.transform.position = cameraPoint.position;
+            mainCamera.transform.rotation = cameraPoint.rotation;
+        }
 
         // 如果在平台上，只能按 E 下飞机
         if (isOnPlatform)
@@ -98,13 +111,13 @@ public class PlayerController1 : MonoBehaviour
         if (Input.GetMouseButtonDown(0))//left click mouse button
         {
             RaycastHit hit;//invisible stick
-            if (Physics.Raycast(camTrans.position, camTrans.forward, out hit, 500f))
+            if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 500f))
             {
                 firePoint.LookAt(hit.point);
             }
             else
             {
-                firePoint.LookAt(camTrans.position + (camTrans.forward * 30f));
+                firePoint.LookAt(mainCamera.transform.position + (mainCamera.transform.forward * 30f));
             }
 
             Instantiate(bullet, firePoint.position, firePoint.rotation);
@@ -130,59 +143,15 @@ public class PlayerController1 : MonoBehaviour
         transform.SetParent(null); // 解除绑定
         charCon.enabled = true; // 恢复 CharacterController
 
-        Vector3 exitOffset = currentPlatform.right * 2f; // 右移2米，下移1米
+        Vector3 exitOffset = currentPlatform.right * 2f; // 右移2m
         transform.position = currentPlatform.position + exitOffset;
 
         L3MovingPlane plane = currentPlatform.GetComponent<L3MovingPlane>();
         if (plane != null)
         {
-            plane.TemporarilyDisableAttach(3f); // 禁用2秒
+            plane.TemporarilyDisableAttach(3f); // 禁用3秒
         }
 
         Debug.Log("玩家已下平台");
     }
 }
-
-
-/*
-public void FireShot()
-{
-    if (activeGun.currentAmmo > 0)
-    {
-        activeGun.currentAmmo--;
-
-        Instantiate(activeGun.bullet, firePoint.position, firePoint.rotation);
-
-        activeGun.fireCounter = activeGun.fireRate;//reset the fireCounter to fireRate then counting down again
-        //UIController.instance.AmmoText.text = "Ammo: " + activeGun.currentAmmo;
-    }
-
-
-
-}
-
-public void SwitchGun()
-{
-    activeGun.gameObject.SetActive(false);
-
-    currentGun++;
-
-    if (currentGun > allGuns.Count)
-    {
-        currentGun = 0;
-    }
-
-    activeGun = allGuns[currentGun];
-    activeGun.gameObject.SetActive(true);
-
-   // UIController.instance.AmmoText.text = "AMMO:" + activeGun.currentAmmo;
-}
-
-}
-
-/*if (other.gameObject.tag == "Enemy" && damageEnemy)
-{
-//Destroy(other.gameObject);
-other.gameObject.GetComponent<EnemyHealthController>().DamageEnemy(damage);
-}
-*/

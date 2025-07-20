@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8345113338670798617}
   - component: {fileID: 2076386169665856164}
   - component: {fileID: 7136222557999600587}
-  - component: {fileID: -4938279166743165514}
+  - component: {fileID: -6839428078538572558}
   m_Layer: 3
   m_Name: PlayerBullet 1
   m_TagString: PlayerBullet
@@ -254,7 +254,7 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &-4938279166743165514
+--- !u!114 &-6839428078538572558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -263,12 +263,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8555865319367664294}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8df604328c14a14eb21aef1dcfbfddc, type: 3}
+  m_Script: {fileID: 11500000, guid: 88433fb6ef64d9b47b898c49b92ad948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 15
-  LifeTime: 5
+  lifeTime: 5
   impactEffect: {fileID: 7112781024126390488, guid: d6a3c8caa8646924c91b954c7c8f4085, type: 3}
   damage: 1
   damageEnemy: 1
   damagePlayer: 0
+  attackPlayer: 0
