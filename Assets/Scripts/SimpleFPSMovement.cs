@@ -26,7 +26,7 @@ public class SimpleFPSMovement : MonoBehaviour
     public float doubleJumpSpeedBoost = 1.2f;
 
     [Header("Sprint Settings")]
-    public float maxSprintTime = 5f;
+    public float maxSprintTime = 10f;
     public int maxEnergy = 20;
     public int sprintEnergyCost = 5;
 
@@ -77,9 +77,20 @@ public class SimpleFPSMovement : MonoBehaviour
         // Use CharacterController's built-in ground check
         isGrounded = controller.isGrounded;
 
-        // Landing sound
-        if (!wasGroundedLastFrame && isGrounded && landClip != null)
-            audioSource.PlayOneShot(landClip);
+        // Predict landing 0.2 seconds earlier using raycast
+        if (!wasGroundedLastFrame && !isGrounded && velocity.y < -1f)
+        {
+            RaycastHit hit;
+            float predictionDistance = 0.6f; // Adjust for anticipation
+
+            if (Physics.Raycast(groundCheck.position, Vector3.down, out hit, predictionDistance, groundMask))
+            {
+                if (landClip != null && !audioSource.isPlaying)
+                {
+                    audioSource.PlayOneShot(landClip);
+                }
+            }
+        }
 
         if (isGrounded && velocity.y < 0)
         {

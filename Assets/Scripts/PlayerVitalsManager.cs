@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,9 +34,13 @@ public class PlayerVitalsManager : MonoBehaviour
 
     [Header("Respawn Settings")]
     public Transform respawnPoint;
+    private float lastEnergy;
 
-    void Start()
+    private void Start()
     {
+        currentHP = maxHP;
+        currentEnergy = maxEnergy;
+
         audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
         controller = GetComponent<CharacterController>();
         lastY = transform.position.y;
@@ -55,13 +59,18 @@ public class PlayerVitalsManager : MonoBehaviour
     [System.Obsolete]
     void Update()
     {
-        // Energy drain over time
-        energyTimer += Time.deltaTime;
-        if (energyTimer >= energyInterval)
+        if (Mathf.Abs(lastEnergy - currentEnergy) > 0.1f) // small threshold to avoid noise
         {
-            energyTimer = 0f;
-            ConsumeEnergy(energyLoss);
+            UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
+            lastEnergy = currentEnergy;
         }
+            // Energy drain over time
+            energyTimer += Time.deltaTime;
+            if (energyTimer >= energyInterval)
+            {
+                energyTimer = 0f;
+                ConsumeEnergy(energyLoss);
+            }
 
         // Fall damage
         if (controller.isGrounded)
@@ -88,6 +97,8 @@ public class PlayerVitalsManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I)) TryUseAmmoProp();
         if (Input.GetKeyDown(KeyCode.O)) TryUseHPProp();
         if (Input.GetKeyDown(KeyCode.P)) TryUseEnergyProp();
+
+        UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
 
     }
 

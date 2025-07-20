@@ -26872,7 +26872,7 @@ Transform:
   m_GameObject: {fileID: 748513545}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 14, y: 2.73, z: -47.4}
+  m_LocalPosition: {x: 14, y: 3.69, z: -47.4}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -26912,7 +26912,7 @@ MonoBehaviour:
   walkClip: {fileID: 8300000, guid: a81cc3923a808bf448b2fa9b826c3de8, type: 3}
   sprintClip: {fileID: 8300000, guid: 4cce09c4b93d2624989b6f4f31a3b1be, type: 3}
   jumpClip: {fileID: 8300000, guid: b8765f7539bd17946ac37794790a3caa, type: 3}
-  landClip: {fileID: 8300000, guid: 5cbde0c1fa7ea96429e17400394b6a4e, type: 3}
+  landClip: {fileID: 8300000, guid: 98a13d07558ac054ea51d58e8cfbd72b, type: 3}
   stepRate: 0.5
   currentMoveVelocity: {x: 0, y: 0, z: 0}
   isGrounded: 0
