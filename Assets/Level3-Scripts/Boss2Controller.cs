@@ -22,6 +22,9 @@ public class Boss2Controller : MonoBehaviour
     [Header("Colliders")]
     public GameObject lyingColliderObject;
 
+    [Header("ChainSaw")]
+    public Animator chainsawAnimator; // 拖入电锯 Animator
+
     void Update()
     {
         if (!isSummoning && currentMinions.Count > 0)
@@ -41,6 +44,10 @@ public class Boss2Controller : MonoBehaviour
             }
         }
     }
+    public void OnLyingDownStart()
+    {
+        chainsawAnimator.SetBool("isActive", false);
+    }
 
     public void StartGetUpAnimation()
     {
@@ -51,6 +58,7 @@ public class Boss2Controller : MonoBehaviour
     public void OnGetUpFinished()
     {
         Invoke(nameof(StartSummon), 1.5f);
+        chainsawAnimator.SetBool("isActive", true);
     }
 
     void StartSummon()
