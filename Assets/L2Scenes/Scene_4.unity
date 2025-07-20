@@ -6228,6 +6228,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1519066165}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &135085958
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -21685,6 +21686,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1685320947}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &191113177
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -24845,6 +24847,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1866152271}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &239716831
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -76815,6 +76818,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 797166816}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &548288862
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -126145,6 +126149,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1557085502}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &841685305
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -139775,6 +139780,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 422904333}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &897110092
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -162660,7 +162666,7 @@ Transform:
   m_GameObject: {fileID: 1008412439}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 38.85, y: -5.62, z: 14.64}
+  m_LocalPosition: {x: 25.32, y: 154.2, z: 14.64}
   m_LocalScale: {x: 20, y: 2, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -187192,6 +187198,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1929205818}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &1079754138
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -193772,6 +193779,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 721158244}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &1130828780
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -263477,6 +263485,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1876120089}
+  footstepAudioSource: {fileID: 0}
 --- !u!136 &1365682917
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -343862,6 +343871,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 772220947}
+  footstepAudioSource: {fileID: 0}
 --- !u!136 &1648821474
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -357790,6 +357800,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1420517886}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &1724691876
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -357964,6 +357975,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1447789828}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &1728930730
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -419897,6 +419909,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1434739606}
+  footstepAudioSource: {fileID: 0}
 --- !u!136 &2063376598
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -424781,6 +424794,7 @@ MonoBehaviour:
   waitBetweenShots: 0.2
   timeToShoot: 0.5
   anim: {fileID: 1718830878}
+  footstepAudioSource: {fileID: 0}
 --- !u!195 &2108316656
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -436700,7 +436714,7 @@ Transform:
   m_GameObject: {fileID: 3656305848884771993}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -106.5, y: 5.39, z: 27.2}
+  m_LocalPosition: {x: -106.5, y: 78.6, z: 27.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
