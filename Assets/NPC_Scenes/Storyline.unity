@@ -478,7 +478,7 @@ MonoBehaviour:
       \u201CIt\u2019s your turn to feel small.\u201D"
   blackScreen: {fileID: 4626525910973720537}
   fadeDuration: 3
-  nextSceneName: NPC_UI
+  nextSceneName: Scene 1
 --- !u!4 &1773466216
 Transform:
   m_ObjectHideFlags: 0

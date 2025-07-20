@@ -1,14 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class DialogueUI : MonoBehaviour
 {
     public static DialogueUI Instance;
 
+    [Header("UI References")]
     public GameObject dialoguePanel;
     public Text dialogueText;
+    public Text speakerNameText;
+    public Image portraitImage;
     public GameObject nextIcon;
-    public GameObject[] uiElementsToHide;  // Assign health/ammo icons here
+    public GameObject[] uiElementsToHide;
+
+    [Header("Speaker Database")]
+    public SpeakerData[] speakers;
 
     private int currentLineIndex = 0;
     private string[] lines;
@@ -71,6 +78,20 @@ public class DialogueUI : MonoBehaviour
         fullText = lines[currentLineIndex];
         dialogueText.text = "";
         nextIcon.SetActive(false);
+
+        Sprite currentPortrait = portraits[currentLineIndex];
+        portraitImage.sprite = currentPortrait;
+
+        SpeakerData matchedSpeaker = speakers.FirstOrDefault(s => s.portrait == currentPortrait);
+        if (matchedSpeaker != null)
+        {
+            speakerNameText.text = matchedSpeaker.speakerName;
+        }
+        else
+        {
+            speakerNameText.text = "";
+        }
+
         StartCoroutine(TypeText(fullText));
     }
 

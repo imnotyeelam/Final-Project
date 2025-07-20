@@ -4758,6 +4758,7 @@ MonoBehaviour:
   - You deserve it
   dialoguePortraits:
   - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
 --- !u!135 &171469288
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -41309,6 +41310,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473967ace5109c74bb0ed5b1e4c40bd4, type: 3}
+--- !u!114 &1201895467 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1421699351702312431, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+  m_PrefabInstance: {fileID: 1716035399}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1210452275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58290,6 +58302,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1716035400}
     - target: {fileID: 2847490446864323561, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+      propertyPath: speakerNameText
+      value: 
+      objectReference: {fileID: 1201895467}
+    - target: {fileID: 2847490446864323561, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+      propertyPath: speakers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847490446864323561, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
       propertyPath: uiElementsToHide.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -58297,6 +58317,22 @@ PrefabInstance:
       propertyPath: 'uiElementsToHide.Array.data[0]'
       value: 
       objectReference: {fileID: 64999120}
+    - target: {fileID: 2847490446864323561, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+      propertyPath: speakers.Array.data[0].portrait
+      value: 
+      objectReference: {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+    - target: {fileID: 2847490446864323561, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+      propertyPath: speakers.Array.data[1].portrait
+      value: 
+      objectReference: {fileID: 21300000, guid: 8588825deb7347646a727bc7ee870e35, type: 3}
+    - target: {fileID: 2847490446864323561, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+      propertyPath: speakers.Array.data[0].speakerName
+      value: Fairy
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847490446864323561, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
+      propertyPath: speakers.Array.data[1].speakerName
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 6629731948322118683, guid: 40def669a9b71a7478712125594a7bf9, type: 3}
       propertyPath: m_Text
       value: Press [Enter] to continue

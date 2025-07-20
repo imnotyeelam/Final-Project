@@ -23,8 +23,9 @@ public class StoryManager : MonoBehaviour
     public StoryFrame[] frames;
 
     [Header("Transition")]
-    public Image blackScreen;         // full-screen black image
-    public float fadeDuration = 1f;   // fade in/out time
+    public Image blackScreen;
+    public float fadeDuration = 1f;
+    [Tooltip("The name of the next scene (must match Build Settings)")]
     public string nextSceneName = "Scene 1";
 
     private int currentIndex = 0;
@@ -43,7 +44,6 @@ public class StoryManager : MonoBehaviour
         }
         else
         {
-            // no blackscreen -> just show first frame
             StartStory();
         }
     }
@@ -127,7 +127,7 @@ public class StoryManager : MonoBehaviour
         if (blackScreen != null)
             StartCoroutine(FadeToBlack());
         else
-            SceneManager.LoadScene(nextSceneName);
+            LoadNextScene();
     }
 
     IEnumerator FadeFromBlack()
@@ -161,6 +161,18 @@ public class StoryManager : MonoBehaviour
             yield return null;
         }
 
-        SceneManager.LoadScene(nextSceneName);
+        LoadNextScene();
+    }
+
+    void LoadNextScene()
+    {
+        if (!string.IsNullOrEmpty(nextSceneName))
+        {
+            SceneManager.LoadScene(nextSceneName);
+        }
+        else
+        {
+            Debug.LogError("Next scene name is empty! Please set it in the inspector.");
+        }
     }
 }
