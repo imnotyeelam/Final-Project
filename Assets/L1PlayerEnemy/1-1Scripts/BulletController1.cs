@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BulletController : MonoBehaviour
+public class L3BulletController1 : MonoBehaviour
 {
     public float moveSpeed, lifeTime;
     private Rigidbody rb;
@@ -36,28 +36,28 @@ public class BulletController : MonoBehaviour
         
         if (other.CompareTag("Enemy") && damageEnemy)
         {
-            var enemyHealth = other.gameObject.GetComponent<EnemyHealthController>();
-            if (enemyHealth != null)
-            {
-                enemyHealth.DamageEnemy(damage);
-            }
+            var enemyHealth = other.gameObject.GetComponent<EnemyHealthController1>();
+        if (enemyHealth != null)
+        {
+            enemyHealth.DamageEnemy(damage);
+        }
 
-            var enemyHealthL3 = other.gameObject.GetComponent<L3EnemyHealthController>();
-            if (enemyHealthL3 != null)
-            {
-                enemyHealthL3.DamageEnemy(damage);
-            }
+        var enemyHealthL3 = other.gameObject.GetComponent<L3EnemyHealthController>();
+        if (enemyHealthL3 != null)
+        {
+            enemyHealthL3.DamageEnemy(damage);
+        }
         }
         
         if (other.gameObject.tag == "headShot" && damageEnemy)
         {
             //Destroy(other.gameObject);
-            other.transform.parent.GetComponent<EnemyHealthController>().DamageEnemy(damage * 2);
+            other.transform.parent.GetComponent<EnemyHealthController1>().DamageEnemy(damage * 2);
         }
         if (other.CompareTag("Player")&&damagePlayer)
         {
             //Debug.Log("Hit the player");
-            PlayerHealthController1.instance.DamagePlayer(damage);
+            Level3PlayerHealthController1.instance.DamagePlayer(damage);
         }
         
 

@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyHealthController : MonoBehaviour
+public class EnemyHealthController1 : MonoBehaviour
 {
 
     public int currentHealth = 5;

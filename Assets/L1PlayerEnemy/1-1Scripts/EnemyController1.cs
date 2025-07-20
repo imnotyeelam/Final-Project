@@ -45,7 +45,7 @@ public class EnemyController1 : MonoBehaviour
         //rb.linearVelocity = transform.forward * moveSpeed;
 
         
-        targetPoint = PlayerController1.instance.transform.position;
+        targetPoint = Level3PlayerController1.instance.transform.position;
         targetPoint.y = transform.position.y;//make y axis the same, do not depend on player y axis
         
         if (!chasing)//chasing = false
@@ -114,7 +114,7 @@ public class EnemyController1 : MonoBehaviour
 
                     anim.SetBool("isMoving", true);
                 }
-                else if (PlayerController1.instance.gameObject.activeInHierarchy)//only run the code whem he is active when he is alive
+                else if (Level3PlayerController1.instance.gameObject.activeInHierarchy)//only run the code whem he is active when he is alive
                 {
                     shootTimeCounter -= Time.deltaTime;
                     if (shootTimeCounter > 0)
@@ -127,9 +127,9 @@ public class EnemyController1 : MonoBehaviour
                         {
                             fireCount = fireRate;
 
-                            firePoint.LookAt(PlayerController1.instance.transform.position + new Vector3(0f, 0.3f, 0f));
+                            firePoint.LookAt(Level3PlayerController1.instance.transform.position + new Vector3(0f, 0.3f, 0f));
 
-                            Vector3 targetDir = PlayerController1.instance.transform.position - transform.position;//get direction
+                            Vector3 targetDir = Level3PlayerController1.instance.transform.position - transform.position;//get direction
                             float angle = Vector3.SignedAngle(targetDir, transform.forward, Vector3.up);
 
                             if (Mathf.Abs(angle) <= 30f)//abs:绝对值（因为有时候角度会为负数）

@@ -20,8 +20,8 @@ public class Turret : MonoBehaviour
 
     bool CanSeePlayer()
     {
-        Vector3 direction = (PlayerController1.instance.transform.position - firePoint.position).normalized;
-        float distance = Vector3.Distance(firePoint.position, PlayerController1.instance.transform.position);
+        Vector3 direction = (Level3PlayerController1.instance.transform.position - firePoint.position).normalized;
+        float distance = Vector3.Distance(firePoint.position, Level3PlayerController1.instance.transform.position);
 
         if (Physics.Raycast(firePoint.position, direction, out RaycastHit hit, distance, ~0))
         {
@@ -44,9 +44,9 @@ public class Turret : MonoBehaviour
 
     void Update()
     {
-        if (Vector3.Distance(transform.position, PlayerController1.instance.transform.position) < rangeToTargetPlayer && CanSeePlayer())
+        if (Vector3.Distance(transform.position, Level3PlayerController1.instance.transform.position) < rangeToTargetPlayer && CanSeePlayer())
         {
-            gun.LookAt(PlayerController1.instance.transform.position + new Vector3(0f, 0.2f, 0f));
+            gun.LookAt(Level3PlayerController1.instance.transform.position + new Vector3(0f, 0.2f, 0f));
 
             shotCounter -= Time.deltaTime;
 

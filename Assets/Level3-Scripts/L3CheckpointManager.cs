@@ -19,9 +19,9 @@ public class L3CheckpointManager : MonoBehaviour
         {
             if (PlayerPrefs.GetString(SceneManager.GetActiveScene().name + "_cp") == cpName)
             {
-                PlayerController1.instance.charCon.enabled = false;
-                PlayerController1.instance.transform.position = transform.position;
-                PlayerController1.instance.charCon.enabled = true;
+                Level3PlayerController1.instance.charCon.enabled = false;
+                Level3PlayerController1.instance.transform.position = transform.position;
+                Level3PlayerController1.instance.charCon.enabled = true;
             }
         }
     }

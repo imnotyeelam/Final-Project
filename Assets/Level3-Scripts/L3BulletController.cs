@@ -44,7 +44,7 @@ public class L3BulletController : MonoBehaviour
             explosionPos.y += 0.8f; // 在玩家头顶0.8米处爆炸（可视情况调整）
             Instantiate(impactEffect, explosionPos, Quaternion.identity);
 
-            PlayerHealthController1.instance.DamagePlayer(damage);
+            Level3PlayerHealthController1.instance.DamagePlayer(damage);
         }
         else // 其他情况（打中环境等）
         {

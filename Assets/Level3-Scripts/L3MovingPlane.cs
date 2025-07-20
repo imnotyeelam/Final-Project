@@ -104,7 +104,7 @@ public class L3MovingPlane : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            PlayerController1.instance.EnterPlatform(transform);
+            Level3PlayerController1.instance.EnterPlatform(transform);
         }
     }
 
