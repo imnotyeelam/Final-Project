@@ -38,12 +38,13 @@ public class L3BulletController : MonoBehaviour
 
         if (other.CompareTag("Player") && damagePlayer)
         {
-            Debug.Log("Hit the player");
-
+            //Debug.Log("Hit the player");
             // 针对玩家的特殊爆炸效果（抬高Y轴位置）
             Vector3 explosionPos = other.ClosestPoint(transform.position); // 获取玩家身上最近的碰撞点
             explosionPos.y += 0.8f; // 在玩家头顶0.8米处爆炸（可视情况调整）
             Instantiate(impactEffect, explosionPos, Quaternion.identity);
+
+            PlayerHealthController1.instance.DamagePlayer(damage);
         }
         else // 其他情况（打中环境等）
         {
