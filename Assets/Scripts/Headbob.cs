@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class HeadBob : MonoBehaviour
 {
+    //用于添加头部晃动效果(??
+    //要的话加载camerapoint上
     [Header("Walking Settings")]
     public float walkFrequency = 1.6f;
     public float walkHorizontalAmplitude = 0.05f;

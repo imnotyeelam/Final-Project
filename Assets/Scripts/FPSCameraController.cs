@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class FPSCameraController : MonoBehaviour
 {
+    //可以换成playercontroller一起集成
     public Transform cameraHolder; // Drag in CameraHolder
     public float mouseSensitivity = 2f;
 
@@ -9,7 +10,7 @@ public class FPSCameraController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // Hide & lock cursor
+        Cursor.lockState = CursorLockMode.Locked; // 去掉鼠标——这个挂到GameManager里面
     }
 
     void Update()

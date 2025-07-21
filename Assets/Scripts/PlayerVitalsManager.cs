@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class PlayerVitalsManager : MonoBehaviour
 {
+
+    //这里是playerhealthcontroller的对应的，最主要改变重生点的code就可以
     public float maxHP = 100f;
     public float maxEnergy = 100f;
     public float currentHP;
@@ -245,6 +247,10 @@ public class PlayerVitalsManager : MonoBehaviour
     public void SetInvincible(bool value) => isInvincible = value;
 
     [System.Obsolete]
+
+
+
+    //这里开始是设置重生点的，这里重生点用逸颖的内容
     public void RespawnPlayer()
     {
         if (respawnPoint != null) StartCoroutine(RespawnMoveCoroutine());

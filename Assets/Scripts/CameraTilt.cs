@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CameraTilt : MonoBehaviour
 {
+    //ÊÔ¹ÒÔÚCamerapointÉÏ
     public float tiltAmount = 4f;
     public float tiltSpeed = 5f;
 

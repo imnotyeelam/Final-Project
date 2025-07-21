@@ -4,6 +4,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class GrapplingHook : MonoBehaviour
 {
+    //这个挂在player上面
     [Header("Grappling Settings")]
     public Transform cameraTransform;
     public Transform hookStartPoint;

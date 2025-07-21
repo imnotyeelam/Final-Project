@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CameraAimer : MonoBehaviour
 {
+    //相机瞄准效果，可以挂在camerapoint或maincamera上
     public Camera playerCamera;
     public float normalFOV = 60f;
     public float gunAimFOV = 30f;

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class GunInput : MonoBehaviour
 {
+    //gunmanager挂在外面的gunmanager上面
+
     public GunShooter gunShooter;
 
     [System.Obsolete]

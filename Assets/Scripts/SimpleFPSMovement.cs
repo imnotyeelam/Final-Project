@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class SimpleFPSMovement : MonoBehaviour
 {
+    //类比playercontroller的部分
     public CharacterController charCon;
     public static SimpleFPSMovement instance;
     [Header("Movement Settings")]

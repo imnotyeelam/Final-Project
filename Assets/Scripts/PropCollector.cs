@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PropCollector : MonoBehaviour
 {
+
+    //挂在player上，是额外内容
     [Header("Audio Clips")]
     public AudioClip hpClip;
     public AudioClip energyClip;

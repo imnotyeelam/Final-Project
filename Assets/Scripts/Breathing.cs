@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Breathing : MonoBehaviour
 {
+    //挂在相机上
     [Header("Idle Settings")]
     public float idleBreathSpeed = 1.5f;
     public float idleBreathAmount = 0.01f;
