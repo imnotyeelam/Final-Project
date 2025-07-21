@@ -18,8 +18,10 @@ public class TaskPanelToggle : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip toggleClip;
 
-
     private bool isShown = true;
+
+    [Header("Scroll Settings")]
+    public float scrollSpeed = 3.0f; // adjust this to change scroll sensitivity
 
     void Start()
     {
@@ -32,6 +34,7 @@ public class TaskPanelToggle : MonoBehaviour
 
     void Update()
     {
+        // Toggle Panel
         if (Input.GetKeyDown(KeyCode.T))
         {
             isShown = !isShown;
@@ -45,8 +48,22 @@ public class TaskPanelToggle : MonoBehaviour
             taskPanel.DOAnchorPos(isShown ? shownPos : hiddenPos, 0.3f)
                     .SetEase(Ease.OutCubic);
         }
-    }
 
+        // Scroll with arrow keys
+        if (scrollRect != null && isShown)
+        {
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                scrollRect.verticalNormalizedPosition -= scrollSpeed * Time.deltaTime;
+                scrollRect.verticalNormalizedPosition = Mathf.Clamp01(scrollRect.verticalNormalizedPosition);
+            }
+            else if (Input.GetKey(KeyCode.UpArrow))
+            {
+                scrollRect.verticalNormalizedPosition += scrollSpeed * Time.deltaTime;
+                scrollRect.verticalNormalizedPosition = Mathf.Clamp01(scrollRect.verticalNormalizedPosition);
+            }
+        }
+    }
 
     public void ScrollToLatestTask()
     {

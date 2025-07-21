@@ -19,6 +19,7 @@ public class PlayerVitalsManager : MonoBehaviour
 
     private AudioSource audioSource;
     private bool isInvincible = false;
+    private bool isDead = false; // ✅ 死亡状态标志
 
     private float energyTimer = 0f;
     private float energyInterval = 120f;
@@ -59,20 +60,19 @@ public class PlayerVitalsManager : MonoBehaviour
     [System.Obsolete]
     void Update()
     {
-        if (Mathf.Abs(lastEnergy - currentEnergy) > 0.1f) // small threshold to avoid noise
+        if (Mathf.Abs(lastEnergy - currentEnergy) > 0.1f)
         {
             UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
             lastEnergy = currentEnergy;
         }
-            // Energy drain over time
-            energyTimer += Time.deltaTime;
-            if (energyTimer >= energyInterval)
-            {
-                energyTimer = 0f;
-                ConsumeEnergy(energyLoss);
-            }
 
-        // Fall damage
+        energyTimer += Time.deltaTime;
+        if (energyTimer >= energyInterval)
+        {
+            energyTimer = 0f;
+            ConsumeEnergy(energyLoss);
+        }
+
         if (controller.isGrounded)
         {
             float fallDistance = lastY - transform.position.y;
@@ -82,8 +82,7 @@ public class PlayerVitalsManager : MonoBehaviour
                 if (damage > 0)
                 {
                     TakeDamage(damage);
-
-                    if (!isInvincible) // Skip red flash and fall sound during Mom Buff
+                    if (!isInvincible)
                     {
                         if (fallSound) audioSource.PlayOneShot(fallSound);
                         StartCoroutine(FlashRed());
@@ -97,13 +96,12 @@ public class PlayerVitalsManager : MonoBehaviour
             lastY = transform.position.y;
         }
 
-        // Debug keys for props
+        // Use item keys
         if (Input.GetKeyDown(KeyCode.I)) TryUseAmmoProp();
         if (Input.GetKeyDown(KeyCode.O)) TryUseHPProp();
         if (Input.GetKeyDown(KeyCode.P)) TryUseEnergyProp();
 
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
-
     }
 
     IEnumerator FlashRed()
@@ -198,17 +196,41 @@ public class PlayerVitalsManager : MonoBehaviour
     [System.Obsolete]
     public void TakeDamage(float amount)
     {
-        if (isInvincible) return;
+        if (isInvincible || isDead) return;
 
         currentHP = Mathf.Max(0, currentHP - amount);
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
 
-        if (currentHP <= 0) TriggerDeath();
+        if (currentHP <= 0)
+        {
+            TriggerDeath();
+        }
+    }
+
+    [System.Obsolete]
+    public void DamagePlayer(float damageAmount)
+    {
+        if (isDead) return;
+
+        currentHP -= damageAmount;
+        if (currentHP <= 0)
+        {
+            currentHP = 0;
+            UIManager.Instance.UpdateHealth(currentHP, maxHP);
+            TriggerDeath();
+        }
+        else
+        {
+            UIManager.Instance.UpdateHealth(currentHP, maxHP);
+        }
     }
 
     [System.Obsolete]
     void TriggerDeath()
     {
+        if (isDead) return;
+        isDead = true;
+
         HandSwitcher handSwitcher = FindObjectOfType<HandSwitcher>();
         float delay = 3f;
 
@@ -217,6 +239,7 @@ public class PlayerVitalsManager : MonoBehaviour
             handSwitcher.SwitchToDeadState();
             delay = handSwitcher.fadeDuration + 1f;
         }
+
         StartCoroutine(RespawnAfterDelay(delay));
     }
 
@@ -227,29 +250,14 @@ public class PlayerVitalsManager : MonoBehaviour
         RespawnPlayer();
     }
 
-    public void ConsumeEnergy(float amount)
-    {
-        currentEnergy = Mathf.Max(0, currentEnergy - amount);
-        UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
-    }
-
-    public void CollectPiece()
-    {
-        if (collectedPieces < totalPieces)
-        {
-            collectedPieces++;
-            UIManager.Instance.UpdatePieces(collectedPieces, totalPieces);
-        }
-    }
-
-    public void SetInvincible(bool value) => isInvincible = value;
-
     [System.Obsolete]
     public void RespawnPlayer()
     {
-        if (respawnPoint != null) StartCoroutine(RespawnMoveCoroutine());
+        if (respawnPoint != null)
+            StartCoroutine(RespawnMoveCoroutine());
 
         currentHP = 50f;
+        isDead = false; // ✅ 重置死亡状态
         UIManager.Instance.UpdateHealth(currentHP, maxHP);
         UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
 
@@ -290,4 +298,21 @@ public class PlayerVitalsManager : MonoBehaviour
     {
         if (clip && audioSource) audioSource.PlayOneShot(clip);
     }
+
+    public void ConsumeEnergy(float amount)
+    {
+        currentEnergy = Mathf.Max(0, currentEnergy - amount);
+        UIManager.Instance.UpdateEnergy(currentEnergy, maxEnergy);
+    }
+
+    public void CollectPiece()
+    {
+        if (collectedPieces < totalPieces)
+        {
+            collectedPieces++;
+            UIManager.Instance.UpdatePieces(collectedPieces, totalPieces);
+        }
+    }
+
+    public void SetInvincible(bool value) => isInvincible = value;
 }
