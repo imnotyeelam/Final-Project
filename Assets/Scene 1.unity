@@ -5759,8 +5759,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueLines:
   - Omo! What a poor little boy~
-  - You deserve it
+  - W-Who said that...? Where am I?
+  - "You\u2019ve been shrunk, my dear. Just a tiny little thing now..."
+  - Tossed out of your room like one of your forgotten toys.
+  - What? Shrunk?! Why... why did this happen to me?!
+  - "Hmm... perhaps because you didn\u2019t treat your toys very kindly."
+  - 'And maybe... just maybe, '
+  - the world thought it was time for you to see things from their perspective.
+  - But... my parents are always working...
+  - They only buy me toys. I just... I just wanted someone to play with me.
+  - I know, little one. Being ignored is hard.
+  - But now, you have a new journey ahead.
+  - "What do I do now? I can\u2019t stay here in the garden!"
+  - You see that pipe over there? It leads to the bathroom.
+  - If you can climb it, you may find a way back...
+  - "The bathroom? That\u2019s... so far away\u2026"
+  - Then you'd better start moving.
+  - This garden is no place for a boy of your size.
+  - "But don't worry... I\u2019ll be watching."
   dialoguePortraits:
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 8588825deb7347646a727bc7ee870e35, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 8588825deb7347646a727bc7ee870e35, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 8588825deb7347646a727bc7ee870e35, type: 3}
+  - {fileID: 21300000, guid: 8588825deb7347646a727bc7ee870e35, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 8588825deb7347646a727bc7ee870e35, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
+  - {fileID: 21300000, guid: 8588825deb7347646a727bc7ee870e35, type: 3}
+  - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
   - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
   - {fileID: 21300000, guid: 87c930e356862544080a4c55bff74cfa, type: 3}
 --- !u!135 &171469288

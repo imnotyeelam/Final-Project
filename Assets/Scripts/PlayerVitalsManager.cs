@@ -82,8 +82,12 @@ public class PlayerVitalsManager : MonoBehaviour
                 if (damage > 0)
                 {
                     TakeDamage(damage);
-                    if (fallSound) audioSource.PlayOneShot(fallSound);
-                    StartCoroutine(FlashRed());
+
+                    if (!isInvincible) // Skip red flash and fall sound during Mom Buff
+                    {
+                        if (fallSound) audioSource.PlayOneShot(fallSound);
+                        StartCoroutine(FlashRed());
+                    }
                 }
             }
             lastY = transform.position.y;

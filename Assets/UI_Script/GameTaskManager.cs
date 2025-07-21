@@ -4,7 +4,7 @@ public class GameTaskManager : MonoBehaviour
 {
     void Start()
     {
-        // Just show tasks as instructions
+        // Show actual game tasks
         AddGameTask("Collect HP Prop");
         AddGameTask("Kill Enemy");
         AddGameTask("Talk to NPC");
@@ -12,16 +12,10 @@ public class GameTaskManager : MonoBehaviour
 
     public void AddGameTask(string taskDescription)
     {
-        Debug.Log("Adding task: " + taskDescription);
-
         if (UIManager.Instance != null)
         {
             var item = UIManager.Instance.AddTask(taskDescription);
-            if (item != null)
-            {
-                Debug.Log("✅ Task displayed: " + taskDescription);
-            }
-            else
+            if (item == null)
             {
                 Debug.LogError("❌ Failed to create task UI!");
             }
