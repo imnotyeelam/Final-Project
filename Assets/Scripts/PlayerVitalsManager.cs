@@ -19,7 +19,7 @@ public class PlayerVitalsManager : MonoBehaviour
 
     private AudioSource audioSource;
     private bool isInvincible = false;
-    private bool isDead = false; // ✅ 死亡状态标志
+    private bool isDead = false; // 死亡状态标志
 
     private float energyTimer = 0f;
     private float energyInterval = 120f;
@@ -176,7 +176,7 @@ public class PlayerVitalsManager : MonoBehaviour
 
         if (UIManager.Instance.UseProp("Ammo"))
         {
-            WeaponManager.Instance.AddAmmo(10);
+            FindObjectOfType<GunShooter>()?.AddAmmo(10);
             PlayClip(useAmmoClip);
         }
     }

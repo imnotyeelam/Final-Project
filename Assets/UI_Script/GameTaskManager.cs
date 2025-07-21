@@ -1,14 +1,15 @@
 using UnityEngine;
 
+
 public class GameTaskManager : MonoBehaviour
 {
     void Start()
     {
         // Show actual game tasks
-        AddGameTask("Collect HP Prop");
-        AddGameTask("Kill Enemy");
         AddGameTask("Talk to NPC");
+        AddGameTask("Go into bathroom");
     }
+
 
     public void AddGameTask(string taskDescription)
     {

@@ -175,17 +175,6 @@ public class UIManager : MonoBehaviour
         return taskItem;
     }
 
-    public void ClearAllTasks()
-    {
-        if (taskListParent == null) return;
-
-        foreach (Transform child in taskListParent)
-        {
-            Destroy(child.gameObject);
-        }
-        taskList.Clear();
-    }
-
     // ---------------- Props ----------------
     public void AddProp(string type)
     {

@@ -8,7 +8,7 @@ public class GunShooter : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 50f;
     public float fireRate = 0.1f;
-    public int maxAmmo = 30;  // Max ammo capacity
+    public int maxAmmo = 60;  // Max ammo capacity
     private static int currentAmmo;  // Shared ammo across all gun modes
 
     [Header("Visual Effects")]

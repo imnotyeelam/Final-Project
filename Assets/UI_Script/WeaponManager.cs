@@ -30,7 +30,7 @@ public class WeaponManager : MonoBehaviour
 
     [Header("Gun Settings")]
     public int currentAmmo;
-    public int maxAmmo = 30;
+    public int maxAmmo = 60;
     public int ammoPerShot = 1;
 
     void Start()

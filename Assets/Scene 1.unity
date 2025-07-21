@@ -8894,7 +8894,7 @@ PrefabInstance:
     - target: {fileID: 4118555768695585269, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
       propertyPath: horizontalScrollbar
       value: 
-      objectReference: {fileID: 525645348}
+      objectReference: {fileID: 0}
     - target: {fileID: 4160987687563991729, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -9118,7 +9118,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8297600469559825386, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
     - {fileID: 1707935941337980770, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7447924956729818235, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7350661280237927702, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
       insertIndex: -1
@@ -21223,17 +21224,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2467315583864496046, guid: 473967ace5109c74bb0ed5b1e4c40bd4, type: 3}
   m_PrefabInstance: {fileID: 525294155}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &525645348 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5927801083998520997, guid: 833bfab1616f6074e85aaa74725de7c2, type: 3}
-  m_PrefabInstance: {fileID: 262483842}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &526435796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25024,7 +25014,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4754782290425702832, guid: 10a08a899d715304fa2a7581d8752d0c, type: 3}
   bulletSpeed: 50
   fireRate: 0.1
-  maxAmmo: 30
+  maxAmmo: 60
   lightningPrefab: {fileID: 4666016928129409062, guid: da22f0a50b8d94b4782f84f5f3c21647, type: 3}
   muzzleFlashPrefab: {fileID: 1896416882}
   muzzleFlashDuration: 0.1
@@ -35180,7 +35170,7 @@ PrefabInstance:
       objectReference: {fileID: 736489520}
     - target: {fileID: 6066733414231877079, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
       propertyPath: maxAmmo
-      value: 30
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6066733414231877079, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
       propertyPath: weaponIcon
@@ -35188,7 +35178,7 @@ PrefabInstance:
       objectReference: {fileID: 2098581806}
     - target: {fileID: 6066733414231877079, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
       propertyPath: currentAmmo
-      value: 30
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 7693293783550901359, guid: 10e43f32b774520489b35d881e8ff7a6, type: 3}
       propertyPath: m_Enabled
